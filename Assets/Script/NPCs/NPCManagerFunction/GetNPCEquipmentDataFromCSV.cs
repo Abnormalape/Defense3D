@@ -8,7 +8,7 @@ namespace BHSSolo.DungeonDefense.NPCs
     /// NPC의 장비에 관한 정보를 들고 있는 Class
     /// 최초 한번 불러오면 더 건드릴 일이 없다.
     /// </summary>
-    class GetNPCEquipmentDataFromCSV
+    static class GetNPCEquipmentDataFromCSV
     {
         [SerializeField] static TextAsset NPCEquipmentDataCSV;
 

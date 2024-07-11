@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Unity.VisualScripting;
 
 namespace BHSSolo.DungeonDefense.NPCs
 {
@@ -21,7 +20,6 @@ namespace BHSSolo.DungeonDefense.NPCs
             }
             return outHeroDictionary;
         }
-
         //Hero뿐 아니라 Monster의 데이터도 찾을 수 있어야 한다.
     }
 }

@@ -16,10 +16,10 @@ namespace BHSSolo.DungeonDefense.NPCs
         protected NPCType NPCType;
         protected int NPCLevel = 1;
         protected Dictionary<string, string> NPCData;
-        //protected NPCNature[] nPCNature; //Todo:
-        //protected NPCState[] nPCState;
-        //protected NPCStatus nPCStatus;
-        protected NPCEquipment[] nPCEquipment;
+        protected List<NPCNature> nPCNature = new List<NPCNature>(3);
+        protected List<NPCState> nPCState = new List<NPCState>(10);
+        protected NPCStatus nPCStatus;
+        protected List<NPCEquipment> nPCEquipment = new List<NPCEquipment>(3);
     }
     public enum NPCType
     {
