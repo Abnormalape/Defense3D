@@ -51,9 +51,7 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
         private void InitRoomEffect()
         {
             //전투방 종류로 룸의 데이터 찾기.
-            roomData = RoomDataLoader.FindBattleRoomFromBattleRoomDictionary(
-                GetRoomDataFromCSV.dungeonRoomBattleData,
-                BattleRoomType.ToString());
+            roomData = RoomDataLoader.FindBattleRoomFromBattleRoomDictionary(BattleRoomType.ToString());
 
             //찾아낸 데이터로 방의 상태 추가하기.
             Dictionary<string, string> effectDictionary = roomData;

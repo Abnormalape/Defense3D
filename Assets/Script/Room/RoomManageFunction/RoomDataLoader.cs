@@ -9,11 +9,11 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
     static class RoomDataLoader
     {
         public static Dictionary<string,string> FindBattleRoomFromBattleRoomDictionary
-            (List<Dictionary<string, string>> battleRoomDictionary,
-             string battleRoomType) //Todo: battleRoomType을 enum으로 받을지 string으로 받을지...
+            (string battleRoomType) //Todo: 받을 매개변수의 값을 무엇으로 할까? 1.String 2.Enum
         {
             Dictionary<string, string> DictionaryOut = new Dictionary<string,string>();
-            List<Dictionary<string, string>> tempBattleRoomDictionary = battleRoomDictionary;
+            List<Dictionary<string, string>> tempBattleRoomDictionary 
+                = GetRoomDataFromCSV.dungeonRoomBattleData;
 
             for (int ix = 0; ix < tempBattleRoomDictionary.Count; ix++)
             {
@@ -23,5 +23,7 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
 
             return DictionaryOut;
         }
+
+        //Todo: battleRoom뿐이 아니라 다른 Room들의 데이터도 찾을 수 있어야 한다.
     }
 }

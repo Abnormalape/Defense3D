@@ -43,17 +43,9 @@ namespace BHSSolo.DungeonDefense.NPCs
             
         }
 
-        //용사를 생성할 때, 대략적인 수치는 용사의 타입에 맞게 설정이 된다.
-        //상세수치는 정해진 수치 내에서 변동되어 생성된다.
-        //용사는 실시간으로 레벨업을 할 수 있다. 만, 잘 일어나지 않는다.
-        //같은 종류의 용사여도 더 높은 레벨을 지녔다면, 능력치가 더 높다.
-        //용사는 타입에 따라 기본적으로 몇가지 특성을 가지고 시작한다. (ex.왕궁기사 : 제식검법, 왕궁검법)
-        //용사는 타입에 따른 특성 외에도 npc특성을 가지고 시작할 수 있다.
-        //용사는 장비를 착용 할 수 있다.
-
-        private void InitNPCDataTable()
+        private void InitNPCDataTable(HeroType heroType)
         {
-            //NPCData = ;//Todo:여기서 입력받은 HeroType으로 NPCData를 저장.
+            
         }
 
         //Hero의 status초기화.
