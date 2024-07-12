@@ -21,10 +21,10 @@ namespace BHSSolo.DungeonDefense.NPCs
         public static List<Dictionary<string, string>> NPCMonsterData { get; private set; }
          = ParseCSV.ParseCsvFile(NPCMonsterDataCSV.text);
 
-        //NPC Attribute Data.
-        [SerializeField] static TextAsset NPCAttributeDataCSV;
-        public static List<Dictionary<string, string>> NPCAttributeData { get; private set; }
-        = ParseCSV.ParseCsvFile(NPCAttributeDataCSV.text);
+        //NPC Trait Data.
+        [SerializeField] static TextAsset NPCTraitDataCSV;
+        public static List<Dictionary<string, string>> NPCTraitData { get; private set; }
+        = ParseCSV.ParseCsvFile(NPCTraitDataCSV.text);
 
         //NPC Buff Data.
         [SerializeField] static TextAsset NPCBuffDataCSV;

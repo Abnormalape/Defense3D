@@ -18,22 +18,23 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
         protected Vector3 roomPosition;
         protected Vector3 roomSize;
         protected RoomType roomType;
-        protected List<RoomAddon> roomAddon = new List<RoomAddon>(3); // 방의 설치물을 3개를 넘지 못한다.
+        protected List<DungeonRoomAddon> roomAddon = new List<DungeonRoomAddon>(3); // 방의 설치물을 3개를 넘지 못한다.
         protected int roomLevel = 1;
         protected Dictionary<string, string> roomData;
-        protected List<RoomEffect> roomEffectAll = new List<RoomEffect>(10); // 방의 효과는 10개가 넘지 않을듯 싶다.
+        protected List<DungeonRoomTrait> roomTrait = new List<DungeonRoomTrait>(3);
+        protected List<DungeonRoomEffect> roomEffect = new List<DungeonRoomEffect>(10); // 방의 효과는 10개가 넘지 않을듯 싶다.
         protected DungeonRoomInstanceEventManager dungeonRoomInstanceEventManager = new DungeonRoomInstanceEventManager();
         //Todo: 방마다 지닌것이 아닌, 모든 방의 이벤트를 총괄하는 총괄하는 총괄자를 만들자.
 
 
 
-        protected List<RoomEffect> roomEffectHeroEnter = new List<RoomEffect>(4);
-        protected List<RoomEffect> roomEffectHeroDead = new List<RoomEffect>(4);
-        protected List<RoomEffect> roomEffectHeroExit = new List<RoomEffect>(4);
-        protected List<RoomEffect> roomEffectMonsterPlace = new List<RoomEffect>(4);
-        protected List<RoomEffect> roomEffectMonsterDead = new List<RoomEffect>(4);
-        protected List<RoomEffect> roomEffectDayStart = new List<RoomEffect>(4);
-        protected List<RoomEffect> roomEffectDayEnd = new List<RoomEffect>(4);
+        protected List<DungeonRoomEffect> roomEffectHeroEnter = new List<DungeonRoomEffect>(4);
+        protected List<DungeonRoomEffect> roomEffectHeroDead = new List<DungeonRoomEffect>(4);
+        protected List<DungeonRoomEffect> roomEffectHeroExit = new List<DungeonRoomEffect>(4);
+        protected List<DungeonRoomEffect> roomEffectMonsterPlace = new List<DungeonRoomEffect>(4);
+        protected List<DungeonRoomEffect> roomEffectMonsterDead = new List<DungeonRoomEffect>(4);
+        protected List<DungeonRoomEffect> roomEffectDayStart = new List<DungeonRoomEffect>(4);
+        protected List<DungeonRoomEffect> roomEffectDayEnd = new List<DungeonRoomEffect>(4);
 
 
         //protected void DevideRoomEffectWithItsCondition()

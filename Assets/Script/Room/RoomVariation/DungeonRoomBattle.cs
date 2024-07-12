@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Numerics;
 using BHSSolo.DungeonDefense.NPCs;
+using BHSSolo.DungeonDefense.StaticFunction;
 
 namespace BHSSolo.DungeonDefense.DungeonRoom
 {
@@ -59,8 +60,8 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
 
             for (int ix = 0; ix < effectsCount; ++ix)
             {
-                roomEffectAll.Add(
-                    new RoomEffect( this,
+                roomEffect.Add(
+                    new DungeonRoomEffect( this,
                     roomLevel,
                     Convert.ToInt32(effectDictionary[$"WhenRange{ix+1}"]),
                     Convert.ToInt32(effectDictionary[$"Range{ix + 1}"]),
@@ -70,6 +71,40 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
                     effectDictionary[$"Value{ix + 1}"],
                     effectDictionary[$"When{ix + 1}"]
                     )); //Todo: RoomState를 새로 생성한다.
+            }
+        }
+
+        //DungeonRoom의 roomData를 초기화 한다.
+        private void InitBattleRoomData(BattleRoomType battleRoom)
+        {
+            roomData = FindSingleDictionaryFromDictionaryList.FindDictionaryByKey
+                (RoomDatas.asdf,"BattleRoomType",battleRoom);
+        }
+
+        
+        private void InitBattleRoomPosition(Vector3 roomBuildPosition)
+        {
+            roomPosition = roomBuildPosition;
+        }
+
+        private void InitBattleRoomTrait()
+        {
+            int roomTraitCount = Convert.ToInt32(roomData["RoomTraitCount"]);
+
+            for (int ix = 0; ix < roomTraitCount; ++ix)
+            {
+                roomTrait.Add(new DungeonRoomTrait($"RoomTrait{ix}")); 
+                //Todo: 던전룸 특성은 생성될때, 던전룸 특성을 기준으로 dictionary를 생성한다.
+            }
+        }
+
+        private void InitBattleRoomEffect()
+        {
+            int roomTraitCount = roomTrait.Count;
+
+            for (int ix = 0;ix < roomTraitCount; ++ix)
+            {
+                roomTrait[ix].roomTraitData(""); //Todo:
             }
         }
     }

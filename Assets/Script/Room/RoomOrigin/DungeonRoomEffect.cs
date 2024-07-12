@@ -14,7 +14,7 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
     /// Add: 증감
     /// When: 조건
     /// </summary>
-    class RoomEffect
+    class DungeonRoomEffect
     {
         private object effectProvider;
         private int effectProviderLevel;
@@ -26,7 +26,7 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
         private string effectAdd;
         
         public string effectWhen { get; private set; }
-        public RoomEffect(
+        public DungeonRoomEffect(
             object inputeffectProvider,
             int inputeffectProviderLevel,
             int inputeffectObserveRange,

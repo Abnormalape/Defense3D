@@ -12,7 +12,7 @@ namespace BHSSolo.DungeonDefense.NPCs
         public BuffName BuffName { get; private set; }
         public BuffTrigger BuffTrigger { get; private set; }
         public BuffType BuffType { get; private set; }
-        public object buffGiver { get; private set; } //버프제공자. Attribute인가, Equipment인가, 그외의 누군가인가?.
+        public object buffGiver { get; private set; } //버프제공자. Trait인가, Equipment인가, 그외의 누군가인가?.
 
         public NPCBuff(BuffName buffName) //버프의 이름을 받아 생성자가 작동한다. Todo: Enum과 string을 혼재중. 속히 수정 요망.
         {

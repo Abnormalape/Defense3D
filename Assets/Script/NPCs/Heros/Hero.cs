@@ -12,7 +12,7 @@ namespace BHSSolo.DungeonDefense.NPCs
         {   //level:1, equipment null 의 hero.
             InitHeroDataDictionary(heroType);
             InitHeroStatus(heroType);
-            InitHeroAttribute();
+            InitHeroTrait();
             InitHeroBuff();
         }
         public Hero(HeroType heroType, int level)
@@ -20,7 +20,7 @@ namespace BHSSolo.DungeonDefense.NPCs
             NPCLevel = level;
             InitHeroDataDictionary(heroType);
             InitHeroStatus(heroType);
-            InitHeroAttribute();
+            InitHeroTrait();
             InitHeroBuff();
         }
 
@@ -28,7 +28,7 @@ namespace BHSSolo.DungeonDefense.NPCs
         {   //level:1, equipment !null 의 hero.
             InitHeroDataDictionary(heroType);
             InitHeroStatus(heroType);
-            InitHeroAttribute();
+            InitHeroTrait();
             InitHeroBuff();
             //InitHeroEquipment(equipments);
             //InitHeroBuffWithEquipment();
@@ -39,7 +39,7 @@ namespace BHSSolo.DungeonDefense.NPCs
             NPCLevel = level;
             InitHeroDataDictionary(heroType);
             InitHeroStatus(heroType);
-            InitHeroAttribute();
+            InitHeroTrait();
             InitHeroBuff();
             //InitHeroEquipment(equipments);
             //InitHeroBuffWithEquipment();
@@ -71,28 +71,28 @@ namespace BHSSolo.DungeonDefense.NPCs
             //Todo: level에 맞게 스탯에 변화를 준다.
         }
 
-        //Hero의 Attribute를 NPCData의 [Attribute]기준으로 초기화.
-        private void InitHeroAttribute()
+        //Hero의 Trait를 NPCData의 [Trait]기준으로 초기화.
+        private void InitHeroTrait()
         {
-            int attributeCount = Convert.ToInt32(NPCData["AttributeCount"]);
+            int traitCount = Convert.ToInt32(NPCData["TraitCount"]);
 
-            for (int ix = 0; ix < attributeCount; ++ix)
-            {   //nPCAttribute에 new Attribute()로 Add.
-                nPCAttribute.Add(new NPCAttribute(NPCData[$"Attribute{ix + 1}"]));
+            for (int ix = 0; ix < traitCount; ++ix)
+            {   //nPCTrait에 new Trait()로 Add.
+                nPCTrait.Add(new NPCTrait(NPCData[$"Trait{ix + 1}"]));
             }
         }
 
         //Todo: 현재 Room의 State 부여 방식은 잘못 되어있다.
-        //Hero의 Buff를 nPCAttribute의 [Buff]기준으로 초기화.
+        //Hero의 Buff를 nPCTrait의 [Buff]기준으로 초기화.
         private void InitHeroBuff()
-        {   //Attribute가 Buff를 제공함.
-            int attributeCount = nPCAttribute.Count;
-            for (int ix = 0; ix < attributeCount; ++ix)
+        {   //Trait가 Buff를 제공함.
+            int traitCount = nPCTrait.Count;
+            for (int ix = 0; ix < traitCount; ++ix)
             {
-                int buffCount = Convert.ToInt32(nPCAttribute[ix].attributeData["BuffCount"]);
+                int buffCount = Convert.ToInt32(nPCTrait[ix].traitData["BuffCount"]);
                 for (int iy = 0; iy < buffCount; ++iy)
                 {
-                    nPCBuff.Add(new NPCBuff(nPCAttribute[ix].attributeData[$"Buff{iy}"]));
+                    nPCBuff.Add(new NPCBuff(nPCTrait[ix].traitData[$"Buff{iy}"]));
                 }
             }
         }

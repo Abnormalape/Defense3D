@@ -11,7 +11,7 @@ namespace BHSSolo.DungeonDefense.NPCs
         {
             InitMonsterDictionary(monsterType);
             InitMonsterStatus(monsterType);
-            InitMonsterAttribute();
+            InitMonsterTrait();
             InitMonsterBuff();
         }
 
@@ -20,7 +20,7 @@ namespace BHSSolo.DungeonDefense.NPCs
             NPCLevel = level;
             InitMonsterDictionary(monsterType);
             InitMonsterStatus(monsterType);
-            InitMonsterAttribute();
+            InitMonsterTrait();
             InitMonsterBuff();
         }
 
@@ -28,7 +28,7 @@ namespace BHSSolo.DungeonDefense.NPCs
         {
             InitMonsterDictionary(monsterType);
             InitMonsterStatus(monsterType);
-            InitMonsterAttribute();
+            InitMonsterTrait();
             InitMonsterBuff();
             //InitMonsterEquipment(equipments);
             //InitMonsterBuffWithEquipment();
@@ -39,7 +39,7 @@ namespace BHSSolo.DungeonDefense.NPCs
             NPCLevel = level;
             InitMonsterDictionary(monsterType);
             InitMonsterStatus(monsterType);
-            InitMonsterAttribute();
+            InitMonsterTrait();
             InitMonsterBuff();
             //InitMonsterEquipment(equipments);
             //InitMonsterBuffWithEquipment();
@@ -70,25 +70,25 @@ namespace BHSSolo.DungeonDefense.NPCs
             //Todo: level에 맞게 스탯에 변화를 준다.
         }
 
-        private void InitMonsterAttribute()
+        private void InitMonsterTrait()
         {
-            int attributeCount = Convert.ToInt32(NPCData["AttributeCount"]);
+            int traitCount = Convert.ToInt32(NPCData["TraitCount"]);
 
-            for (int ix = 0; ix < attributeCount; ++ix)
-            {   //nPCAttribute에 new Attribute()로 Add.
-                nPCAttribute.Add(new NPCAttribute(NPCData[$"Attribute{ix + 1}"]));
+            for (int ix = 0; ix < traitCount; ++ix)
+            {   //nPCTrait에 new Trait()로 Add.
+                nPCTrait.Add(new NPCTrait(NPCData[$"Trait{ix + 1}"]));
             }
         }
 
         private void InitMonsterBuff()
         {
-            int attributeCount = nPCAttribute.Count;
-            for (int ix = 0; ix < attributeCount; ++ix)
+            int traitCount = nPCTrait.Count;
+            for (int ix = 0; ix < traitCount; ++ix)
             {
-                int buffCount = Convert.ToInt32(nPCAttribute[ix].attributeData["BuffCount"]);
+                int buffCount = Convert.ToInt32(nPCTrait[ix].traitData["BuffCount"]);
                 for (int iy = 0; iy < buffCount; ++iy)
                 {
-                    nPCBuff.Add(new NPCBuff(nPCAttribute[ix].attributeData[$"Buff{iy}"]));
+                    nPCBuff.Add(new NPCBuff(nPCTrait[ix].traitData[$"Buff{iy}"]));
                 }
             }
         }
