@@ -92,7 +92,7 @@ namespace BHSSolo.DungeonDefense.NPCs
                 int buffCount = Convert.ToInt32(nPCTrait[ix].traitData["BuffCount"]);
                 for (int iy = 0; iy < buffCount; ++iy)
                 {
-                    nPCBuff.Add(new NPCBuff(nPCTrait[ix].traitData[$"Buff{iy}"]));
+                    //nPCBuff.Add(new NPCBuff(nPCTrait[ix].traitData[$"Buff{iy}"])); //Todo:
                 }
             }
         }

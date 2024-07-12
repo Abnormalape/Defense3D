@@ -1,6 +1,7 @@
-﻿namespace BHSSolo.DungeonDefense.DungeonRoom;
-
-static class RoomDatas
+﻿namespace BHSSolo.DungeonDefense.DungeonRoom
 {
+    static class RoomDatas
+    {
 
+    }
 }

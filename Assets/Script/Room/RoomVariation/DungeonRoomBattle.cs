@@ -77,8 +77,8 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
         //DungeonRoom의 roomData를 초기화 한다.
         private void InitBattleRoomData(BattleRoomType battleRoom)
         {
-            roomData = FindSingleDictionaryFromDictionaryList.FindDictionaryByKey
-                (RoomDatas.asdf,"BattleRoomType",battleRoom);
+            //roomData = FindSingleDictionaryFromDictionaryList.FindDictionaryByKey
+            //    (RoomDatas.asdf,"BattleRoomType",battleRoom); //Todo:
         }
 
         
@@ -93,7 +93,7 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
 
             for (int ix = 0; ix < roomTraitCount; ++ix)
             {
-                roomTrait.Add(new DungeonRoomTrait($"RoomTrait{ix}")); 
+                //roomTrait.Add(new DungeonRoomTrait($"RoomTrait{ix}")); 
                 //Todo: 던전룸 특성은 생성될때, 던전룸 특성을 기준으로 dictionary를 생성한다.
             }
         }
@@ -104,7 +104,7 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
 
             for (int ix = 0;ix < roomTraitCount; ++ix)
             {
-                roomTrait[ix].roomTraitData(""); //Todo:
+                //roomTrait[ix].roomTraitData(""); //Todo:
             }
         }
     }

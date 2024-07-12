@@ -18,7 +18,7 @@ namespace BHSSolo.DungeonDefense.NPCs
         {
             BuffName = buffName; //버프의 이름을 설정한다.
 
-            buffData = ;//BuffName으로 NPCBuffData에서 하나의 Dictionary를 찾는다.
+            //buffData = ;//Todo: BuffName으로 NPCBuffData에서 하나의 Dictionary를 찾는다.
         }
     }
 
