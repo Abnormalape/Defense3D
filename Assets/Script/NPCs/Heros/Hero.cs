@@ -1,51 +1,54 @@
 ﻿using BHSSolo.DungeonDefense.StaticFunction;
 using System;
 using System.Collections.Generic;
-using System.Net.NetworkInformation;
 
 namespace BHSSolo.DungeonDefense.NPCs
 {
 
-    class Hero : NPCs
+    class Hero : NPC
     {
-
         public HeroType HeroType { get; private set; }
         public Hero(HeroType heroType)
         {   //level:1, equipment null 의 hero.
-            InitNPCDataTable(heroType);
+            InitHeroDataDictionary(heroType);
             InitHeroStatus(heroType);
-            InitHeroState();
+            InitHeroAttribute();
+            InitHeroBuff();
         }
         public Hero(HeroType heroType, int level)
         {   //level이 바뀌었고, equipment null의 hero.
             NPCLevel = level;
-            InitNPCDataTable(heroType);
+            InitHeroDataDictionary(heroType);
             InitHeroStatus(heroType);
-            InitHeroState();
+            InitHeroAttribute();
+            InitHeroBuff();
         }
 
         public Hero(HeroType heroType, List<NPCEquipment> equipments)
         {   //level:1, equipment !null 의 hero.
-            InitNPCDataTable(heroType);
+            InitHeroDataDictionary(heroType);
             InitHeroStatus(heroType);
-            InitHeroState();
-            InitHeroEquipment(equipments);
-            InitHeroStateWithEquipment();
+            InitHeroAttribute();
+            InitHeroBuff();
+            //InitHeroEquipment(equipments);
+            //InitHeroBuffWithEquipment();
         }
 
         public Hero(HeroType heroType, int level, List<NPCEquipment> equipments)
         {   //level이 바뀌었고, equipment !null 의 hero.
             NPCLevel = level;
-            InitNPCDataTable(heroType);
+            InitHeroDataDictionary(heroType);
             InitHeroStatus(heroType);
-            InitHeroState();
-            InitHeroEquipment(equipments);
-            InitHeroStateWithEquipment();
+            InitHeroAttribute();
+            InitHeroBuff();
+            //InitHeroEquipment(equipments);
+            //InitHeroBuffWithEquipment();
         }
 
-        private void InitNPCDataTable(HeroType heroType)
+        private void InitHeroDataDictionary(HeroType heroType)
         {
-            NPCData = NPCDataLoader.FindHeroFromHeroDictionary(heroType.ToString());
+            NPCData = FindSingleDictionaryFromDictionaryList.FindDictionaryByKey
+                (NPCDatas.NPCHeroData,"HeroType",heroType.ToString());
         }
 
         //Hero의 status초기화.
@@ -68,32 +71,30 @@ namespace BHSSolo.DungeonDefense.NPCs
             //Todo: level에 맞게 스탯에 변화를 준다.
         }
 
-        //Hero의 Equipment초기화.
-        private void InitHeroEquipment(List<NPCEquipment> equipment)
+        //Hero의 Attribute를 NPCData의 [Attribute]기준으로 초기화.
+        private void InitHeroAttribute()
         {
-            nPCEquipment = equipment; //장비창에 입력받은 리스트를 넣는다.
+            int attributeCount = Convert.ToInt32(NPCData["AttributeCount"]);
+
+            for (int ix = 0; ix < attributeCount; ++ix)
+            {   //nPCAttribute에 new Attribute()로 Add.
+                nPCAttribute.Add(new NPCAttribute(NPCData[$"Attribute{ix + 1}"]));
+            }
         }
 
-        //Hero의 State초기화.
-        //nature와 equipment가 제공하는 State를 저장한다.
-        private void InitHeroState()
-        {
-            //Todo: Type이 가진 특성에서 파생하는 효과를 지닌다.
-            int stateCount = Convert.ToInt32(NPCData["StateCount"]);
-
-            for (int ix = 0; ix < stateCount; ++ix)
+        //Todo: 현재 Room의 State 부여 방식은 잘못 되어있다.
+        //Hero의 Buff를 nPCAttribute의 [Buff]기준으로 초기화.
+        private void InitHeroBuff()
+        {   //Attribute가 Buff를 제공함.
+            int attributeCount = nPCAttribute.Count;
+            for (int ix = 0; ix < attributeCount; ++ix)
             {
-                //Todo: 현재 Room의 State 부여 방식은 잘못 되어있다.
-                //1. HeroData에서 StateCount를 찾아서 그 수만큼 순회한다.
-                //2. State{ix}는 상태의 이름이다.
-                string stateName = NPCData[$"State{ix + 1}"];
-                //3. 위의 이름을 NPCStateData에서 찾아낸다. Todo: 현재 NPCStateData가 없다.
-
-                //4. NPCState에 new로 생성하면서 등록한다.
-
+                int buffCount = Convert.ToInt32(nPCAttribute[ix].attributeData["BuffCount"]);
+                for (int iy = 0; iy < buffCount; ++iy)
+                {
+                    nPCBuff.Add(new NPCBuff(nPCAttribute[ix].attributeData[$"Buff{iy}"]));
+                }
             }
-
-            //Todo: 동시에 누가 주는 효과인지 명시해야한다.
         }
 
         private void InitHeroStateWithEquipment()
@@ -102,6 +103,13 @@ namespace BHSSolo.DungeonDefense.NPCs
 
             //Todo: 동시에 누가 주는 효과인지 명시해야한다.
         }
+
+        //Hero의 Equipment초기화.
+        private void InitHeroEquipment(List<NPCEquipment> equipment)
+        {
+            nPCEquipment = equipment; //장비창에 입력받은 리스트를 넣는다.
+        }
+
         public void GudokRoomEffect() //Todo: 임시코드.
         {
 

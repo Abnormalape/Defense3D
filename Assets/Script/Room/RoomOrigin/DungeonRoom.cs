@@ -74,6 +74,7 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
     }
     public enum RoomType
     {
+        None,
         Battle,
         Trap,
         Function,

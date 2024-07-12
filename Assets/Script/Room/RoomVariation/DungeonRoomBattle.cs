@@ -20,7 +20,7 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
     {
         public BattleRoomType BattleRoomType { get; private set; }
         private int monsterCapacity = 3;
-        private List<Monsters> roomMonster = new List<Monsters>(3);
+        private List<Monster> roomMonster = new List<Monster>(3);
         private int HeroCapacity = 3;
         private List<Hero> roomHero = new List<Hero>(3);
 

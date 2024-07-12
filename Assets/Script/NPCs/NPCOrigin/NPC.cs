@@ -10,14 +10,14 @@ namespace BHSSolo.DungeonDefense.NPCs
     /// nPCStatus : npc의 능력치. 해당 클래스에서 설명.
     /// nPCEquipment : npc의 장비.
     /// </summary>
-    class NPCs
+    class NPC
     {
         protected string NPCName;
         protected NPCType NPCType;
         protected int NPCLevel = 1;
         protected Dictionary<string, string> NPCData;
-        protected List<NPCNature> nPCNature = new List<NPCNature>(3);
-        protected List<NPCState> nPCState = new List<NPCState>(10);
+        protected List<NPCAttribute> nPCAttribute = new List<NPCAttribute>(3);
+        protected List<NPCBuff> nPCBuff = new List<NPCBuff>(10);
         protected NPCStatus nPCStatus;
         protected List<NPCEquipment> nPCEquipment = new List<NPCEquipment>(3);
     }
