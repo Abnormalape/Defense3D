@@ -1,4 +1,5 @@
 ﻿using BHSSolo.DungeonDefense.NPCs;
+using BHSSolo.DungeonDefense.StaticFunction;
 using JetBrains.Annotations;
 
 namespace BHSSolo.DungeonDefense.DungeonRoom
@@ -26,6 +27,13 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
         private string effectAdd;
         
         public string effectWhen { get; private set; }
+
+        public DungeonRoomEffect(string type)
+        {
+            FindSingleDictionaryFromDictionaryList.FindDictionaryByKey //생성할때 입력받은 타입으로, 단일 dictionary를 출력한다.
+                (RoomDatas.dungeonRoomEffectData, "RoomEffectName", type);
+            //dictionary의 값들을 순회해서 배치한다.
+        }
         public DungeonRoomEffect(
             object inputeffectProvider,
             int inputeffectProviderLevel,
