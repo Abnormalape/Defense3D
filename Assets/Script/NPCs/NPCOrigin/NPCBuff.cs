@@ -180,8 +180,9 @@ namespace BHSSolo.DungeonDefense.NPCs
         /// This Method Activates Buff.
         /// This runs on certain event.
         /// Ex) if there is buff like(when "me" attacks, "me" get damage) , This method runs get damage.
+        /// Todo: nPC do nothing in this method?
         /// </summary>
-        private void ActivateBuff()
+        private void ActivateBuff(NPC nPC) 
         {
             if (buffData["BuffType"] == "BuffModifier") //Add or Remove Target's Buff.
             {
@@ -194,7 +195,7 @@ namespace BHSSolo.DungeonDefense.NPCs
             {
                 foreach (var e in _buffTargetNPCs)
                 {
-                    e.Value.NPCStatusController.ModifyStatus(); //Todo: call target's Status modifier and run its method.
+                    //e.Value.NPCStatusController.ModifyStatus(); //Todo: call target's Status modifier and run its method.
                 }
             }
         }

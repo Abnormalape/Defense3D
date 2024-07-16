@@ -78,7 +78,7 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
         private void InitBattleRoomData(BattleRoomType battleRoom)
         {
             roomData = FindSingleDictionaryFromDictionaryList.FindDictionaryByKey
-                (RoomDatas.dungeonRoomBattleData, "BattleRoomType", battleRoom);
+                (RoomDatas.dungeonRoomBattleData, "BattleRoomType", battleRoom.ToString()); //Todo: String? Enum?
         }
 
         

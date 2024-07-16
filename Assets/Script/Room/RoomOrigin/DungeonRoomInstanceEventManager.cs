@@ -1,4 +1,4 @@
-﻿using Unity.VisualScripting;
+﻿using BHSSolo.DungeonDefense.NPCs;
 
 namespace BHSSolo.DungeonDefense.DungeonRoom
 {
@@ -8,16 +8,16 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
     class DungeonRoomInstanceEventManager
     {
         //객체가 들어오고 나갈때 이벤트 실행.
-        public delegate void HeroEnter();
+        public delegate void HeroEnter(NPC nPC);
         public event HeroEnter OnHeroEnter;
 
-        public delegate void HeroExit();
+        public delegate void HeroExit(NPC nPC);
         public event HeroEnter OnHeroExit;
 
-        public delegate void HeroDead(); //Hero.NPCEventHandler.OnNPCDead += HeroDead;
+        public delegate void HeroDead(NPC nPC); //Hero.NPCEventHandler.OnNPCDead += HeroDead;
         public event HeroDead OnHeroDead;
 
-        public delegate void MonsterDead(); //Monster.NPCEventHandler.OnNPCDead += MonsterDead;
+        public delegate void MonsterDead(NPC nPC); //Monster.NPCEventHandler.OnNPCDead += MonsterDead;
         public event MonsterDead OnMonsterDead;
 
         private void HeyListen()
