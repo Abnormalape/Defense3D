@@ -10,8 +10,15 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
         //객체가 들어오고 나갈때 이벤트 실행.
         public delegate void HeroEnter();
         public event HeroEnter OnHeroEnter;
+
         public delegate void HeroExit();
         public event HeroEnter OnHeroExit;
+
+        public delegate void HeroDead(); //Hero.NPCEventHandler.OnNPCDead += HeroDead;
+        public event HeroDead OnHeroDead;
+
+        public delegate void MonsterDead(); //Monster.NPCEventHandler.OnNPCDead += MonsterDead;
+        public event MonsterDead OnMonsterDead;
 
         private void HeyListen()
         {

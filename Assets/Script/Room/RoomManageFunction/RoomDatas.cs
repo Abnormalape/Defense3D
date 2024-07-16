@@ -1,11 +1,4 @@
-<<<<<<< HEAD
-﻿namespace BHSSolo.DungeonDefense.DungeonRoom
-{
-    static class RoomDatas
-    {
-
-=======
-﻿using BHSSolo.DungeonDefense.StaticFunction;
+using BHSSolo.DungeonDefense.StaticFunction;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,6 +25,5 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
         [SerializeField] static TextAsset DungeonRoomEffectDataCSV;
         public static List<Dictionary<string, string>> dungeonRoomEffectData { get; private set; }
          = ParseCSV.ParseCsvFile(DungeonRoomEffectDataCSV.text);
->>>>>>> 4f7035a0fb0bb46dcbaf538f47ebde1df47f54de
     }
 }

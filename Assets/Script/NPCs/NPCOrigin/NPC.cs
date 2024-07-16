@@ -1,5 +1,5 @@
-﻿using JetBrains.Annotations;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using DungeonRoom = BHSSolo.DungeonDefense.DungeonRoom.DungeonRoom;
 
 namespace BHSSolo.DungeonDefense.NPCs
 {
@@ -20,6 +20,18 @@ namespace BHSSolo.DungeonDefense.NPCs
         protected List<NPCBuff> nPCBuff = new List<NPCBuff>(10);
         protected NPCStatus nPCStatus;
         protected List<NPCEquipment> nPCEquipment = new List<NPCEquipment>(3);
+        public NPCEventHandler NPCEventHandler { get; set; } = new NPCEventHandler();
+        public DungeonRoom.DungeonRoom placingDungeonRoom; //Room Where NPC Locates.
+
+        protected static int NPCCount = 1;
+        public int NPCID { get; protected set; }
+        protected void InitNPCID()
+        {
+            NPCID = NPCCount;
+            NPCCount++;
+        }
+
+        public NPCBuffController NPCBuffController { get; protected set; }
     }
     public enum NPCType
     {

@@ -77,13 +77,8 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
         //DungeonRoom의 roomData를 초기화 한다.
         private void InitBattleRoomData(BattleRoomType battleRoom)
         {
-<<<<<<< HEAD
-            //roomData = FindSingleDictionaryFromDictionaryList.FindDictionaryByKey
-            //    (RoomDatas.asdf,"BattleRoomType",battleRoom); //Todo:
-=======
             roomData = FindSingleDictionaryFromDictionaryList.FindDictionaryByKey
-                (RoomDatas.dungeonRoomBattleData,"BattleRoomType",battleRoom);
->>>>>>> 4f7035a0fb0bb46dcbaf538f47ebde1df47f54de
+                (RoomDatas.dungeonRoomBattleData, "BattleRoomType", battleRoom);
         }
 
         
@@ -92,7 +87,6 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
             roomPosition = roomBuildPosition;
         }
 
-<<<<<<< HEAD
         private void InitBattleRoomTrait()
         {
             int roomTraitCount = Convert.ToInt32(roomData["RoomTraitCount"]);
@@ -104,19 +98,13 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
             }
         }
 
-=======
->>>>>>> 4f7035a0fb0bb46dcbaf538f47ebde1df47f54de
         private void InitBattleRoomEffect()
         {
             int effectCount = Convert.ToInt32(roomData["EffectCount"]);
 
             for (int ix = 0;ix < effectCount; ++ix)
             {
-<<<<<<< HEAD
-                //roomTrait[ix].roomTraitData(""); //Todo:
-=======
                 roomEffect.Add(new DungeonRoomEffect(roomData[$"Effect{ix+1}"])); //Todo:
->>>>>>> 4f7035a0fb0bb46dcbaf538f47ebde1df47f54de
             }
         }
     }

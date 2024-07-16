@@ -22,9 +22,11 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
         protected int roomLevel = 1;
         protected Dictionary<string, string> roomData;
         protected List<DungeonRoomEffect> roomEffect = new List<DungeonRoomEffect>(10); // 방의 효과는 10개가 넘지 않을듯 싶다.
-        protected DungeonRoomInstanceEventManager dungeonRoomInstanceEventManager = new DungeonRoomInstanceEventManager();
-        //Todo: 방마다 지닌것이 아닌, 모든 방의 이벤트를 총괄하는 총괄하는 총괄자를 만들자.
 
+        //Todo: 방마다 지닌것이 아닌, 모든 방의 이벤트를 총괄하는 총괄하는 총괄자를 만들자.
+        public DungeonRoomInstanceEventManager dungeonRoomInstanceEventManager = new DungeonRoomInstanceEventManager();
+
+        public List<DungeonRoom> ConnectedRooms; //Can be Add or Delete, actually use ConnectedRooms.dungeonRoomInstanceEventManager.
 
 
         protected List<DungeonRoomEffect> roomEffectHeroEnter = new List<DungeonRoomEffect>(4);

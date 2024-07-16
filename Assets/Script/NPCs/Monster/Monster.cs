@@ -9,6 +9,7 @@ namespace BHSSolo.DungeonDefense.NPCs
         public MonsterType MonsterType { get; private set; }
         public Monster(MonsterType monsterType)
         {
+            InitNPCID();
             InitMonsterDictionary(monsterType);
             InitMonsterStatus(monsterType);
             InitMonsterTrait();
@@ -17,6 +18,7 @@ namespace BHSSolo.DungeonDefense.NPCs
 
         public Monster(MonsterType monsterType, int level)
         {
+            InitNPCID();
             NPCLevel = level;
             InitMonsterDictionary(monsterType);
             InitMonsterStatus(monsterType);
@@ -26,6 +28,7 @@ namespace BHSSolo.DungeonDefense.NPCs
 
         public Monster(MonsterType monsterType, List<NPCEquipment> equipments)
         {
+            InitNPCID();
             InitMonsterDictionary(monsterType);
             InitMonsterStatus(monsterType);
             InitMonsterTrait();
@@ -36,6 +39,7 @@ namespace BHSSolo.DungeonDefense.NPCs
 
         public Monster(MonsterType monsterType, int level, List<NPCEquipment> equipments)
         {
+            InitNPCID();
             NPCLevel = level;
             InitMonsterDictionary(monsterType);
             InitMonsterStatus(monsterType);

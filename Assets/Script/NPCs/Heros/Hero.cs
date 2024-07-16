@@ -10,6 +10,7 @@ namespace BHSSolo.DungeonDefense.NPCs
         public HeroType HeroType { get; private set; }
         public Hero(HeroType heroType)
         {   //level:1, equipment null 의 hero.
+            InitNPCID();
             InitHeroDataDictionary(heroType);
             InitHeroStatus(heroType);
             InitHeroTrait();
@@ -17,6 +18,7 @@ namespace BHSSolo.DungeonDefense.NPCs
         }
         public Hero(HeroType heroType, int level)
         {   //level이 바뀌었고, equipment null의 hero.
+            InitNPCID();
             NPCLevel = level;
             InitHeroDataDictionary(heroType);
             InitHeroStatus(heroType);
@@ -26,6 +28,7 @@ namespace BHSSolo.DungeonDefense.NPCs
 
         public Hero(HeroType heroType, List<NPCEquipment> equipments)
         {   //level:1, equipment !null 의 hero.
+            InitNPCID();
             InitHeroDataDictionary(heroType);
             InitHeroStatus(heroType);
             InitHeroTrait();
@@ -36,6 +39,7 @@ namespace BHSSolo.DungeonDefense.NPCs
 
         public Hero(HeroType heroType, int level, List<NPCEquipment> equipments)
         {   //level이 바뀌었고, equipment !null 의 hero.
+            InitNPCID();
             NPCLevel = level;
             InitHeroDataDictionary(heroType);
             InitHeroStatus(heroType);
@@ -44,6 +48,8 @@ namespace BHSSolo.DungeonDefense.NPCs
             //InitHeroEquipment(equipments);
             //InitHeroBuffWithEquipment();
         }
+
+        
 
         private void InitHeroDataDictionary(HeroType heroType)
         {
@@ -93,6 +99,7 @@ namespace BHSSolo.DungeonDefense.NPCs
                 for (int iy = 0; iy < buffCount; ++iy)
                 {
                     //nPCBuff.Add(new NPCBuff(nPCTrait[ix].traitData[$"Buff{iy}"])); //Todo:
+                    nPCBuff.Add(new NPCBuff(nPCTrait[ix].traitData[$"Buff{iy}"], this));
                 }
             }
         }

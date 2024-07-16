@@ -7,6 +7,13 @@ namespace BHSSolo.DungeonDefense.StaticFunction
     /// </summary>
     static class FindSingleDictionaryFromDictionaryList
     {
+        //Test Dictionary for better Data Saving.
+        static Dictionary<int,Dictionary<string,string>> tempDictDict;
+
+        /// <summary>
+        /// this method Find out single dictionary from List<dictionary<>> with key and string.
+        /// Todo: But if We Use Dictionary<int,Dictionary<>> it can be better
+        /// </summary>
         public static Dictionary<string, string> FindDictionaryByKey(List<Dictionary<string,string>> list,string key,string value)
         {
             Dictionary<string, string> outDictionary = new Dictionary <string, string>();
@@ -17,6 +24,20 @@ namespace BHSSolo.DungeonDefense.StaticFunction
                 if (tempDictionary[ix][key] == value)
                 { outDictionary = tempDictionary[ix]; break; }
             }
+            return outDictionary;
+        }
+
+        /// <summary>
+        /// Dictionary Dictionary.
+        /// Todo: Need to Convert List<Dictionary> datas to Dictionary<string, Dictionary<>> data.
+        /// </summary>
+        public static Dictionary<string, string> FindDictionaryByDictionary
+            (Dictionary<string,Dictionary<string,string>> list, string DicionaryName)
+        {
+            Dictionary<string, string> outDictionary = new Dictionary<string, string>();
+
+            outDictionary = list[DicionaryName];
+
             return outDictionary;
         }
     }
