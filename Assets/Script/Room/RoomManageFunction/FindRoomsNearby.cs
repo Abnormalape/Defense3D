@@ -3,9 +3,9 @@ using UnityEditor;
 
 namespace BHSSolo.DungeonDefense.DungeonRoom
 {
-    static class FindRooms
+    static class FindRoomsNearby
     {
-        static public List<DungeonRoom> FindDungeonRoomsByLength(DungeonRoom inputCentralRoom, int distance)
+        static public List<DungeonRoom> FindDungeonRoomsByRange(DungeonRoom inputCentralRoom, int distance)
         {
             DungeonRoom centralRoom = inputCentralRoom;
             int findDistance = distance;

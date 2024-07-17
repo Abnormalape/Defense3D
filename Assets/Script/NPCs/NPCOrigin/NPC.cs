@@ -31,7 +31,8 @@ namespace BHSSolo.DungeonDefense.NPCs
             NPCCount++;
         }
 
-        public NPCBuffController NPCBuffController { get; protected set; }
+        public NPCBuffController NPCBuffController { get; protected set; } = new NPCBuffController();
+        public NPCStatusController NPCStatusController { get; protected set; } = new NPCStatusController();
     }
     public enum NPCType
     {

@@ -52,7 +52,8 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
         private void InitRoomEffect()
         {
             //전투방 종류로 룸의 데이터 찾기.
-            roomData = RoomDataLoader.FindBattleRoomFromBattleRoomDictionary(BattleRoomType.ToString());
+            roomData = FindSingleDictionaryFromMultipleDictionary.FindDictionaryFromDictionary
+                (Data.GameData.DungeonRoomData,BattleRoomType.ToString());
 
             //찾아낸 데이터로 방의 상태 추가하기.
             Dictionary<string, string> effectDictionary = roomData;
@@ -60,25 +61,25 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
 
             for (int ix = 0; ix < effectsCount; ++ix)
             {
-                roomEffect.Add(
-                    new DungeonRoomEffect( this,
-                    roomLevel,
-                    Convert.ToInt32(effectDictionary[$"WhenRange{ix+1}"]),
-                    Convert.ToInt32(effectDictionary[$"Range{ix + 1}"]),
-                    effectDictionary[$"Effect{ix + 1}"],
-                    effectDictionary[$"Target{ix + 1}"],
-                    effectDictionary[$"Add{ix + 1}"],
-                    effectDictionary[$"Value{ix + 1}"],
-                    effectDictionary[$"When{ix + 1}"]
-                    )); //Todo: RoomState를 새로 생성한다.
+                //roomEffect.Add(
+                //    new DungeonRoomEffect( this,
+                //    roomLevel,
+                //    Convert.ToInt32(effectDictionary[$"WhenRange{ix+1}"]),
+                //    Convert.ToInt32(effectDictionary[$"Range{ix + 1}"]),
+                //    effectDictionary[$"Effect{ix + 1}"],
+                //    effectDictionary[$"Target{ix + 1}"],
+                //    effectDictionary[$"Add{ix + 1}"],
+                //    effectDictionary[$"Value{ix + 1}"],
+                //    effectDictionary[$"When{ix + 1}"]
+                //    )); //Todo: RoomState를 새로 생성한다.
             }
         }
 
         //DungeonRoom의 roomData를 초기화 한다.
         private void InitBattleRoomData(BattleRoomType battleRoom)
         {
-            roomData = FindSingleDictionaryFromDictionaryList.FindDictionaryByKey
-                (RoomDatas.dungeonRoomBattleData, "BattleRoomType", battleRoom.ToString()); //Todo: String? Enum?
+            roomData = FindSingleDictionaryFromMultipleDictionary.FindDictionaryFromDictionary
+                (Data.GameData.DungeonRoomData, battleRoom.ToString());
         }
 
         

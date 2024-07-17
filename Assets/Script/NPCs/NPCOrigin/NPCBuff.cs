@@ -26,13 +26,14 @@ namespace BHSSolo.DungeonDefense.NPCs
         private bool _effectTargetFound;    //Effect Target Finding has Finished. I true, Effect target may be "me".
                                             //If false, this keeps finding effection target.
 
-        public NPCBuff(string buffName, NPC buffProvider) //Todo: BuffProvider should be renamed.
+        public NPCBuff(string buffName, NPC buffOwner) //buffOwner Means Who Contains buff.
         {
-            if (buffProvider is Hero) { _buffProvider = (Hero)buffProvider; }
-            else if (buffProvider is Monster) { _buffProvider = (Monster)buffProvider; }
+            if (buffOwner is Hero) { _buffProvider = (Hero)buffOwner; }
+            else if (buffOwner is Monster) { _buffProvider = (Monster)buffOwner; }
             else { return; }
 
-            buffData = FindSingleDictionaryFromDictionaryList.FindDictionaryByKey(NPCDatas.NPCBuffData, "BuffName", $"{buffName}");
+            buffData = FindSingleDictionaryFromMultipleDictionary.FindDictionaryFromDictionary
+                (Data.GameData.BuffData, buffName);
         }
 
         private List<object> _subscribedObserveTarget; // Room, Monster, Hero, Mawang, Champion etc
@@ -68,7 +69,7 @@ namespace BHSSolo.DungeonDefense.NPCs
                 int observingRange = Convert.ToInt32(buffData["ObserveTargetRange"]);
 
                 List<DungeonRoom.DungeonRoom> observingRooms =
-                    FindRooms.FindDungeonRoomsByLength(_buffProvider.placingDungeonRoom, observingRange);
+                    FindRoomsNearby.FindDungeonRoomsByRange(_buffProvider.placingDungeonRoom, observingRange);
 
                 //If Buff activates when Hero Enters at room.
                 if (buffData["ObserveTargetAction"] == "OnHeroEnter")
@@ -93,7 +94,7 @@ namespace BHSSolo.DungeonDefense.NPCs
                 int observingRange = Convert.ToInt32(buffData["ObserveTargetRange"]);
 
                 List<DungeonRoom.DungeonRoom> observingRooms =
-                    FindRooms.FindDungeonRoomsByLength(_buffProvider.placingDungeonRoom, observingRange);
+                    FindRoomsNearby.FindDungeonRoomsByRange(_buffProvider.placingDungeonRoom, observingRange);
 
                 if (buffData["ObserveTargetAction"] == "OnHeroDead")
                 {
@@ -109,7 +110,7 @@ namespace BHSSolo.DungeonDefense.NPCs
                 int observingRange = Convert.ToInt32(buffData["ObserveTargetRange"]);
 
                 List<DungeonRoom.DungeonRoom> observingRooms =
-                    FindRooms.FindDungeonRoomsByLength(_buffProvider.placingDungeonRoom, observingRange);
+                    FindRoomsNearby.FindDungeonRoomsByRange(_buffProvider.placingDungeonRoom, observingRange);
 
                 if (buffData["ObserveTargetAction"] == "OnMonsterDead")
                 {
@@ -130,9 +131,6 @@ namespace BHSSolo.DungeonDefense.NPCs
         private void UnsubdcribeToObserveTargetEvent()
         {
         }
-
-        //When Hero Died On Room A, Monster B which is on Room A, gives buff to all Monsters in Dungeon.
-
 
         private List<DungeonRoom.DungeonRoom> _buffTargetRooms;
 
@@ -170,7 +168,7 @@ namespace BHSSolo.DungeonDefense.NPCs
             }
         }
 
-        //Todo: Think other way => Reset -buffTargetNPCs.
+        //Todo: Think other way => Reset _buffTargetNPCs.
         private void UnsubscribeBuffTargetRoom()
         {
 
@@ -195,7 +193,7 @@ namespace BHSSolo.DungeonDefense.NPCs
             {
                 foreach (var e in _buffTargetNPCs)
                 {
-                    //e.Value.NPCStatusController.ModifyStatus(); //Todo: call target's Status modifier and run its method.
+                    e.Value.NPCStatusController.ModifyStatus(); //Todo: call target's Status modifier and run its method.
                 }
             }
         }

@@ -51,8 +51,8 @@ namespace BHSSolo.DungeonDefense.NPCs
 
         private void InitMonsterDictionary(MonsterType monsterType)
         {
-            NPCData = FindSingleDictionaryFromDictionaryList.FindDictionaryByKey
-                (NPCDatas.NPCMonsterData, "MonsterType", monsterType.ToString());
+            NPCData = FindSingleDictionaryFromMultipleDictionary.FindDictionaryFromDictionary
+                (Data.GameData.NPCMonsterData, monsterType.ToString());
         }
 
         private void InitMonsterStatus(MonsterType monsterType)

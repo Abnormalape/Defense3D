@@ -10,10 +10,11 @@ namespace BHSSolo.DungeonDefense.NPCs
 
         public object traitGiver { get; private set; } //특성제공자.
 
+        //Todo: Trait Initializer
         public NPCTrait(string traitName)
         {
-            traitData = FindSingleDictionaryFromDictionaryList.FindDictionaryByKey(
-                NPCDatas.NPCTraitData, "TraitName", traitName);
+            traitData = FindSingleDictionaryFromMultipleDictionary.FindDictionaryFromDictionary
+                (Data.GameData.NPCTraitData, traitName);
         }
     }
 

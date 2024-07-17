@@ -53,8 +53,8 @@ namespace BHSSolo.DungeonDefense.NPCs
 
         private void InitHeroDataDictionary(HeroType heroType)
         {
-            NPCData = FindSingleDictionaryFromDictionaryList.FindDictionaryByKey
-                (NPCDatas.NPCHeroData,"HeroType",heroType.ToString());
+            NPCData = FindSingleDictionaryFromMultipleDictionary.FindDictionaryFromDictionary
+                (Data.GameData.NPCHeroData,heroType.ToString());
         }
 
         //Hero의 status초기화.
@@ -98,7 +98,6 @@ namespace BHSSolo.DungeonDefense.NPCs
                 int buffCount = Convert.ToInt32(nPCTrait[ix].traitData["BuffCount"]);
                 for (int iy = 0; iy < buffCount; ++iy)
                 {
-                    //nPCBuff.Add(new NPCBuff(nPCTrait[ix].traitData[$"Buff{iy}"])); //Todo:
                     nPCBuff.Add(new NPCBuff(nPCTrait[ix].traitData[$"Buff{iy}"], this));
                 }
             }
