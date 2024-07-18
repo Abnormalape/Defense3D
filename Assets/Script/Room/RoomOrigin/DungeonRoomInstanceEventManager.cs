@@ -1,9 +1,13 @@
 ﻿using BHSSolo.DungeonDefense.NPCs;
+using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.DungeonRoom
 {
     /// <summary>
-    /// 모든 던전룸의 이벤트를 관리한다.
+    /// This class Manages Single Dungeon Room's Event.
+    /// Event Occurs In Unity.
+    /// This Subscribes Monster in Room, Heros Entering Room(Hero should Enter room to locate at room)
+    /// and Room's Floor.
     /// </summary>
     class DungeonRoomInstanceEventManager
     {
@@ -20,12 +24,7 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
         public delegate void MonsterDead(NPC nPC); //Monster.NPCEventHandler.OnNPCDead += MonsterDead;
         public event MonsterDead OnMonsterDead;
 
-        private void HeyListen()
-        {
-            
-        }
 
-        //객체가 들어오고 나가는 것만 관리하면 이것을 구독한 것들이 해당 객체를 알아서 구독하건 말건 할것.
     }
     public enum DungeonRoomInstanceEvent
     {
