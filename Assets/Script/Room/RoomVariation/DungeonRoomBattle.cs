@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using System.Numerics;
 using BHSSolo.DungeonDefense.NPCs;
-using BHSSolo.DungeonDefense.StaticFunction;
+using BHSSolo.DungeonDefense.Function;
 
 namespace BHSSolo.DungeonDefense.DungeonRoom
 {

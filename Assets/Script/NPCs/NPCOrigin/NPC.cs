@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
-using DungeonRoom = BHSSolo.DungeonDefense.DungeonRoom.DungeonRoom;
+using UnityEngine;
+
 
 namespace BHSSolo.DungeonDefense.NPCs
 {
@@ -10,8 +11,19 @@ namespace BHSSolo.DungeonDefense.NPCs
     /// nPCStatus : npc의 능력치. 해당 클래스에서 설명.
     /// nPCEquipment : npc의 장비.
     /// </summary>
-    class NPC
+    class NPC : MonoBehaviour
     {
+        protected Function.StateMachineBehaviour StateMachineBehaviour;
+
+        //protected NPCStatusController     = NPCStatusController;
+        //protected NPCSubStateController   = NPCSubStateController;
+        //protected NPCBuffController       = NPCBuffController;
+        //protected NPCTraitController      = NPCTraitController;
+        //protected NPCEquipmentController  = NPCEquipmentController;
+
+
+
+        //==============================================================//
         protected string NPCName;
         protected NPCType NPCType;
         protected int NPCLevel = 1;

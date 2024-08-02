@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace BHSSolo.DungeonDefense.StaticFunction
+namespace BHSSolo.DungeonDefense.Function
 {
     static class ParseCSV
     {

@@ -1,5 +1,5 @@
 ﻿using BHSSolo.DungeonDefense.DungeonRoom;
-using BHSSolo.DungeonDefense.StaticFunction;
+using BHSSolo.DungeonDefense.Function;
 using System;
 using System.Collections.Generic;
 using TMPro;

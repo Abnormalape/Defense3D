@@ -1,7 +1,6 @@
 ﻿using BHSSolo.DungeonDefense.Management;
 using BHSSolo.DungeonDefense.NPCs;
-using BHSSolo.DungeonDefense.StaticFunction;
-using JetBrains.Annotations;
+using BHSSolo.DungeonDefense.Function;
 using System.Collections.Generic;
 
 namespace BHSSolo.DungeonDefense.DungeonRoom

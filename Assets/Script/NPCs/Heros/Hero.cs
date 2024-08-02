@@ -1,4 +1,4 @@
-﻿using BHSSolo.DungeonDefense.StaticFunction;
+﻿using BHSSolo.DungeonDefense.Function;
 using System;
 using System.Collections.Generic;
 

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using BHSSolo.DungeonDefense.StaticFunction;
+using BHSSolo.DungeonDefense.Function;
 
 namespace BHSSolo.DungeonDefense.NPCs
 {

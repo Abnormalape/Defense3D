@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BHSSolo.DungeonDefense.NPCs;
+using System.Collections.Generic;
 using System.Numerics;
 
 namespace BHSSolo.DungeonDefense.DungeonRoom
@@ -29,13 +30,17 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
         public List<DungeonRoom> ConnectedRooms; //Can be Add or Delete, actually use ConnectedRooms.dungeonRoomInstanceEventManager.
 
 
-        protected List<DungeonRoomEffect> roomEffectHeroEnter = new List<DungeonRoomEffect>(4);
-        protected List<DungeonRoomEffect> roomEffectHeroDead = new List<DungeonRoomEffect>(4);
-        protected List<DungeonRoomEffect> roomEffectHeroExit = new List<DungeonRoomEffect>(4);
-        protected List<DungeonRoomEffect> roomEffectMonsterPlace = new List<DungeonRoomEffect>(4);
-        protected List<DungeonRoomEffect> roomEffectMonsterDead = new List<DungeonRoomEffect>(4);
-        protected List<DungeonRoomEffect> roomEffectDayStart = new List<DungeonRoomEffect>(4);
-        protected List<DungeonRoomEffect> roomEffectDayEnd = new List<DungeonRoomEffect>(4);
+        public delegate void HeroEnter(Hero enterHero);
+        public event HeroEnter OnHeroEnter;
+
+        public delegate void HeroExit(Hero exitHero);
+        public event HeroExit OnHeroExit;
+
+        public delegate void HeroDead(Hero deadHero);
+        public event HeroDead OnHeroDead;
+
+        public delegate void MonsterDead(Hero deadMonster);
+        public event MonsterDead OnMonsterDead;
 
 
         //protected void DevideRoomEffectWithItsCondition()

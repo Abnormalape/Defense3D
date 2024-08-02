@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BHSSolo.DungeonDefense.StaticFunction
+namespace BHSSolo.DungeonDefense.Function
 {
     /// <summary>
     /// 입력한 조건에 맞는 Dictionary를 찾아주는 클래스 이다.
