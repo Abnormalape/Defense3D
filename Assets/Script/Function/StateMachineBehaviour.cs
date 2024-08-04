@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.Function
 {
-    class StateMachineBehaviour : MonoBehaviour
+    public class StateMachineBehaviour : MonoBehaviour
     {
         private State _currentState;
 

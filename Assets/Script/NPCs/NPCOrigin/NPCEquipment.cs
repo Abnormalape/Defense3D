@@ -1,6 +1,6 @@
 ﻿namespace BHSSolo.DungeonDefense.NPCs
 {
-    class NPCEquipment
+    public class NPCEquipment
     {
 
     }

@@ -1,6 +1,6 @@
 ﻿namespace BHSSolo.DungeonDefense.NPCs
 {
-    abstract class State
+    abstract public class State
     {
         private object _stateCaller;
         public object StateCaller { get => _stateCaller; set => _stateCaller = value; }

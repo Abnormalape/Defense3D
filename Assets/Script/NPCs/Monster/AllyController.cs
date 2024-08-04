@@ -1,16 +1,30 @@
-﻿namespace BHSSolo.DungeonDefense.NPCs
+﻿using BHSSolo.DungeonDefense.DungeonRoom;
+
+namespace BHSSolo.DungeonDefense.NPCs
 {
-    class AllyController : NPC
+    public class AllyController : NPC
     {
         private void Awake()
         {
-            this.StateMachineBehaviour = new Function.StateMachineBehaviour();
+            this.StateMachineBehaviour = new();
+            OnPlaced += SetCurrentRoom;
+            OnDisPlaced += SetCurrentRoomEmpty;
+        }
+
+        private void SetCurrentRoom(AllyController enteredNPC, DungeonRoomController placingRoom)
+        {
+            CurrentRoom = placingRoom;
+        }
+
+        private void SetCurrentRoomEmpty()
+        {
+            CurrentRoom = null;
         }
 
         public delegate void Attack();
         public delegate void Damaged();
         public delegate void Dead();
-        public delegate void Placed();
+        public delegate void Placed(AllyController placedAlly, DungeonRoomController placedRoom);
         public delegate void DisPlaced();
 
 

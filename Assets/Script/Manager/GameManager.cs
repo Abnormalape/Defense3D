@@ -1,29 +1,27 @@
 using BHSSolo.DungeonDefense.Singleton;
+using System.Runtime.CompilerServices;
+using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.Management
 {
-    public static class GameManager
+    public class GameManager : SingletonMono<GameManager>
     {
-        //Time flows as
-        // DayStarted
-        // => ManagePhaseStarted => Action => ManagePhaseFinished
-        // => BattlePhaseStarted => Action => BattlePhaseFinished
-        // => ManagePhaseStarted => Action => ManagePhaseFinished 
-        // => DayFinished
+        public EnemyManager EnemyManager { get => _enemyManager; private set => _enemyManager = value; }
 
-        public delegate void ManagePhaseStarted();
-        public delegate void ManagePhaseFinished();
-        public delegate void BattlePhaseStarted();
-        public delegate void BattlePhaseFinished();
-        public delegate void DayStarted();
-        public delegate void DayFinished();
+        public AllyManager AllyManager { get => _allyManager; private set => _allyManager = value; }
 
-        public static event ManagePhaseStarted OnManagePhaseStarted;
-        public static event ManagePhaseFinished OnManagePhaseFinished;
-        public static event BattlePhaseStarted OnBattlePhaseStarted;
-        public static event BattlePhaseFinished OnBattlePhaseFinished;
-        public static event DayStarted OnDayStarted;
-        public static event DayFinished OnDayFinished;
+        public RoomManager RoomManager { get => _roomManager; private set => _roomManager = value; }
 
+        
+        [SerializeField] private EnemyManager _enemyManager;
+        [SerializeField] private AllyManager _allyManager;
+        [SerializeField] private RoomManager _roomManager;
+
+        private void Awake()
+        {
+            if (EnemyManager == null) { EnemyManager = GetComponent<EnemyManager>(); }
+            if (AllyManager == null) { AllyManager = GetComponent<AllyManager>(); }
+            if (RoomManager == null) { RoomManager = GetComponent<RoomManager>(); }
+        }
     }
 }

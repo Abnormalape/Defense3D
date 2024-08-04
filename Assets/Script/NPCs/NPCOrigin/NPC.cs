@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using BHSSolo.DungeonDefense.DungeonRoom;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -11,40 +12,56 @@ namespace BHSSolo.DungeonDefense.NPCs
     /// nPCStatus : npc의 능력치. 해당 클래스에서 설명.
     /// nPCEquipment : npc의 장비.
     /// </summary>
-    class NPC : MonoBehaviour
+    public abstract class NPC : MonoBehaviour
     {
+        //private Data //Todo: Data Of Single NPC;
+
         protected Function.StateMachineBehaviour StateMachineBehaviour;
+        public NPCStatusController      NPCStatusController { get; private set; }
 
-        //protected NPCStatusController     = NPCStatusController;
-        //protected NPCSubStateController   = NPCSubStateController;
-        //protected NPCBuffController       = NPCBuffController;
-        //protected NPCTraitController      = NPCTraitController;
-        //protected NPCEquipmentController  = NPCEquipmentController;
+        public NPCSubStatusController   NPCSubStateController { get; private set; }
 
+        public NPCTraitController       NPCTraitController { get; private set; }
 
+        public NPCBuffController        NPCBuffController { get; private set; }
+
+        public NPCEquipmentController   NPCEquipmentController { get; private set; }
+
+        public DungeonRoomController    CurrentRoom { get; protected set; }
+
+        public Dictionary<string, string> NPCData { get; private set; }
+
+        private void Awake()
+        {
+            NPCStatusController = new(this);
+            NPCSubStateController = new(this);
+            NPCTraitController = new(this);
+            NPCBuffController = new(this);
+            NPCEquipmentController = new(this);
+        }
 
         //==============================================================//
         protected string NPCName;
         protected NPCType NPCType;
         protected int NPCLevel = 1;
-        protected Dictionary<string, string> NPCData;
-        protected List<NPCTrait> nPCTrait = new List<NPCTrait>(3);
-        protected List<NPCBuff> nPCBuff = new List<NPCBuff>(10);
-        protected NPCStatus nPCStatus;
-        protected List<NPCEquipment> nPCEquipment = new List<NPCEquipment>(3);
-        public NPCEventHandler NPCEventHandler { get; set; } = new NPCEventHandler();
-        public DungeonRoom.DungeonRoom placingDungeonRoom; //Room Where NPC Locates.
+        
 
-        protected static int NPCCount = 1;
-        public int NPCID { get; protected set; }
-        protected void InitNPCID()
-        {
-            NPCID = NPCCount;
-            NPCCount++;
-        }
+        //protected List<NPCTrait> nPCTrait = new List<NPCTrait>(3);
+        //protected List<NPCBuff> nPCBuff = new List<NPCBuff>(10);
+        //protected NPCStatus nPCStatus;
+        //protected List<NPCEquipment> nPCEquipment = new List<NPCEquipment>(3);
 
-        public NPCBuffController NPCBuffController { get; protected set; } = new NPCBuffController();
-        public NPCStatusController NPCStatusController { get; protected set; } = new NPCStatusController();
+        //public NPCEventHandler NPCEventHandler { get; set; } = new NPCEventHandler();
+
+
+
+        //protected static int NPCCount = 1; // Todo:
+        //public int NPCID { get; protected set; } // Todo:
+        //protected void InitNPCID() // Todo:
+        //{
+        //    NPCID = NPCCount;
+        //    NPCCount++;
+        //}
     }
     public enum NPCType
     {

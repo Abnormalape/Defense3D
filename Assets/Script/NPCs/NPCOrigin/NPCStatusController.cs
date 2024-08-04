@@ -1,10 +1,13 @@
 ﻿namespace BHSSolo.DungeonDefense.NPCs
 {
-    class NPCStatusController
+    public class NPCStatusController
     {
-        public void ModifyStatus()
-        {
+        private readonly NPC _ownerNPC;
 
+
+        public NPCStatusController(NPC owner) 
+        {
+            _ownerNPC = owner;
         }
     }
 }
