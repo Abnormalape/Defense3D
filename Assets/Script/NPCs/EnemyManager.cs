@@ -21,8 +21,8 @@ namespace BHSSolo.DungeonDefense.Management
         {
             if (GameManager == null) { GameManager = GetComponent<GameManager>(); }
 
-            if (_enemySpawner == null) { _enemySpawner = new(this); } //Todo:
-            _enemySpawner.OnEnemySpawn += AddSummonedEnemyToList;
+            //if (_enemySpawner == null) { _enemySpawner = new(this); } //Todo:
+            //_enemySpawner.OnEnemySpawn += AddSummonedEnemyToList;
 
             ModifyAllEnemyPrefabDatas(); //Todo: Same to ally, room, mawang etc...
         }

@@ -11,6 +11,11 @@
         int sortingOrder { get; set; }
 
         /// <summary>
+        /// Enable action depends on user's input.
+        /// </summary>
+        bool inputActionEnabled { get; set; }
+
+        /// <summary>
         /// Enable Canvas
         /// </summary>
         void Show();
