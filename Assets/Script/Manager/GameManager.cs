@@ -1,3 +1,4 @@
+using BHSSolo.DungeonDefense.Game;
 using BHSSolo.DungeonDefense.Singleton;
 using BHSSolo.DungeonDefense.UI;
 using UnityEngine;
@@ -12,6 +13,8 @@ namespace BHSSolo.DungeonDefense.Management
 
         public RoomManager RoomManager { get => _roomManager; private set => _roomManager = value; }
 
+        public GameStateController GameStateController { get => _gameStateController; private set => _gameStateController = value; }
+
         public UIManager UIManager
         {
             get
@@ -24,12 +27,15 @@ namespace BHSSolo.DungeonDefense.Management
             }
         }
 
+        
+
         public bool IsSaveGameDataExsist { get; private set; }
 
         [SerializeField] private EnemyManager _enemyManager;
         [SerializeField] private AllyManager _allyManager;
         [SerializeField] private RoomManager _roomManager;
-        private UIManager _uIManager;
+        [SerializeField] private GameStateController _gameStateController;
+        [SerializeField] private UIManager _uIManager;
 
         private void Awake()
         {

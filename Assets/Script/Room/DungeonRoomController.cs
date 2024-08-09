@@ -1,5 +1,6 @@
 ﻿using BHSSolo.DungeonDefense.NPCs;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.DungeonRoom
