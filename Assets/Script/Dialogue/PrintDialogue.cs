@@ -21,7 +21,6 @@ namespace BHSSolo.DungeonDefense.Dialogue
             int mainID = 1; //Todo:
             // 4. Start Dialogue.
             List<Dictionary<string, string>> usingDialogueData = new(20);
-
             bool foundMainID = false;
 
             for (int i = 0; i < dialogueDictionary.Count; i++)
