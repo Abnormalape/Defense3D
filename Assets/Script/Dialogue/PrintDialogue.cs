@@ -1,6 +1,7 @@
 ﻿using BHSSolo.DungeonDefense.Data;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace BHSSolo.DungeonDefense.Dialogue
 
@@ -10,11 +11,16 @@ namespace BHSSolo.DungeonDefense.Dialogue
 
         static private void PrintPrologueDialogue()
         {
-            PrintDialogueMessage(GameData.PrologueDialogueData);
+            SelectDialogue(GameData.PrologueDialogueData);
         }
 
-        public static void PrintDialogueMessage(List<Dictionary<string, string>> dialogueDictionary)
-        {   //Todo:
+        /// <summary>
+        /// Select Dialogue Message from Data.
+        /// </summary>
+        /// <param name="dialogueDictionary">List of Dialogue.</param>
+        public static void SelectDialogue(List<Dictionary<string, string>> dialogueDictionary)
+        {
+            //Todo:
             // 1. Check Option.
             // 2. Find MainID.
             // 3. Select MainID.
@@ -41,7 +47,6 @@ namespace BHSSolo.DungeonDefense.Dialogue
                     usingDialogueData.Add(dialogueDictionary[i]);
                 }
             }
-
             ShowMessages(usingDialogueData);
         }
 
