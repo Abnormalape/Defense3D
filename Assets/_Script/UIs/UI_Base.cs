@@ -38,17 +38,17 @@ namespace BHSSolo.DungeonDefense.UI
 
         protected virtual void InputAction()
         {
-
+            Debug.Log("InputAction Runs");
         }
 
         public virtual void Hide()
         {
-            _canvas.enabled = true;
+            _canvas.enabled = false;
         }
 
         public virtual void Show()
         {
-            _canvas.enabled = false;
+            _canvas.enabled = true;
         }
 
         public bool TryCast<T>(Vector2 pointerPosition, out T result)

@@ -1,4 +1,5 @@
 using BHSSolo.DungeonDefense.Game;
+using BHSSolo.DungeonDefense.InteractableObject;
 using BHSSolo.DungeonDefense.Singleton;
 using BHSSolo.DungeonDefense.UI;
 using UnityEngine;
@@ -14,6 +15,13 @@ namespace BHSSolo.DungeonDefense.Management
         public RoomManager RoomManager { get => _roomManager; private set => _roomManager = value; }
 
         public GameStateController GameStateController { get => _gameStateController; private set => _gameStateController = value; }
+
+        public InteractableObjectManager InteractableObjectManager
+        {
+            get => interactableObjectManager;
+            set => interactableObjectManager = value;
+        }
+
 
         public UIManager UIManager
         {
@@ -36,6 +44,7 @@ namespace BHSSolo.DungeonDefense.Management
         [SerializeField] private RoomManager _roomManager;
         [SerializeField] private GameStateController _gameStateController;
         [SerializeField] private UIManager _uIManager;
+        [SerializeField] private InteractableObjectManager interactableObjectManager;
 
         private void Awake()
         {
