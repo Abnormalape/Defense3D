@@ -5,14 +5,14 @@ namespace BHSSolo.DungeonDefense.Function
 {
     public class StateMachineBehaviour : MonoBehaviour
     {
-        private State _currentState;
+        private NPCs.State _currentState;
 
         private void Update()
         {
             _currentState.OnStateUpdate();
         }
 
-        public void ChangeState(State changingState)
+        public void ChangeState(NPCs.State changingState)
         {
             if (_currentState == changingState) { return; }
 
