@@ -21,7 +21,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void AddToDictionary(IController controller);
 
-        public void AddToDictionary(IController controller, GameObject controllerGameObject);
+        public void AddGameObejctToControllerDictionary(IController controller, GameObject controllerGameObject);
 
         public void RemoveFromDictionary(IController controller);
 

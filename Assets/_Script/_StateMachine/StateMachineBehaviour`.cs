@@ -4,19 +4,19 @@ namespace BHSSolo.DungeonDefense.State
 {
     public class StateMachineBehaviour_
     {
-        public void OnStateEnter()
+        private IState_ currentState_;
+
+
+        public void ChangeState(IState_ newState_)
         {
-            Debug.Log("On State Enter");
+            currentState_?.Exit();
+            currentState_ = newState_;
+            currentState_?.Enter();
         }
 
         public void OnStateUpdate()
         {
-            Debug.Log("On State Update");
-        }
-
-        public void OnStateExit()
-        {
-            Debug.Log("On State Exit");
+            currentState_?.Update();
         }
     }
 }
