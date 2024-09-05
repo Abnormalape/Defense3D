@@ -1,4 +1,5 @@
 ﻿using BHSSolo.DungeonDefense.Controller;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -14,9 +15,14 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         private InteractableController targetInteractableController = null;
 
 
+        
+
+
+
         private void Awake()
         {
-
+            Dictionary<Enum, string> aa = new();
+            aa.Add(asdfasdf.d4,"asdf");
         }
 
         private void Start()
@@ -52,6 +58,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                 AddGameObejctToControllerDictionary( //Todo:
                     interactable as IController, //Very Very Dangerous.
                     interactable.gameObject);
+
                 (interactable as IController)?.ControllerInitializer(this);
             }
 
@@ -98,5 +105,9 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             targetInteractableController = foundInteractable;
             targetInteractableController?.OnInteractable();
         }
+    }
+    public enum asdfasdf
+    {
+        d1,d2,d3,d4,
     }
 }
