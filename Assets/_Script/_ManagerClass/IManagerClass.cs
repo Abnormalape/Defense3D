@@ -15,6 +15,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void InitializeManager(GameManager_ gameManager_);
 
+        public void FindAllAppropriateControllers();
+
         public void AddToList(IController controller);
 
         public void RemoveFronList(IController controller);

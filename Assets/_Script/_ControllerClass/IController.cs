@@ -1,7 +1,12 @@
-﻿namespace BHSSolo.DungeonDefense.Controller
+﻿using BHSSolo.DungeonDefense.ManagerClass;
+
+namespace BHSSolo.DungeonDefense.Controller
 {
     public interface IController
     {
-        public void ControllerInitializer();
+        public IManagerClass OwnerManager { get; set; }
+
+
+        public void ControllerInitializer(IManagerClass ownerManager);
     }
 }

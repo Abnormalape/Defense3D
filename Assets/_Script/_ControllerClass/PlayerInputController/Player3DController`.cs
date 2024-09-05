@@ -8,6 +8,7 @@ namespace BHSSolo.DungeonDefense.Controller
     public class Player3DController_ : MonoBehaviour, IController, IPlayerController
     {
         public PlayerManager_ playerManager_ { get; set; }
+        public IManagerClass OwnerManager { get; set; }
 
         public IState_ CurrentPlayerState { get; private set; }
 
@@ -16,6 +17,8 @@ namespace BHSSolo.DungeonDefense.Controller
         public Transform playerCamera;
 
         private CharacterController characterController;
+        private InteractableGameObjectFinder interactableGameObjectFinder; //Only For 3D
+        private InteractableManager_ interactableManager;
         private float xRotation = 0f;
 
 
@@ -23,7 +26,9 @@ namespace BHSSolo.DungeonDefense.Controller
         {
             if (playerCamera == null)
                 playerCamera = Camera.main.transform;
-            ControllerInitializer();
+            //ControllerInitializer(); //Todo: Adjust
+            SetPlayerManager(); //Todo: Remove
+            interactableGameObjectFinder = new(this); //Todo: Remove
         }
 
         void Start()
@@ -36,14 +41,29 @@ namespace BHSSolo.DungeonDefense.Controller
         private void Update()
         {
             ReactToInput();
+            SendTargetToInteractManager();
         }
 
-        public void ControllerInitializer()
+        public void ControllerInitializer(IManagerClass owenerManager)
         {
+            interactableGameObjectFinder = new(this);
             SetPlayerManager();
         }
 
         public void ReactToInput()
+        {
+            Player3DMovement();
+        }
+
+        public void SetPlayerManager() //Todo: Adjust This Method To Need Parameter (IManagerClass)
+        {
+            OwnerManager = FindFirstObjectByType<PlayerManager_>();
+            playerManager_ = (PlayerManager_)OwnerManager;
+            interactableManager = playerManager_.OwnerManager.InteractableManager_;
+            Debug.Log(interactableManager);
+        }
+
+        private void Player3DMovement()
         {
             float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
             float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
@@ -62,9 +82,12 @@ namespace BHSSolo.DungeonDefense.Controller
             characterController.Move(move * moveSpeed * Time.deltaTime);
         }
 
-        public void SetPlayerManager()
+        private void SendTargetToInteractManager() //Change as Event?
         {
-            playerManager_ = FindFirstObjectByType<PlayerManager_>();
-        }
+            interactableManager
+                .SetTargetInteractableGameObject(
+                    interactableGameObjectFinder
+                    .FindInteractableGameObject());
+        }   
     }
 }

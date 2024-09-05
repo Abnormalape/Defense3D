@@ -9,6 +9,7 @@ namespace BHSSolo.DungeonDefense.Controller
         public PlayerManager_ playerManager_ {  get; set; }
 
         public IState_ CurrentPlayerState { get; private set; }
+        public IManagerClass OwnerManager { get; set; }
 
         public Transform playerCamera;
 
@@ -18,7 +19,7 @@ namespace BHSSolo.DungeonDefense.Controller
         {
             if (playerCamera == null)
                 playerCamera = Camera.main.transform;
-            ControllerInitializer();
+            //ControllerInitializer(); //Todo:
         }
 
         void Start()
@@ -31,7 +32,7 @@ namespace BHSSolo.DungeonDefense.Controller
             ReactToInput();
         }
 
-        public void ControllerInitializer()
+        public void ControllerInitializer(IManagerClass owenerManager)
         {
             SetPlayerManager();
         }
@@ -46,7 +47,8 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public void SetPlayerManager()
         {
-            playerManager_ = FindFirstObjectByType<PlayerManager_>();
+            OwnerManager = FindFirstObjectByType<PlayerManager_>();
+            playerManager_ = (PlayerManager_)OwnerManager;
         }
     }
 }

@@ -45,5 +45,10 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         {
 
         }
+
+        public void FindAllAppropriateControllers()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

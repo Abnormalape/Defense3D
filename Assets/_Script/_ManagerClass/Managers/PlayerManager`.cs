@@ -40,7 +40,6 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public void AddGameObejctToControllerDictionary(IController controller, GameObject controllerGameObject)
         {
             DictionaryOfController.Add(controller, controllerGameObject);
-
         }
 
         public void AddToList(IController controller)
@@ -61,6 +60,11 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public void EventLoudSpeaker()
         {
 
+        }
+
+        public void FindAllAppropriateControllers()
+        {
+            throw new System.NotImplementedException();
         }
     }
 
