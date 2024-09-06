@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    public class AllyManager_ : MonoBehaviour, IManagerClass
+    public class AudioManager : MonoBehaviour, IManagerClass
     {
         public List<IController> ListOfController { get; set; }
         public Dictionary<IController, GameObject> DictionaryOfController { get; set; }
@@ -48,25 +48,9 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         }
 
-        private Dictionary<Enum, GameObject> dictionaryEnumPrefab;
-        private void SummonAlly(Ally_enum toSummon)
-        {
-            GameObject summoned = Instantiate(dictionaryEnumPrefab[toSummon]);
-            summoned.GetComponent<AllyController_>().AllyStatus_.ModifyStatus();
-            ListOfController.Add(summoned.GetComponent<AllyController_>() as IController);
-        }//Todo: Remove
-
         public void FindAllAppropriateControllers()
         {
-            //Find Ally Name and find in path use with name
-            //then add dictionary name and gameobject
-            Resources.Load($"Prefabs/Ally/{"aa"}");
             throw new System.NotImplementedException();
         }
-    }
-
-    public enum Ally_enum
-    {
-        Sample,
     }
 }

@@ -10,13 +10,12 @@ namespace BHSSolo.DungeonDefense.ManagerClass
     {
         public List<IController> ListOfController { get; set; } = new();
         public Dictionary<IController, GameObject> DictionaryOfController { get; set; } = new();
+        public Dictionary<Enum, IController> DictionaryEnumController { get; set; }
         public GameManager_ OwnerManager { get; set; }
 
+
         private InteractableController targetInteractableController = null;
-
-
-        
-
+        private SceneManager_ SceneManager;
 
 
         private void Awake()
@@ -46,6 +45,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public void InitializeManager(GameManager_ gameManager_)
         {
             OwnerManager = gameManager_;
+            this.SceneManager = OwnerManager.SceneManager_;
         }
 
         public void FindAllAppropriateControllers()

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using BHSSolo.DungeonDefense.State;
+using System;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
@@ -9,6 +10,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
     {
         public List<IController> ListOfController { get; set; } = new();
         public Dictionary<IController, GameObject> DictionaryOfController { get; set; } = new ();
+        public Dictionary<Enum, IController> DictionaryEnumController {  get; set; }
         public GameManager_ OwnerManager { get; set; }
         public StateMachineBehaviour_ StateMachineBehaviour_ { get; private set; }
 

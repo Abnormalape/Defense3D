@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/Dungeon1F.unity
     guid: c9420b32954da384aab97b1d08b99632
+  - enabled: 1
+    path: Assets/_Scenes/TESTROOM.unity
+    guid: ac3bccc313150f94ea2527b12efb40e5
+  - enabled: 1
+    path: Assets/_Scenes/TESTROOM2.unity
+    guid: 960e4b0faf08f024ba29be26c3146443
   m_configObjects: {}

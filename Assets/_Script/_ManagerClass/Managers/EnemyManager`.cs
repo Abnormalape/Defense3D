@@ -1,4 +1,5 @@
 ﻿using BHSSolo.DungeonDefense.Controller;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
     {
         public List<IController> ListOfController { get; set; }
         public Dictionary<IController, GameObject> DictionaryOfController { get; set; }
+        public Dictionary<Enum, IController> DictionaryEnumController { get; set; }
         public GameManager_ OwnerManager { get; set; }
 
 

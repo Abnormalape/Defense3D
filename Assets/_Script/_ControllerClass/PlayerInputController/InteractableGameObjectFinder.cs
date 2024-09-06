@@ -30,8 +30,6 @@ namespace BHSSolo.DungeonDefense.Controller
             Collider resultCollider = null;
             float distanceOfResult = 0f;
 
-            Debug.Log(finds.Length);
-
             foreach (Collider c in finds)
             {
                 float instantDistance

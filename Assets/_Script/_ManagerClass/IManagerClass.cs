@@ -9,9 +9,9 @@ namespace BHSSolo.DungeonDefense.ManagerClass
     {
         public List<IController> ListOfController { get; set; }
 
-        public Dictionary<IController, GameObject> DictionaryOfController { get; set; }
+        public Dictionary<IController, GameObject> DictionaryOfController { get; set; } //???
 
-        //public Dictionary<Enum, IController> DictionaryEnumController { get; set; } //Todo:
+        public Dictionary<Enum, IController> DictionaryEnumController { get; set; } //Find Controller with enum
 
         public GameManager_ OwnerManager { get; set; }
 

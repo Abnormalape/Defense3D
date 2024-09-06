@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
-    public class Player3DController_ : MonoBehaviour, IController, IPlayerController
+    public class Player3DController_ : MonoBehaviour, IController, IPlayerController, IInputReactor
     {
         public PlayerManager_ playerManager_ { get; set; }
         public IManagerClass OwnerManager { get; set; }
@@ -19,6 +19,7 @@ namespace BHSSolo.DungeonDefense.Controller
         private CharacterController characterController;
         private InteractableGameObjectFinder interactableGameObjectFinder; //Only For 3D
         private InteractableManager_ interactableManager;
+        private InputManager_ inputManager;
         private float xRotation = 0f;
 
 
@@ -29,6 +30,7 @@ namespace BHSSolo.DungeonDefense.Controller
             //ControllerInitializer(); //Todo: Adjust
             SetPlayerManager(); //Todo: Remove
             interactableGameObjectFinder = new(this); //Todo: Remove
+            SubScribeInputManager(); //Todo: Remove
         }
 
         void Start()
@@ -41,13 +43,16 @@ namespace BHSSolo.DungeonDefense.Controller
         private void Update()
         {
             ReactToInput();
+
             SendTargetToInteractManager();
         }
 
         public void ControllerInitializer(IManagerClass owenerManager)
         {
+            Debug.Log("Player Initializer");
             interactableGameObjectFinder = new(this);
             SetPlayerManager();
+            SubScribeInputManager();
         }
 
         public void ReactToInput()
@@ -60,6 +65,7 @@ namespace BHSSolo.DungeonDefense.Controller
             OwnerManager = FindFirstObjectByType<PlayerManager_>();
             playerManager_ = (PlayerManager_)OwnerManager;
             interactableManager = playerManager_.OwnerManager.InteractableManager_;
+            inputManager = playerManager_.OwnerManager.InputManager_;
             Debug.Log(interactableManager);
         }
 
@@ -88,6 +94,39 @@ namespace BHSSolo.DungeonDefense.Controller
                 .SetTargetInteractableGameObject(
                     interactableGameObjectFinder
                     .FindInteractableGameObject());
-        }   
+        }
+
+        public void SubScribeInputManager()
+        {
+            inputManager.OnKeyPress += GetKeyDownReaction;
+            inputManager.OnKeyPressing += GetKeyReaction;
+            inputManager.OnKeyUnpress += GetKeyUpReaction;
+        }
+
+        public void GetKeyDownReaction(KeyCode key)
+        {
+            if (key == KeyCode.W) { Debug.Log("State1 W Pressed"); }
+            if (key == KeyCode.A) { Debug.Log("State1 A Pressed"); }
+            if (key == KeyCode.S) { Debug.Log("State1 S Pressed"); }
+            if (key == KeyCode.D) { Debug.Log("State1 D Pressed"); }
+        }
+
+        public void GetKeyReaction(KeyCode key)
+        {
+            if (key == KeyCode.W) { Debug.Log("State1 W Pressing"); }
+            if (key == KeyCode.A) { Debug.Log("State1 A Pressing"); }
+            if (key == KeyCode.S) { Debug.Log("State1 S Pressing"); }
+            if (key == KeyCode.D) { Debug.Log("State1 D Pressing"); }
+            if (key == KeyCode.E) { Debug.Log("State2 E Pressing"); }
+            if (key == KeyCode.Q) { Debug.Log("State2 Q Pressing"); }
+        }
+
+        public void GetKeyUpReaction(KeyCode key)
+        {
+            if (key == KeyCode.W) { Debug.Log("State1 W Unpressed"); }
+            if (key == KeyCode.A) { Debug.Log("State1 A Unpressed"); }
+            if (key == KeyCode.S) { Debug.Log("State1 S Unpressed"); }
+            if (key == KeyCode.D) { Debug.Log("State1 D Unpressed"); }
+        }
     }
 }

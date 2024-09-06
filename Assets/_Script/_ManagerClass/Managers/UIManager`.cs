@@ -15,6 +15,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public void InitializeManager(GameManager_ gameManager_)
         {
             OwnerManager = gameManager_;
+            FindAllAppropriateControllers();
         }
 
         public void FindAllAppropriateControllers()
@@ -28,7 +29,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                     ui as IController, //Very Very Dangerous.
                     ui.gameObject);
 
-                //DictionaryEnumController.Add(ui.UIType, ui as IController); //Todo: Master Piece
+                DictionaryEnumController.Add(ui.UIType, ui as IController); //Todo: Master Piece
 
                 (ui as IController)?.ControllerInitializer(this);
             }
@@ -56,19 +57,30 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void RemoveFronList(IController controller)
         {
-
+            
         }
 
         public void EventLoudSpeaker()
         {
 
         }
+
+        public void Open(UI_enum openUI)
+        {
+            (DictionaryEnumController[openUI] as UIController_).Open();
+        }
+
+        public void Close(UI_enum openUI)
+        {
+            (DictionaryEnumController[openUI] as UIController_).Close();
+        }
     }
 
     public enum UI_enum
     {
-        None = 0,
+        Sample = 0,
         ChatBox = 1,
         YesOrNo = 2,
+        LoadScene = 3,
     }
 }
