@@ -1,6 +1,9 @@
 ﻿using BHSSolo.DungeonDefense.Controller;
+using BHSSolo.DungeonDefense.Data;
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
@@ -13,9 +16,34 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public GameManager_ OwnerManager { get; set; }
 
 
+        private Dictionary<Ally_enum, AllyBaseStatus> TypeBasedStatus = new();
+
+
         public void InitializeManager(GameManager_ gameManager_)
         {
             OwnerManager = gameManager_;
+
+            Array array = Enum.GetValues(typeof(Ally_enum));
+            Dictionary<string, Ally_enum> tempNameTypePair = new();
+
+            foreach (Ally_enum value in array)
+            {
+                tempNameTypePair.Add(value.ToString(),value);
+            }
+
+            foreach(var e in GameData.AllyBaseData)
+            {
+                Debug.Log("Setting...");
+
+                TypeBasedStatus.Add(
+                    tempNameTypePair[e.Key],
+                    new AllyBaseStatus(
+                        Convert.ToInt32(GameData.AllyBaseData[e.Key]["HP"]),
+                        Convert.ToInt32(GameData.AllyBaseData[e.Key]["MP"])
+                        ));
+            }
+
+            Debug.Log("ADF");
         }
 
         public void AddToDictionary(IController controller)
@@ -48,25 +76,31 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         }
 
-        private Dictionary<Enum, GameObject> dictionaryEnumPrefab;
-        private void SummonAlly(Ally_enum toSummon)
-        {
-            GameObject summoned = Instantiate(dictionaryEnumPrefab[toSummon]);
-            summoned.GetComponent<AllyController_>().AllyStatus_.ModifyStatus();
-            ListOfController.Add(summoned.GetComponent<AllyController_>() as IController);
-        }//Todo: Remove
-
         public void FindAllAppropriateControllers()
         {
-            //Find Ally Name and find in path use with name
-            //then add dictionary name and gameobject
-            Resources.Load($"Prefabs/Ally/{"aa"}");
-            throw new System.NotImplementedException();
+
         }
     }
 
     public enum Ally_enum
     {
         Sample,
+        Goblin,
+        Oak,
+        Oger,
+        Dragon,
+    }
+
+    public struct AllyBaseStatus //Todo: More Fields.
+    {
+        public AllyBaseStatus(int hp, int mp)
+        {
+            HP = hp;
+            MP = mp;
+        }
+
+
+        public int HP { get; private set; }
+        public int MP { get; private set; }
     }
 }

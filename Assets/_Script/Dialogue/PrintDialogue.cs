@@ -11,7 +11,7 @@ namespace BHSSolo.DungeonDefense.Dialogue
 
         static private void PrintPrologueDialogue()
         {
-            SelectDialogue(GameData.PrologueDialogueData);
+            //SelectDialogue(GameData.PrologueDialogueData);
         }
 
         /// <summary>

@@ -28,17 +28,17 @@ namespace BHSSolo.DungeonDefense.NPCs
 
                 List<string> m_traitBuffNames = trait.Value.BuffNames;
 
-                for (int ix = 0; ix < m_traitBuffCounts; ix++)
-                {
-                    string m_traitBuffName = m_traitBuffNames[ix];
+                //for (int ix = 0; ix < m_traitBuffCounts; ix++)
+                //{
+                //    string m_traitBuffName = m_traitBuffNames[ix];
 
-                    Dictionary<string, string> m_traitBuffData //Todo:
-                     = Data.GameData.BuffData[m_traitBuffName];
+                //    Dictionary<string, string> m_traitBuffData //Todo:
+                //     = Data.GameData.BuffData[m_traitBuffName];
 
-                    NPCBuff m_traitBuff = new NPCBuff(this, m_traitBuffData);
+                //    NPCBuff m_traitBuff = new NPCBuff(this, m_traitBuffData);
 
-                    AddBuff(m_traitBuffName, m_traitBuff);
-                }
+                //    AddBuff(m_traitBuffName, m_traitBuff);
+                //}
             }
         }
 

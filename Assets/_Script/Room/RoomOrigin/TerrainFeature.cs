@@ -16,8 +16,8 @@ namespace BHSSolo.DungeonDefense.DungeonRoom
         private Dictionary<string, string> effectData;
         public TerrainFeature(string RoomEffectName)
         {
-            effectData = FindSingleDictionaryFromMultipleDictionary.FindDictionaryFromDictionary
-                (Data.GameData.DungeonRoomEffectData, RoomEffectName);
+            //effectData = FindSingleDictionaryFromMultipleDictionary.FindDictionaryFromDictionary
+            //    (Data.GameData.DungeonRoomEffectData, RoomEffectName);
 
             //InitObserveTarget();
             //InitEffectTarget();

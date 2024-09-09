@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using BHSSolo.DungeonDefense.Data;
+using UnityEditor;
 using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
@@ -32,6 +33,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         private void Awake()
         {
+            GameData.InitializeGameData();
+
             UIManager_ = GetComponent<UIManager_>();
             RoomManager_ = GetComponent<RoomManager_>();
             AllyManager_ = GetComponent<AllyManager_>();
@@ -45,10 +48,10 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             InteractableManager_ = GetComponent<InteractableManager_>();
             EventManager_ = GetComponent<EventManager>();
 
+            this.DataManager_.InitializeManager(this); //DataManager First.
             this.UIManager_.InitializeManager(this);
             this.RoomManager_.InitializeManager(this);
             this.AllyManager_.InitializeManager(this);
-            this.DataManager_.InitializeManager(this);
             this.AudioManager_.InitializeManager(this);
             this.SceneManager_.InitializeManager(this);
             this.EnemyManager_.InitializeManager(this);
@@ -57,6 +60,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             this.GameStateManager_.InitializeManager(this);
             this.InteractableManager_.InitializeManager(this);
             this.EventManager_.InitializeManager(this);
+
         }
 
         private void Start()

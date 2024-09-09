@@ -21,17 +21,17 @@ namespace BHSSolo.DungeonDefense.NPCs
             // _ownerNPC. //Todo: Get data from _ownerNPC
             int m_traitCount = Convert.ToInt32(_ownerNPC.NPCData["TraitCount"]);
 
-            for (int ix = 1; ix <= m_traitCount; ix++)
-            {
-                string m_traitName = _ownerNPC.NPCData[$"Trait{ix}"];
+            //for (int ix = 1; ix <= m_traitCount; ix++)
+            //{
+            //    string m_traitName = _ownerNPC.NPCData[$"Trait{ix}"];
 
-                Dictionary<string, string> m_traitData //Todo:
-                    = Data.GameData.NPCTraitData[m_traitName];
+            //    Dictionary<string, string> m_traitData //Todo:
+            //        = Data.GameData.NPCTraitData[m_traitName];
 
-                NPCTrait m_trait = new NPCTrait(this, m_traitData);
+            //    NPCTrait m_trait = new NPCTrait(this, m_traitData);
 
-                AddTrait(m_traitName, m_trait);
-            }
+            //    AddTrait(m_traitName, m_trait);
+            //}
         }
 
         private void AddTrait(string traitName,NPCTrait traitToAdd)
