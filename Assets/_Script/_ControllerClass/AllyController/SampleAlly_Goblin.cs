@@ -1,15 +1,19 @@
 ﻿using BHSSolo.DungeonDefense.ManagerClass;
+using System.Diagnostics;
+using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
-    public class SampleAlly : AllyController_, IController, IAllyStatusModifier
+    public class SampleAlly_Goblin : AllyController_, IController, IAllyStatusModifier
     {
         public override AllyStatus_ AllyStatus_ { get; set; }
-        public override Ally_enum AllyEnum_ { get; set; } = Ally_enum.Sample; //Manager use this???
+        public override AllyBaseStatus AllyBaseStatus_ { get; set; }
+        public override AllyType AllyEnum_ { get; set; } = AllyType.Goblin;
         public IManagerClass OwnerManager { get; set; }
         public AllyStatusModifier AllyStatusModifier { get; set; }
         public override AllyManager_ AllyManager_ { get; set; }
         public override int level { get; set; }
+        public override int Ally_ID { get; set; }
 
 
         /// <summary>
@@ -24,10 +28,16 @@ namespace BHSSolo.DungeonDefense.Controller
         /// <summary>
         /// Manager runs this.
         /// </summary>
-        public override void AllyControllerInitializer(AllyStatus_ statusFound)
+        public override void AllyControllerInitializer(AllyBaseStatus statusFound)
         {
             AllyStatusModifier = new(this);
-            AllyStatus_ = statusFound;
+            AllyBaseStatus_ = statusFound; //Base Status, Please Initiate CurrentStatus
+        }
+
+        private void Update()
+        {
+            UnityEngine.Debug.Log($"I Am {AllyBaseStatus_.Type}." +
+                $"\nMy Base HP is {AllyBaseStatus_.Blood}.");
         }
     }
 }

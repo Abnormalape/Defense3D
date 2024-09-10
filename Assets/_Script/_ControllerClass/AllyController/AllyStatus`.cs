@@ -1,6 +1,6 @@
 ﻿namespace BHSSolo.DungeonDefense.Controller
 {
-    public class AllyStatus_
+    public class AllyStatus_ //Todo: More!
     {
         public AllyStatus_(
             string HP,

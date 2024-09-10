@@ -1,4 +1,5 @@
 ﻿using BHSSolo.DungeonDefense.Controller;
+using BHSSolo.DungeonDefense.State;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    public class InputManager_ : MonoBehaviour, IManagerClass
+    public class InputManager_ : MonoBehaviour, IManagerClass, IManagerStateMachine
     {
         public delegate void KeyPress(KeyCode key);
         public delegate void KeyPressing(KeyCode key);
@@ -18,11 +19,10 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
 
 
-        public List<IController> ListOfController { get; set; }
-        public Dictionary<IController, GameObject> DictionaryOfController { get; set; }
         public Dictionary<Enum, IController> DictionaryEnumController { get; set; } = new();
         public GameManager_ OwnerManager { get; set; }
-
+        public IState_ CurrentState { get; set; }
+        public Dictionary<Enum, IState_> Type_StateDictionary { get; set; }
 
         private InputState_enum currentInputState;
         private InputController_ currentInputController;
@@ -48,40 +48,17 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public void InitializeManager(GameManager_ gameManager_)
         {
             OwnerManager = gameManager_;
-            FindAllAppropriateControllers();
+
+            OnInitializeManager_StateMachine();
         }
 
-        public void AddToDictionary(IController controller)
+        public void ChangeController(InputState_enum inputState)
         {
-
+            if (currentInputController.InputState != inputState)
+                currentInputController = DictionaryEnumController[inputState] as InputController_;
         }
 
-        public void AddGameObejctToControllerDictionary(IController controller, GameObject controllerGameObject)
-        {
-
-        }
-
-        public void AddToList(IController controller)
-        {
-
-        }
-
-        public void RemoveFromDictionary(IController controller)
-        {
-
-        }
-
-        public void RemoveFronList(IController controller)
-        {
-
-        }
-
-        public void EventLoudSpeaker()
-        {
-
-        }
-
-        public void FindAllAppropriateControllers()
+        public void OnInitializeManager_StateMachine() //Todo:
         {
             var types = Assembly.GetExecutingAssembly().GetTypes();
 
@@ -100,13 +77,23 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             }
 
             Debug.Log($"State Counts : {DictionaryEnumController.Count}");
-            currentInputController = DictionaryEnumController[InputState_enum.Sample] as InputController_; //Todo:
+            currentInputController = DictionaryEnumController[InputState_enum.Sample] as InputController_;
         }
 
-        public void ChangeController(InputState_enum inputState)
+        public void AddState()
         {
-            if (currentInputController.InputState != inputState)
-                currentInputController = DictionaryEnumController[inputState] as InputController_;
+        }
+
+        public void RemoveState()
+        {
+        }
+
+        public void ChangeManagerState()
+        {
+        }
+
+        public void OnChangeManagerState()
+        {
         }
     }
 

@@ -5,52 +5,127 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    public class EnemyManager_ : MonoBehaviour, IManagerClass
+    public class EnemyManager_ : MonoBehaviour, IManagerClass, IManagerFactory<EnemyBaseStatus>
     {
-        public List<IController> ListOfController { get; set; }
-        public Dictionary<IController, GameObject> DictionaryOfController { get; set; }
-        public Dictionary<Enum, IController> DictionaryEnumController { get; set; }
         public GameManager_ OwnerManager { get; set; }
+        public Dictionary<int, IController> ID_ControllerDictionary { get; set; }
+        public Dictionary<Enum, EnemyBaseStatus> BaseDataDictionary { get; set; }
 
+        public void AddSummoned(int summoned_ID, IController summonedAttachedController)
+        {
+            
+        }
+
+        public void DestroyGameObject(GameObject prefabInstance)
+        {
+            
+        }
+
+        public void FindAllInScene()
+        {
+            
+        }
+
+        public void InitializeBaseData()
+        {
+            
+        }
 
         public void InitializeManager(GameManager_ gameManager_)
         {
-            OwnerManager = gameManager_;
+            
         }
 
-        public void AddToDictionary(IController controller)
+        public void OnInitializeManager_Factory()
         {
-
+            
         }
 
-        public void AddGameObejctToControllerDictionary(IController controller, GameObject controllerGameObject)
+        public void RemoveSummoned(int summoned_ID)
         {
-
+            
         }
 
-        public void AddToList(IController controller)
+        public void SummonGameObject(GameObject prefab, Transform summonPoint)
         {
-
+            
         }
+    }
 
-        public void RemoveFromDictionary(IController controller)
+    public struct EnemyBaseStatus
+    {
+        public EnemyBaseStatus(
+            string Type,
+            int blood,
+            int bloodScaling,
+            int mental,
+            int mentalScaling,
+            int physical,
+            int physicalScaling,
+            int special,
+            int specialScaling,
+            int physicalPower,
+            int physicalPowerScaling,
+            int specialPower,
+            int specialPowerScaling,
+            int physicalResist,
+            int physicalResistScaling,
+            int specialResist,
+            int specialResistScaling,
+            int speed,
+            int speedScaling,
+            int reactSpeed,
+            int reactSpeedScaling,
+            int maxLevel,
+            string[] traits)
         {
-
+            this.Type = Type;
+            this.Blood = blood;
+            this.BloodScaling = bloodScaling;
+            this.Mental = mental;
+            this.MentalScaling = mentalScaling;
+            this.Physical = physical;
+            this.PhysicalScaling = physicalScaling;
+            this.Special = special;
+            this.SpecialScaling = specialScaling;
+            this.PhysicalPower = physicalPower;
+            this.PhysicalPowerScaling = physicalPowerScaling;
+            this.SpecialPower = specialPower;
+            this.SpecialPowerScaling = specialPowerScaling;
+            this.PhysicalResist = physicalResist;
+            this.PhysicalResistScaling = physicalResistScaling;
+            this.SpecialResist = specialResist;
+            this.SpecialResistScaling = specialResistScaling;
+            this.Speed = speed;
+            this.SpeedScaling = speedScaling;
+            this.ReactSpeed = reactSpeed;
+            this.ReactSpeedScaling = reactSpeedScaling;
+            this.MaxLevel = maxLevel;
+            this.Traits = traits;
         }
 
-        public void RemoveFronList(IController controller)
-        {
-
-        }
-
-        public void EventLoudSpeaker()
-        {
-
-        }
-
-        public void FindAllAppropriateControllers()
-        {
-            throw new System.NotImplementedException();
-        }
+        public string Type { get; private set; }
+        public int Blood { get; private set; }
+        public int BloodScaling { get; private set; }
+        public int Mental { get; private set; }
+        public int MentalScaling { get; private set; }
+        public int Physical { get; private set; }
+        public int PhysicalScaling { get; private set; }
+        public int Special { get; private set; }
+        public int SpecialScaling { get; private set; }
+        public int PhysicalPower { get; private set; }
+        public int PhysicalPowerScaling { get; private set; }
+        public int SpecialPower { get; private set; }
+        public int SpecialPowerScaling { get; private set; }
+        public int PhysicalResist { get; private set; }
+        public int PhysicalResistScaling { get; private set; }
+        public int SpecialResist { get; private set; }
+        public int SpecialResistScaling { get; private set; }
+        public int Speed { get; private set; }
+        public int SpeedScaling { get; private set; }
+        public int ReactSpeed { get; private set; }
+        public int ReactSpeedScaling { get; private set; }
+        public int MaxLevel { get; private set; }
+        public string[] Traits { get; private set; }
     }
 }
