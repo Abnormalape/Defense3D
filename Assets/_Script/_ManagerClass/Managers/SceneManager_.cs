@@ -64,43 +64,5 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
             UIManager_.Close(UI_enum.LoadScene);
         }
-
-        #region IManager
-        public void AddGameObejctToControllerDictionary(IController controller, GameObject controllerGameObject)
-        {
-
-        }
-
-        public void AddToDictionary(IController controller)
-        {
-
-        }
-
-        public void AddToList(IController controller)
-        {
-
-        }
-
-        public void EventLoudSpeaker()
-        {
-
-        }
-
-        public void FindAllAppropriateControllers()
-        {
-
-        }
-
-
-        public void RemoveFromDictionary(IController controller)
-        {
-
-        }
-
-        public void RemoveFronList(IController controller)
-        {
-
-        }
-        #endregion IManager
     }
 }

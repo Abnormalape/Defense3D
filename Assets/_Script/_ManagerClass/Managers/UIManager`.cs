@@ -29,38 +29,21 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                     ui as IController, //Very Very Dangerous.
                     ui.gameObject);
 
-                DictionaryEnumController.Add(ui.UIType, ui as IController); //Todo: Master Piece
+                DictionaryEnumController.Add(ui.UIType, ui as IController);
 
                 (ui as IController)?.ControllerInitializer(this);
             }
+
+            Debug.Log($"UI Found : {uis.Length}");
         }
 
-        public void AddToDictionary(IController controller)
+        private void Start()
         {
-
+            UIController_[] uis
+                = FindObjectsByType<UIController_>(FindObjectsSortMode.None);
         }
 
         public void AddGameObejctToControllerDictionary(IController controller, GameObject controllerGameObject)
-        {
-
-        }
-
-        public void AddToList(IController controller)
-        {
-
-        }
-
-        public void RemoveFromDictionary(IController controller)
-        {
-
-        }
-
-        public void RemoveFronList(IController controller)
-        {
-            
-        }
-
-        public void EventLoudSpeaker()
         {
 
         }
@@ -82,5 +65,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         ChatBox = 1,
         YesOrNo = 2,
         LoadScene = 3,
+        Manager = 4,
+        BuildDungeon = 5,
     }
 }

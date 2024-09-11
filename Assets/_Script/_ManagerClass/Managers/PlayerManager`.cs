@@ -6,23 +6,13 @@ using System;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    public class PlayerManager_ : MonoBehaviour, IManagerClass
+    public class PlayerManager_ : MonoBehaviour, IManagerClass, IManagerStateMachine
     {
-        public List<IController> ListOfController { get; set; } = new();
-        public Dictionary<IController, GameObject> DictionaryOfController { get; set; } = new ();
-        public Dictionary<Enum, IController> DictionaryEnumController {  get; set; }
         public GameManager_ OwnerManager { get; set; }
         public StateMachineBehaviour_ StateMachineBehaviour_ { get; private set; }
+        public IState_ CurrentState { get; set; }
+        public Dictionary<Enum, IState_> Type_StateDictionary { get; set; }
 
-        private void Awake()
-        {
-            Debug.Log("Awake PlayerManager");
-            StateMachineBehaviour_ = new();
-        }
-
-        private void Start()
-        {
-        }
 
         private void Update()
         {
@@ -31,42 +21,29 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void InitializeManager(GameManager_ gameManager_)
         {
+            StateMachineBehaviour_ = new();
             OwnerManager = gameManager_;
         }
 
-        public void AddToDictionary(IController controller)
+        public void OnInitializeManager_StateMachine()
         {
 
         }
 
-        public void AddGameObejctToControllerDictionary(IController controller, GameObject controllerGameObject)
+        public void AddState()
         {
-            DictionaryOfController.Add(controller, controllerGameObject);
         }
 
-        public void AddToList(IController controller)
+        public void RemoveState()
         {
-
         }
 
-        public void RemoveFromDictionary(IController controller)
+        public void ChangeManagerState()
         {
-
         }
 
-        public void RemoveFronList(IController controller)
+        public void OnChangeManagerState()
         {
-
-        }
-
-        public void EventLoudSpeaker()
-        {
-
-        }
-
-        public void FindAllAppropriateControllers()
-        {
-            throw new System.NotImplementedException();
         }
     }
 

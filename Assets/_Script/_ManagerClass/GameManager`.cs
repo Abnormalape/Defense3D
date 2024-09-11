@@ -60,7 +60,6 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             this.GameStateManager_.InitializeManager(this);
             this.InteractableManager_.InitializeManager(this);
             this.EventManager_.InitializeManager(this);
-
         }
 
         private void Start()

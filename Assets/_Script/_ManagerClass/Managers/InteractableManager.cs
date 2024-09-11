@@ -15,29 +15,14 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         private InteractableController targetInteractableController = null;
         private SceneManager_ SceneManager;
+        private static int Interactable_ID;
 
 
-        private void Awake()
-        {
-            Dictionary<Enum, string> aa = new();
-            aa.Add(asdfasdf.d4,"asdf");
-        }
-
-        private void Start()
-        {
-            FindAllAppropriateControllers();
-        }
-
-        bool ss = false; //Todo: Delete
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F)) //Todo: Delete
-                ss = true; //Todo: Delete
-
-            if (ss) //Todo: Delete
-            {
+            if (Input.GetKeyDown(KeyCode.F))
+            { 
                 targetInteractableController?.OnInteract();
-                ss = false;
             }
         }
 
@@ -45,34 +30,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         {
             OwnerManager = gameManager_;
             this.SceneManager = OwnerManager.SceneManager_;
-        }
 
-        public void FindAllAppropriateControllers()
-        {
-            InteractableController[] interactables
-                = FindObjectsByType<InteractableController>(FindObjectsSortMode.None);
-
-            foreach (InteractableController interactable in interactables)
-            {
-                AddGameObejctToControllerDictionary( //Todo:
-                    interactable as IController, //Very Very Dangerous.
-                    interactable.gameObject);
-
-                (interactable as IController)?.ControllerInitializer(this);
-            }
-
-            Debug.Log(DictionaryOfController.Count);
-        }
-
-
-        public void AddToDictionary(IController controller)
-        {
-
-        }
-
-        public void AddGameObejctToControllerDictionary(IController controller, GameObject controllerGameObject)
-        {
-            DictionaryOfController.Add(controller, controllerGameObject);
+            OnInitializeManager_Factory();
         }
 
         public void SetTargetInteractableGameObject(InteractableController foundInteractable)
@@ -87,51 +46,59 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         //===========================================================
         public void OnInitializeManager_Factory()
         {
+            ID_ControllerDictionary = new();
             InitializeBaseData();
             FindAllInScene();
         }
 
         public void InitializeBaseData()
         {
+            //nothing?
         }
 
-        public void FindAllInScene() //Todo:
+        public void FindAllInScene()
         {
             InteractableController[] interactables
                 = FindObjectsByType<InteractableController>(FindObjectsSortMode.None);
 
-            //foreach (InteractableController interactable in interactables)
-            //{
-            //    AddGameObejctToControllerDictionary( //Todo:
-            //        interactable as IController,
-            //        interactable.gameObject);
+            foreach (var interactable in interactables)
+            {
+                AddSummoned(Interactable_ID, interactable as IController);
+                (interactable as IController)?.ControllerInitializer(this);
+                Interactable_ID++;
+            }
 
-            //    (interactable as IController)?.ControllerInitializer(this);
-            //}
-
-            Debug.Log(DictionaryOfController.Count);
+            Debug.Log($"Interactables found : {ID_ControllerDictionary.Count}");
         }
 
         public void SummonGameObject(GameObject prefab, Transform summonPoint)
         {
+            InteractableController tempInteractable
+                = Instantiate(prefab, summonPoint.position, Quaternion.identity, null)
+                .GetComponent<InteractableController>();
+
+            AddSummoned(Interactable_ID, tempInteractable as IController);
         }
 
         public void AddSummoned(int summoned_ID, IController summonedAttachedController)
         {
+            ID_ControllerDictionary.Add(summoned_ID, summonedAttachedController);
         }
 
         public void DestroyGameObject(GameObject prefabInstance)
         {
+            Destroy(prefabInstance);
         }
 
         public void RemoveSummoned(int summoned_ID)
         {
+            ID_ControllerDictionary.Remove(summoned_ID);
         }
 
     }
-    public enum asdfasdf
+    public enum InteractableObjectType
     {
-        d1,d2,d3,d4,
+        d1, d2, d3, d4,
     }
 
     public struct InteractableStatus

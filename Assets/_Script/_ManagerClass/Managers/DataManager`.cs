@@ -19,10 +19,14 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         #region SetGameData
         private readonly string ALLY_DATA_PATH = "GameData/AllyData";
+        private readonly string ENEMY_DATA_PATH = "GameData/EnemyData";
         private TextAsset allyBaseTextAsset;
+        private TextAsset enemyBaseTextAsset;
         private Dictionary<string, Dictionary<string, string>> allyBaseData;
+        private Dictionary<string, Dictionary<string, string>> enemyBaseData;
         public Dictionary<string, Dictionary<string, string>> AllyBaseData { get => allyBaseData; }
-        
+        public Dictionary<string, Dictionary<string, string>> EnemyBaseData { get => enemyBaseData; }
+
 
         public void InitializeGameData()
         {
@@ -33,11 +37,13 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         private void LoadAllTextAsset()
         {
             allyBaseTextAsset = Resources.Load(ALLY_DATA_PATH) as TextAsset;
+            //enemyBaseTextAsset = Resources.Load(ENEMY_DATA_PATH) as TextAsset;
         }
 
         private void SetBaseData()
         {
             ParseTextAsset(allyBaseTextAsset.text, out allyBaseData);
+            //ParseTextAsset(enemyBaseTextAsset.text, out enemyBaseData);
         }
 
         #endregion

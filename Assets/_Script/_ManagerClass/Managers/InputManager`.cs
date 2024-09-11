@@ -20,9 +20,9 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
 
         public Dictionary<Enum, IController> DictionaryEnumController { get; set; } = new();
+        public Dictionary<Enum, IState_> Type_StateDictionary { get; set; } = new();
         public GameManager_ OwnerManager { get; set; }
         public IState_ CurrentState { get; set; }
-        public Dictionary<Enum, IState_> Type_StateDictionary { get; set; }
 
         private InputState_enum currentInputState;
         private InputController_ currentInputController;
@@ -58,7 +58,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                 currentInputController = DictionaryEnumController[inputState] as InputController_;
         }
 
-        public void OnInitializeManager_StateMachine() //Todo:
+        public void OnInitializeManager_StateMachine()
         {
             var types = Assembly.GetExecutingAssembly().GetTypes();
 
@@ -71,13 +71,18 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             {
                 var inputController = Activator.CreateInstance(controllerType);
 
-                DictionaryEnumController.Add(
+                DictionaryEnumController.Add( //Todo: remove
                     (inputController as InputController_).InputState,
                     inputController as IController);
+
+                Type_StateDictionary.Add(
+                    (inputController as InputController_).InputState,
+                    inputController as IState_);
             }
 
             Debug.Log($"State Counts : {DictionaryEnumController.Count}");
-            currentInputController = DictionaryEnumController[InputState_enum.Sample] as InputController_;
+            currentInputController = DictionaryEnumController[InputState_enum.Sample] as InputController_; //Todo: remove
+            //currentInputController = Type_StateDictionary[InputState_enum.Sample] as InputController_; //Todo: adjust to IState
         }
 
         public void AddState()

@@ -79,8 +79,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void FindAllInScene()
         {
-            //Todo:
-            AllyController_[] allysInMap = FindObjectsOfType<AllyController_>();
+            AllyController_[] allysInMap = FindObjectsByType<AllyController_>(FindObjectsSortMode.None);
 
             foreach (AllyController_ e in allysInMap)
             {
@@ -98,7 +97,6 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void SummonGameObject(GameObject prefab, Transform summonPoint)
         {
-            //Todo:
             AllyController_ tempAllyController = Instantiate(prefab, summonPoint.position, Quaternion.identity, null)
                 .GetComponent<AllyController_>();
 
@@ -109,19 +107,16 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void AddSummoned(int summoned_ID, IController summonedAttachedController)
         {
-            //Todo:
             ID_ControllerDictionary.Add(summoned_ID, summonedAttachedController);
         }
 
         public void DestroyGameObject(GameObject prefabInstance)
         {
-            //Todo:
             Destroy(prefabInstance);
         }
 
         public void RemoveSummoned(int summoned_ID)
         {
-            //Todo:
             ID_ControllerDictionary.Remove(summoned_ID);
         }
     }

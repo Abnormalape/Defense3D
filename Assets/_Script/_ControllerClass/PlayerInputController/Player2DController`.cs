@@ -9,10 +9,11 @@ namespace BHSSolo.DungeonDefense.Controller
         public PlayerManager_ playerManager_ {  get; set; }
 
         public IState_ CurrentPlayerState { get; private set; }
+
         public IManagerClass OwnerManager { get; set; }
 
-        public Transform playerCamera;
 
+        public Transform playerCamera;
 
 
         private void Awake()

@@ -35,7 +35,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - ClickableObject
   - GridFloor
   m_SortingLayers:
   - name: Default

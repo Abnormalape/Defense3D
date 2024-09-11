@@ -8,9 +8,11 @@ namespace BHSSolo.DungeonDefense.Controller
     public class Player3DController_ : MonoBehaviour, IController, IPlayerController, IInputReactor
     {
         public PlayerManager_ playerManager_ { get; set; }
+
         public IManagerClass OwnerManager { get; set; }
 
         public IState_ CurrentPlayerState { get; private set; }
+
 
         [SerializeField] public float moveSpeed = 5f;
         [SerializeField] public float mouseSensitivity = 100f;

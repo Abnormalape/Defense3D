@@ -5,52 +5,76 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    public class RoomManager_ : MonoBehaviour, IManagerClass
+    /// <summary>
+    /// Same as Ally
+    /// </summary>
+    public class RoomManager_ : MonoBehaviour, IManagerClass, IManagerFactory<RoomBaseData>
     {
-        public List<IController> ListOfController { get; set; }
-        public Dictionary<IController, GameObject> DictionaryOfController { get; set; }
-        public Dictionary<Enum, IController> DictionaryEnumController { get; set; }
         public GameManager_ OwnerManager { get; set; }
+        public Dictionary<int, IController> ID_ControllerDictionary { get; set; } = new();
+        public Dictionary<Enum, RoomBaseData> BaseDataDictionary { get; set; } = new();
 
+        public static int Room_ID { get; private set; }
 
         public void InitializeManager(GameManager_ gameManager_)
         {
             OwnerManager = gameManager_;
+            OnInitializeManager_Factory();
         }
 
-        public void AddToDictionary(IController controller)
+        public void OnInitializeManager_Factory()
         {
-
+            InitializeBaseData();
+            FindAllInScene();
         }
 
-        public void AddGameObejctToControllerDictionary(IController controller, GameObject controllerGameObject)
+        public void InitializeBaseData()
         {
-
         }
 
-        public void AddToList(IController controller)
+        public void FindAllInScene()
         {
+            //AllyController_[] allysInMap = FindObjectsByType<AllyController_>(FindObjectsSortMode.None);
 
+            //foreach (AllyController_ e in allysInMap)
+            //{
+            //    ((IController)e).ControllerInitializer(this); //Controller Initialize
+            //    e.AllyControllerInitializer(BaseDataDictionary[e.AllyEnum_]); //Ally Controller Initialize
+
+            //    e.Ally_ID = Ally_ID;
+            //    Ally_ID++;
+
+            //    AddSummoned(e.Ally_ID, e as IController);
+            //}
+
+            //Debug.Log($"Found, Set, Registet Complete.\n{allysInMap.Length} Allys in map.");
+
+            AddSummoned(Room_ID, null);//Todo:
         }
 
-        public void RemoveFromDictionary(IController controller)
+        public void SummonGameObject(GameObject prefab, Transform summonPoint)
         {
-
         }
 
-        public void RemoveFronList(IController controller)
+        public void AddSummoned(int summoned_ID, IController summonedAttachedController)
         {
-            
+            ID_ControllerDictionary.Add(summoned_ID, summonedAttachedController);
+            Room_ID++; ;
         }
 
-        public void EventLoudSpeaker()
+        public void DestroyGameObject(GameObject prefabInstance)
         {
-
+            Destroy(prefabInstance);
         }
 
-        public void FindAllAppropriateControllers()
+        public void RemoveSummoned(int summoned_ID)
         {
-            throw new System.NotImplementedException();
+            ID_ControllerDictionary.Remove(summoned_ID);
         }
+    }
+
+    public struct RoomBaseData
+    {
+
     }
 }
