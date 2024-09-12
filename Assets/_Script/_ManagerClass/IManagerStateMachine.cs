@@ -11,14 +11,15 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public Dictionary<Enum, IState_> Type_StateDictionary { get; set; }
 
+        public StateMachineBehaviour_ StateMachineBehaviour_ { get; set; }
 
         public void OnInitializeManager_StateMachine();
 
-        public void AddState();
+        public void AddState(Enum stateName, IState_ state_);
 
-        public void RemoveState();
+        public void RemoveState(Enum stateName);
 
-        public void ChangeManagerState();
+        public void ChangeManagerState(Enum stateName);
 
         public void OnChangeManagerState();
     }

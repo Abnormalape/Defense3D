@@ -2,6 +2,8 @@
 using BHSSolo.DungeonDefense.State;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
@@ -10,30 +12,93 @@ namespace BHSSolo.DungeonDefense.ManagerClass
     {
         public GameManager_ OwnerManager { get; set; }
         public IState_ CurrentState { get; set; }
-        public Dictionary<Enum, IState_> Type_StateDictionary { get; set; }
+        public Dictionary<Enum, IState_> Type_StateDictionary { get; set; } = new(10);
+        public StateMachineBehaviour_ StateMachineBehaviour_ { get; set; }
 
-        public void AddState()
+
+        private void Start()
         {
+            ChangeManagerState(GameState.Player_IdleState);
         }
 
-        public void ChangeManagerState()
+        private void Update()
         {
+            StateMachineBehaviour_.OnStateUpdate();
         }
+
 
         public void InitializeManager(GameManager_ gameManager_)
         {
-        }
-
-        public void OnChangeManagerState()
-        {
+            OwnerManager = gameManager_;
+            OnInitializeManager_StateMachine();
         }
 
         public void OnInitializeManager_StateMachine()
         {
+            StateMachineBehaviour_ = new StateMachineBehaviour_();
+            FindGameState();
         }
 
-        public void RemoveState()
+        private void FindGameState()
         {
+            var gameStates = Assembly.GetExecutingAssembly().GetTypes()
+                                .Where(t => typeof(IState_).IsAssignableFrom(t)
+                                         && typeof(IGameState).IsAssignableFrom(t)
+                                         && !t.IsInterface
+                                         && !t.IsAbstract).ToList();
+
+            foreach (var gameState in gameStates)
+            {
+                var tempGameState = Activator.CreateInstance(gameState);
+
+                IGameState tempIGameState = tempGameState as IGameState;
+                tempIGameState.InitialzieGameState();
+                AddState(tempIGameState.GameState, tempGameState as IState_);
+            }
         }
+
+
+        public void AddState(Enum stateName, IState_ state_)
+        {
+            Type_StateDictionary.Add(stateName, state_);
+        }
+
+        public void RemoveState(Enum stateName)
+        {
+            Type_StateDictionary.Remove(stateName);
+        }
+
+        public void ChangeManagerState(Enum stateName)
+        {
+            if (Type_StateDictionary.ContainsKey(stateName))
+            {
+                CurrentState = Type_StateDictionary[stateName];
+            }
+            else
+            {
+                Debug.LogWarning("No State Found.");
+                return;
+            }
+
+            OnChangeManagerState();
+        }
+
+        public void OnChangeManagerState()
+        {
+            GameState tempGameState = (CurrentState as IGameState).GameState;
+            Debug.Log($"Game State Changed Into {tempGameState}");
+            OnManagerStateChanged?.Invoke(tempGameState);
+        }
+
+
+        public delegate void ManagerStateChanged(GameState changedInto);
+        public event ManagerStateChanged OnManagerStateChanged;
+    }
+
+    public enum GameState
+    {
+        Player_IdleState,
+        Player_BattleState,
+        DungeonManagementState,
     }
 }

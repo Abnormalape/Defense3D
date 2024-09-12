@@ -40,6 +40,9 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public override void OnUIUpdate()
         {
+            if (myCanvas.enabled == false)
+                return;
+
             Debug.Log("Contruct Dungeon!");
         }
     }

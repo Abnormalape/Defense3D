@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
+using BHSSolo.DungeonDefense.Controller;
 
-namespace BHSSolo.DungeonDefense.Controller
+namespace BHSSolo.DungeonDefense.ManagerClass
 {
     public class InteractableGameObjectFinder
     {
-        public InteractableGameObjectFinder(Player3DController_ FinderHolder)
+        public InteractableGameObjectFinder(PlayerState FinderHolder)
         {
             this.finderHolder = FinderHolder;
         }
 
 
-        private Player3DController_ finderHolder;
+        private PlayerState finderHolder;
         private float searchDistance = 3f;
 
 

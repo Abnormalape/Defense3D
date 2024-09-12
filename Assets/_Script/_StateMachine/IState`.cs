@@ -2,8 +2,8 @@
 {
     public interface IState_
     {
-        public void Enter();
-        public void Update();
-        public void Exit();
+        public void StateEnter();
+        public void StateUpdate();
+        public void StateExit();
     }
 }

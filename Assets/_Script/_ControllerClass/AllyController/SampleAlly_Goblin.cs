@@ -34,10 +34,15 @@ namespace BHSSolo.DungeonDefense.Controller
             AllyBaseStatus_ = statusFound; //Base Status, Please Initiate CurrentStatus
         }
 
+        private float passedTime =0f;
         private void Update()
         {
-            UnityEngine.Debug.Log($"I Am {AllyBaseStatus_.Type}." +
-                $"\nMy Base HP is {AllyBaseStatus_.Blood}.");
+            passedTime += Time.deltaTime;
+            if(passedTime > 5f)
+            {
+                UnityEngine.Debug.Log("I am Goblin");
+                passedTime = 0f;
+            }
         }
     }
 }

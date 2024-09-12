@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
@@ -13,15 +14,18 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public Dictionary<int, IController> ID_ControllerDictionary { get; set; }
         public Dictionary<Enum, InteractableStatus> BaseDataDictionary { get; set; }
 
+
         private InteractableController targetInteractableController = null;
+        private GameStateManager_ GameStateManager_;
         private SceneManager_ SceneManager;
         private static int Interactable_ID;
+        private bool isPlayerIdleGameState = false;
 
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F))
-            { 
+            if (Input.GetKeyDown(KeyCode.F) && isPlayerIdleGameState) //Todo: InputSystem
+            {
                 targetInteractableController?.OnInteract();
             }
         }
@@ -30,8 +34,18 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         {
             OwnerManager = gameManager_;
             this.SceneManager = OwnerManager.SceneManager_;
+            this.GameStateManager_ = OwnerManager.GameStateManager_;
+            this.GameStateManager_.OnManagerStateChanged += Set_IsPlayerIdleGameState;
 
             OnInitializeManager_Factory();
+        }
+
+        private void Set_IsPlayerIdleGameState(GameState gameState)
+        {
+            if (gameState == GameState.Player_IdleState)
+                isPlayerIdleGameState = true;
+            else
+                isPlayerIdleGameState = false;
         }
 
         public void SetTargetInteractableGameObject(InteractableController foundInteractable)

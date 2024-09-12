@@ -23,6 +23,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public Dictionary<Enum, IState_> Type_StateDictionary { get; set; } = new();
         public GameManager_ OwnerManager { get; set; }
         public IState_ CurrentState { get; set; }
+        public StateMachineBehaviour_ StateMachineBehaviour_ { get; set; }
 
         private InputState_enum currentInputState;
         private InputController_ currentInputController;
@@ -85,15 +86,15 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             //currentInputController = Type_StateDictionary[InputState_enum.Sample] as InputController_; //Todo: adjust to IState
         }
 
-        public void AddState()
+        public void AddState(Enum stateName, IState_ state_)
         {
         }
 
-        public void RemoveState()
+        public void RemoveState(Enum stateName)
         {
         }
 
-        public void ChangeManagerState()
+        public void ChangeManagerState(Enum stateName)
         {
         }
 

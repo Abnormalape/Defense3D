@@ -9,14 +9,14 @@ namespace BHSSolo.DungeonDefense.State
 
         public void ChangeState(IState_ newState_)
         {
-            currentState_?.Exit();
+            currentState_?.StateExit();
             currentState_ = newState_;
-            currentState_?.Enter();
+            currentState_?.StateEnter();
         }
 
         public void OnStateUpdate()
         {
-            currentState_?.Update();
+            currentState_?.StateUpdate();
         }
     }
 }

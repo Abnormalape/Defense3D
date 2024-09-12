@@ -1,14 +1,17 @@
 ﻿using BHSSolo.DungeonDefense.Controller;
 using BHSSolo.DungeonDefense.ManagerClass;
+using System;
 using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.InteractableObject
 {
     public class DungeonCoreInteractable : InteractableController, IController
     {
-        private Camera _camera; //Todo: Remove
         [SerializeField] private GameObject ObservePoint2D;
+        private Camera _camera; //Todo: Remove
         private UIManager_ UIManager_;
+        private GameStateManager_ GameStateManager_;
+        private readonly GameState targetGameState = GameState.DungeonManagementState;
 
 
         public IManagerClass OwnerManager { get; set; }
@@ -21,6 +24,10 @@ namespace BHSSolo.DungeonDefense.InteractableObject
         {
             OwnerManager = owenerManager;
             UIManager_ = OwnerManager.OwnerManager.UIManager_;
+            this.GameStateManager_ = OwnerManager.OwnerManager.GameStateManager_;
+
+            OnInteracted += this.GameStateManager_.ChangeManagerState;
+
             _camera = Camera.main; //Todo: Remove
         }
 
@@ -32,6 +39,8 @@ namespace BHSSolo.DungeonDefense.InteractableObject
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             UIManager_.Open(UI_enum.Manager);
+            //=========================================//
+            OnInteracted(targetGameState);
         }
 
         public override void OnInteractable()
@@ -43,5 +52,9 @@ namespace BHSSolo.DungeonDefense.InteractableObject
         {
             Debug.Log("Now Dungeon Core Can Not Interact");
         }
+
+
+        public delegate void Interacted(Enum gameState);
+        public event Interacted OnInteracted;
     }
 }
