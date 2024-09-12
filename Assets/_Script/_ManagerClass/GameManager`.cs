@@ -4,18 +4,6 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    [RequireComponent(typeof(UIManager_))]
-    [RequireComponent(typeof(RoomManager_))]
-    [RequireComponent(typeof(AllyManager_))]
-    [RequireComponent(typeof(DataManager_))]
-    [RequireComponent(typeof(AudioManager))]
-    [RequireComponent(typeof(SceneManager_))]
-    [RequireComponent(typeof(EnemyManager_))]
-    [RequireComponent(typeof(InputManager_))]
-    [RequireComponent(typeof(PlayerManager_))]
-    [RequireComponent(typeof(GameStateManager_))]
-    [RequireComponent(typeof(InteractableManager_))]
-    [RequireComponent(typeof(EventManager))]
     public class GameManager_ : MonoBehaviour
     {
         public UIManager_ UIManager_ { get; private set; }
@@ -30,6 +18,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public GameStateManager_ GameStateManager_ { get; private set; }
         public InteractableManager_ InteractableManager_ { get; private set; }
         public EventManager EventManager_ { get; private set; }
+        public CameraManager CameraManager_ { get; private set; }
 
         private void Awake()
         {
@@ -47,6 +36,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             GameStateManager_ = GetComponent<GameStateManager_>();
             InteractableManager_ = GetComponent<InteractableManager_>();
             EventManager_ = GetComponent<EventManager>();
+            CameraManager_ = GetComponent<CameraManager>();
 
             this.DataManager_.InitializeManager(this); //DataManager First.
             this.UIManager_.InitializeManager(this);
@@ -60,6 +50,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             this.GameStateManager_.InitializeManager(this);
             this.InteractableManager_.InitializeManager(this);
             this.EventManager_.InitializeManager(this);
+            this.CameraManager_.InitializeManager(this);
         }
 
         private void Start()

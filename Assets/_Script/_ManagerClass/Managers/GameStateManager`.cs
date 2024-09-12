@@ -23,7 +23,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         private void Update()
         {
-            StateMachineBehaviour_.OnStateUpdate();
+            StateMachineBehaviour_?.OnStateUpdate();
         }
 
 

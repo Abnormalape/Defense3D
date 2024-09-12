@@ -7,7 +7,7 @@ namespace BHSSolo.DungeonDefense.CustomAttribute
     {
         public FindManager()
         {
-
+            
         }
     }
 }

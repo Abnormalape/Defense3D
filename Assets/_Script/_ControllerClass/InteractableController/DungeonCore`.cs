@@ -8,7 +8,6 @@ namespace BHSSolo.DungeonDefense.InteractableObject
     public class DungeonCoreInteractable : InteractableController, IController
     {
         [SerializeField] private GameObject ObservePoint2D;
-        private Camera _camera; //Todo: Remove
         private UIManager_ UIManager_;
         private GameStateManager_ GameStateManager_;
         private readonly GameState targetGameState = GameState.DungeonManagementState;
@@ -27,15 +26,10 @@ namespace BHSSolo.DungeonDefense.InteractableObject
             this.GameStateManager_ = OwnerManager.OwnerManager.GameStateManager_;
 
             OnInteracted += this.GameStateManager_.ChangeManagerState;
-
-            _camera = Camera.main; //Todo: Remove
         }
 
         public override void OnInteract()
         {
-            _camera.transform.parent = ObservePoint2D.transform;
-            _camera.transform.localPosition = Vector3.zero;
-            _camera.transform.localRotation = Quaternion.identity;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             UIManager_.Open(UI_enum.Manager);
