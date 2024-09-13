@@ -41,6 +41,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         private void OnHorizontal(InputValue value)
         {
+            float mouseMoved = value.Get<float>() / 3f;
+            this.transform.rotation *= Quaternion.Euler(0, mouseMoved, 0);
         }
 
         private void OnVertical(InputValue value)

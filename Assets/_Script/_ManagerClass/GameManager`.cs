@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
+    [RequireComponent(typeof(DungeonConstructManager))]
     public class GameManager_ : MonoBehaviour
     {
         public UIManager_ UIManager_ { get; private set; }
@@ -19,6 +20,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public InteractableManager_ InteractableManager_ { get; private set; }
         public EventManager EventManager_ { get; private set; }
         public CameraManager CameraManager_ { get; private set; }
+        public DungeonConstructManager DungeonConstructManager_ { get; private set; }
 
         private void Awake()
         {
@@ -37,6 +39,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             InteractableManager_ = GetComponent<InteractableManager_>();
             EventManager_ = GetComponent<EventManager>();
             CameraManager_ = GetComponent<CameraManager>();
+            DungeonConstructManager_ = GetComponent<DungeonConstructManager>();
 
             this.DataManager_.InitializeManager(this); //DataManager First.
             this.UIManager_.InitializeManager(this);
@@ -47,10 +50,11 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             this.EnemyManager_.InitializeManager(this);
             this.InputManager_.InitializeManager(this);
             this.PlayerManager_.InitializeManager(this);
-            this.GameStateManager_.InitializeManager(this);
             this.InteractableManager_.InitializeManager(this);
             this.EventManager_.InitializeManager(this);
             this.CameraManager_.InitializeManager(this);
+            this.DungeonConstructManager_.InitializeManager(this);
+            this.GameStateManager_.InitializeManager(this); //GameStateManager Last.
         }
 
         private void Start()

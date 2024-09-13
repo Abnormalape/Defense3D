@@ -27,7 +27,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             OwnerManager = gameManager_;
 
             this.GameStateManager_ = OwnerManager.GameStateManager_;
-            this.GameStateManager_.OnManagerStateChanged += TempEventReactor;
+            this.GameStateManager_.OnGameStateChanged += TempEventReactor;
 
             OnInitializeManager_StateMachine();
         }
@@ -40,7 +40,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         private void TempEventReactor(GameState gameState)
         {
-            if(gameState == GameState.DungeonManagementState)
+            if(gameState == GameState.DungeonObserveState)
                 ChangeManagerState(PlayerState_.PlayerManageSight);
             else
                 ChangeManagerState(PlayerState_.PlayerOnCharacter);

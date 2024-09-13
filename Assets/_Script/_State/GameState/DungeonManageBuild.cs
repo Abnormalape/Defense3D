@@ -3,15 +3,10 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    public class DungeonManageState : IState_, IGameState
+    public class DungeonManageBuild : IState_, IGameState
     {
         public GameStateManager_ GameStateManager_ { get; set; }
-
-        public GameState GameState { get; set; } = GameState.DungeonObserveState;
-
-
-        public readonly float TimeScale = 1f;
-
+        public GameState GameState { get; set; } = GameState.DungeonBuildState;
 
         public void InitialzieGameState()
         {
@@ -20,7 +15,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void StateEnter()
         {
-            Debug.Log("Now Dungeon Observe State.");
+            Debug.Log("Now Dungeon Build State.");
         }
 
         public void StateExit()
@@ -32,6 +27,5 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         {
 
         }
-
     }
 }

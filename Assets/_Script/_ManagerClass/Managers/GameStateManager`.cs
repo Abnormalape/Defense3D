@@ -18,7 +18,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         private void Start()
         {
-            ChangeManagerState(GameState.Player_IdleState);
+            
         }
 
         private void Update()
@@ -31,6 +31,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         {
             OwnerManager = gameManager_;
             OnInitializeManager_StateMachine();
+
+            ChangeManagerState(GameState.Player_IdleState);
         }
 
         public void OnInitializeManager_StateMachine()
@@ -87,18 +89,19 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         {
             GameState tempGameState = (CurrentState as IGameState).GameState;
             Debug.Log($"Game State Changed Into {tempGameState}");
-            OnManagerStateChanged?.Invoke(tempGameState);
+            OnGameStateChanged?.Invoke(tempGameState);
         }
 
 
-        public delegate void ManagerStateChanged(GameState changedInto);
-        public event ManagerStateChanged OnManagerStateChanged;
+        public delegate void GameStateChanged(GameState changedInto);
+        public event GameStateChanged OnGameStateChanged;
     }
 
     public enum GameState
     {
         Player_IdleState,
         Player_BattleState,
-        DungeonManagementState,
+        DungeonObserveState,
+        DungeonBuildState,
     }
 }

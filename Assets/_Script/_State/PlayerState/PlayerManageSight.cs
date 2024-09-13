@@ -11,6 +11,11 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public override PlayerState_ PlayerState_ { get; set; } = PlayerState_.PlayerManageSight;
         public override PlayerInput PlayerInput { get; set; }
 
+
+        [SerializeField] private float moveSpeed = 3f;
+        [SerializeField] private float scrollSpeed = 1f;
+        private Vector2 inputVector;
+
         public override void InitializePlayerState(PlayerManager_ ownerManager)
         {
             PlayerManager_ = ownerManager;
@@ -22,17 +27,31 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         private void OnMove(InputValue value)
         {
-            Vector2 inputKey = value.Get<Vector2>();
+            inputVector = value.Get<Vector2>();
+        }
 
-            MoveDirection(inputKey);
+        private void OnZoom(InputValue value)
+        {
+            float zoomRate = value.Get<Vector2>().y / 100f;
+            Vector3 tempVector = new Vector3(1f / 2f, -1f, -1f / 2f) * zoomRate * scrollSpeed;
+
+            if (this.transform.position.y + tempVector.y > 100f
+                || this.transform.position.y + tempVector.y < 10f)
+                return;
+
+            this.transform.position += tempVector;
         }
 
         private void MoveDirection(Vector2 input)
         {
-            float x = input.x;
-            float y = input.y;
+            if (input == null)
+                return;
 
-            transform.position += new Vector3(x, y, 0f);
+            float x = input.x * moveSpeed;
+            float y = input.y * moveSpeed;
+
+            this.transform.position += new Vector3(-x, 0, -x) * Time.deltaTime;
+            this.transform.position += new Vector3(y, 0, -y) * Time.deltaTime;
         }
 
         public void StateEnter()
@@ -47,7 +66,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void StateUpdate()
         {
-
+            MoveDirection(inputVector);
         }
 
         public override void TurnOffPlayerInput()

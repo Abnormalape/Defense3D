@@ -35,7 +35,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             OwnerManager = gameManager_;
             this.SceneManager = OwnerManager.SceneManager_;
             this.GameStateManager_ = OwnerManager.GameStateManager_;
-            this.GameStateManager_.OnManagerStateChanged += Set_IsPlayerIdleGameState;
+            this.GameStateManager_.OnGameStateChanged += Set_IsPlayerIdleGameState;
 
             OnInitializeManager_Factory();
         }
