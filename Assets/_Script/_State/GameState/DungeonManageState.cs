@@ -7,7 +7,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
     {
         public GameStateManager_ GameStateManager_ { get; set; }
 
-        public GameState GameState { get; set; } = GameState.DungeonObserveState;
+        public GameState GameState { get; set; } = GameState.Dungeon_ObserveState;
 
 
         public readonly float TimeScale = 1f;

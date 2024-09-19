@@ -9,13 +9,19 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public GameManager_ OwnerManager { get; set; }
 
 
+        private GameStateManager_ gameStateManager; //Todo:
         private DungeonGridSpwner dungeonGridSpwner;
-        private List<DungeonGridData> GridDatas = new(10000);
+        public Dictionary<Vector3,DungeonGridData> GridDatas = new(10000);
+
+        private bool showingGrid = false;
 
 
         public void InitializeManager(GameManager_ gameManager_)
         {
             OwnerManager = gameManager_;
+
+            gameStateManager = OwnerManager.GameStateManager_;
+            gameStateManager.OnGameStateChanged += GameStateReaction;
 
             dungeonGridSpwner = FindFirstObjectByType<DungeonGridSpwner>();
 
@@ -23,30 +29,56 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             {
                 for (int iz = 0; iz < 101; iz++)
                 {
-                    int rand0to1 = UnityEngine.Random.Range(0,2);
+                    int rand0to1 = UnityEngine.Random.Range(0, 2);
 
-                    GridDatas.Add(new DungeonGridData(
-                    rand0to1 == 0 ? true : false ,
-                    new Vector3(ix, 0f, iz) * 5f));
+                    GridDatas.Add(
+                        new Vector3(ix, 0.01f, iz) * 5f
+                        ,new DungeonGridData(
+                            false
+                            ,new Vector3(ix, 0.01f, iz) * 5f));
                 }
             }
 
             MakeGrid(GridDatas);
         }
 
-        public void MakeGrid(List<DungeonGridData> gridDatas)
+        private void GameStateReaction(GameState gameState)
+        {
+            switch (gameState)
+            {
+                case GameState.Dungeon_ConstructionState:
+                    ShowGrid(GridDatas);
+                    return;
+
+                default:
+                    HideGrid();
+                    return;
+            }
+        }
+
+        public void MakeGrid(Dictionary<Vector3, DungeonGridData> gridDatas)
         {
             dungeonGridSpwner.MakeGrid(gridDatas);
         }
 
-        public void ShowGrid(List<DungeonGridData> gridDatas)
+        public void ShowGrid(Dictionary<Vector3,DungeonGridData> gridDatas)
         {
-            dungeonGridSpwner.ShowGrid(gridDatas);
+            if (!showingGrid)
+            {
+                Debug.Log("Show Grid");
+                showingGrid = true;
+                dungeonGridSpwner.ShowGrid(gridDatas);
+            }
         }
 
         public void HideGrid()
         {
-            dungeonGridSpwner.HideGrid();
+            if (showingGrid)
+            {
+                Debug.Log("Hide Grid");
+                showingGrid = false;
+                dungeonGridSpwner.HideGrid();
+            }
         }
     }
 }

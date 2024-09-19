@@ -27,7 +27,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             OwnerManager = gameManager_;
 
             this.GameStateManager_ = OwnerManager.GameStateManager_;
-            this.GameStateManager_.OnGameStateChanged += TempEventReactor;
+            this.GameStateManager_.OnGameStateChanged += GameStateReactor;
 
             OnInitializeManager_StateMachine();
         }
@@ -38,9 +38,9 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             FindPlayerState();
         }
 
-        private void TempEventReactor(GameState gameState)
+        private void GameStateReactor(GameState gameState)
         {
-            if(gameState == GameState.DungeonObserveState)
+            if(gameState == GameState.Dungeon_ObserveState || gameState == GameState.Dungeon_ConstructionState)
                 ChangeManagerState(PlayerState_.PlayerManageSight);
             else
                 ChangeManagerState(PlayerState_.PlayerOnCharacter);
@@ -85,6 +85,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             CurrentState?.StateExit();
             CurrentState = Type_StateDictionary[stateName];
             CurrentState?.StateEnter();
+
             OnChangeManagerState();
         }
 

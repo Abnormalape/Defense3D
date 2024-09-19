@@ -101,7 +101,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
     {
         Player_IdleState,
         Player_BattleState,
-        DungeonObserveState,
-        DungeonBuildState,
+        Dungeon_ObserveState,
+        Dungeon_ConstructionState,
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BHSSolo.DungeonDefense.ManagerClass;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
@@ -10,6 +11,18 @@ namespace BHSSolo.DungeonDefense.Controller
         public override Canvas myCanvas { get; set; }
         public IManagerClass OwnerManager { get; set; }
 
+        private GameStateManager_ gameStateManager;
+
+        [SerializeField] private Button constructionButton;
+        public Button ConstructionButton
+        {
+            get
+            {
+                if (constructionButton == null) { constructionButton = transform.Find("ConstructionButton").GetComponent<Button>(); }
+                return constructionButton;
+            }
+        }
+
 
         private void Update()
         {
@@ -19,6 +32,10 @@ namespace BHSSolo.DungeonDefense.Controller
         public void ControllerInitializer(IManagerClass ownerManager)
         {
             OwnerManager = ownerManager;
+            gameStateManager = OwnerManager.OwnerManager.GameStateManager_;
+
+            constructionButton.onClick.AddListener(() => gameStateManager.ChangeManagerState(GameState.Dungeon_ConstructionState)); //Todo:
+
             myCanvas = GetComponent<Canvas>();
             Close();
         }
@@ -46,7 +63,6 @@ namespace BHSSolo.DungeonDefense.Controller
 
             //Todo: Not in UIController
 
-            Debug.Log("Now Managing UI");
 
             if (Input.GetKey(KeyCode.W))
                 Camera.main.transform.position += new Vector3(10f, 0, -10f) * Time.deltaTime;
@@ -60,7 +76,6 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public void OpenConstructUI()
         {
-            Debug.Log("Guae");
             (OwnerManager as UIManager_).Open(UI_enum.BuildDungeon);
             Close();
         }

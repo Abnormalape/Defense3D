@@ -6,7 +6,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
     public class DungeonManageBuild : IState_, IGameState
     {
         public GameStateManager_ GameStateManager_ { get; set; }
-        public GameState GameState { get; set; } = GameState.DungeonBuildState;
+        public GameState GameState { get; set; } = GameState.Dungeon_ConstructionState;
 
         public void InitialzieGameState()
         {

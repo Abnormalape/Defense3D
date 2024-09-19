@@ -28,12 +28,12 @@ namespace BHSSolo.DungeonDefense.Contruct
                 Debug.LogWarning("No Gird Holder Found On Grid Spawner.");
         }
 
-        public void MakeGrid(List<DungeonGridData> gridDatas)
+        public void MakeGrid(Dictionary<Vector3, DungeonGridData> gridDatas)
         {
-            foreach (DungeonGridData data in gridDatas)
+            foreach (var data in gridDatas)
             {
-                data.GridObject =
-                    Instantiate(GridPrefab, data.ConstructedPosition, Quaternion.identity, GridHolder.transform);
+                data.Value.GridObject =
+                    Instantiate(GridPrefab, data.Value.ConstructedPosition, Quaternion.identity, GridHolder.transform);
             }
 
             HideGrid();
@@ -44,16 +44,16 @@ namespace BHSSolo.DungeonDefense.Contruct
             GridHolder.SetActive(false);
         }
 
-        public void ShowGrid(List<DungeonGridData> dungeonGridDatas)
+        public void ShowGrid(Dictionary<Vector3,DungeonGridData> dungeonGridDatas)
         {
             GridHolder.SetActive(true);
 
-            foreach(DungeonGridData data in dungeonGridDatas)
+            foreach(var data in dungeonGridDatas)
             {
-                if(data.IsContructed)
-                    data.SetVisible();
+                if(!data.Value.IsContructed)
+                    data.Value.SetVisible();
                 else
-                    data.SetInvisible();
+                    data.Value.SetInvisible();
             }
         }
     }

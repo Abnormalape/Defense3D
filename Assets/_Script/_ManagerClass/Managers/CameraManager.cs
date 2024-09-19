@@ -45,7 +45,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
             CameraState tempCameraState;
 
-            if (gameState == GameState.DungeonObserveState)
+            if (gameState == GameState.Dungeon_ObserveState || gameState == GameState.Dungeon_ConstructionState)
                 tempCameraState = CameraState.DungeonView;
             else
                 tempCameraState = CameraState.FollowPlayer;

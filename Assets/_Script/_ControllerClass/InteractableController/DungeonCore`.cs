@@ -10,7 +10,7 @@ namespace BHSSolo.DungeonDefense.InteractableObject
         [SerializeField] private GameObject ObservePoint2D;
         private UIManager_ UIManager_;
         private GameStateManager_ GameStateManager_;
-        private readonly GameState targetGameState = GameState.DungeonObserveState;
+        private readonly GameState targetGameState = GameState.Dungeon_ObserveState;
 
 
         public IManagerClass OwnerManager { get; set; }
