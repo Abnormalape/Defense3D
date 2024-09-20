@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using BHSSolo.DungeonDefense.Function;
 
-class MouseChaser : MonoBehaviour
+class GridCursor : MonoBehaviour
 {
     private void Update()
     {

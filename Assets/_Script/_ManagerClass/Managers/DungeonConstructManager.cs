@@ -10,16 +10,27 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
 
         private GameStateManager_ gameStateManager; //Todo:
+        private RoomManager_ RoomManager;
+        private CursorManager cursorManager;
         private DungeonGridSpwner dungeonGridSpwner;
-        public Dictionary<Vector3,DungeonGridData> GridDatas = new(10000);
+        public Dictionary<Vector3, DungeonGridData> GridDatas = new(10000);
 
         private bool showingGrid = false;
+
+        private GameObject constructurePlaceHolder;
+        public GameObject ConstructurePlaceHolder
+        {
+            get => constructurePlaceHolder;
+            set => constructurePlaceHolder = value;
+        }
 
 
         public void InitializeManager(GameManager_ gameManager_)
         {
             OwnerManager = gameManager_;
 
+            this.RoomManager = OwnerManager.RoomManager_;
+            this.cursorManager = OwnerManager.CursorManager_;
             gameStateManager = OwnerManager.GameStateManager_;
             gameStateManager.OnGameStateChanged += GameStateReaction;
 
@@ -29,13 +40,20 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             {
                 for (int iz = 0; iz < 101; iz++)
                 {
-                    int rand0to1 = UnityEngine.Random.Range(0, 2);
+                    bool tempIsBuilt = false;
+
+                    if (ix == 0 && iz == 0)
+                        tempIsBuilt = true;
+
+
+                    float tempX = ix;
+                    float tempZ = iz;
 
                     GridDatas.Add(
-                        new Vector3(ix, 0.01f, iz) * 5f
-                        ,new DungeonGridData(
-                            false
-                            ,new Vector3(ix, 0.01f, iz) * 5f));
+                        new Vector3(tempX, 0.01f, tempZ) * 5f
+                        , new DungeonGridData(
+                            tempIsBuilt
+                            , new Vector3(tempX, 0.01f, tempZ) * 5f));
                 }
             }
 
@@ -61,7 +79,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             dungeonGridSpwner.MakeGrid(gridDatas);
         }
 
-        public void ShowGrid(Dictionary<Vector3,DungeonGridData> gridDatas)
+        public void ShowGrid(Dictionary<Vector3, DungeonGridData> gridDatas)
         {
             if (!showingGrid)
             {
@@ -79,6 +97,72 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                 showingGrid = false;
                 dungeonGridSpwner.HideGrid();
             }
+        }
+
+        /// <summary>
+        /// Find constructure's size by Name in DataManager.
+        /// Then Judge Constructure can Constuct.
+        /// </summary>
+        /// <param name="constructionPoint">Center Point a.k.a Grid Cursor Position </param>
+        /// <param name="attachedConstructureName">Constructure Name. Find Data In DataManager</param>
+        public void JudgeConstruction(Vector3 constructionPoint, string attachedConstructureName)
+        {
+            //Find Constructure Data By Name In DataManager.
+            //Use Construture's xSize, zSize
+
+            int xSize = 3;
+            int zSize = 3;
+            int tempXSize = 0;
+            int tempZSize = 0;
+
+            if (xSize % 2 == 1)
+                tempXSize = (xSize - 1) / 2;
+            if (zSize % 2 == 1)
+                tempZSize = (zSize - 1) / 2;
+
+            Vector3 tempPosition = constructionPoint;
+
+            for (int ix = -tempXSize; ix < tempXSize + 1; ix++)
+            {
+                for (int iz = -tempZSize; iz < tempZSize + 1; iz++)
+                {
+                    Vector3 tempGridPostition
+                        = new Vector3(tempPosition.x + (ix * 5f), tempPosition.y, tempPosition.z + (iz * 5f));
+
+                    if (GridDatas.ContainsKey(tempGridPostition))
+                    {
+                        if (GridDatas[tempGridPostition].IsContructed)
+                        {
+                            Debug.Log("There is already a building at that location.");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("It's not allowed position.");
+                        return;
+                    }
+                }
+            }
+
+            Debug.Log("Construction Success."); //Todo:
+
+            for (int ix = -tempXSize; ix < tempXSize + 1; ix++)
+            {
+                for (int iz = -tempZSize; iz < tempZSize + 1; iz++)
+                {
+                    Vector3 tempGridPostition
+                        = new Vector3(tempPosition.x + (ix * 5f), tempPosition.y, tempPosition.z + (iz * 5f));
+
+                    GridDatas[tempGridPostition].IsContructed = true;
+                }
+            }
+
+            this.RoomManager.AddRoom(attachedConstructureName);
+            Destroy(ConstructurePlaceHolder);
+
+            this.cursorManager.isAttachedOnGridCursor = false; //Todo:
+            this.cursorManager.attachedNameOnGridCursor = ""; //Todo: 
         }
     }
 }

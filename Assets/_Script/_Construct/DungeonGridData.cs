@@ -17,24 +17,45 @@ namespace BHSSolo.DungeonDefense.Contruct
             get => gridObject;
             set
             {
-                gridObject = value; visulaizer = gridObject.GetComponent<MeshRenderer>();
+                gridObject = value; 
+                visulaizer = gridObject.GetComponent<MeshRenderer>();
             }
         }
 
 
-        public bool IsContructed;
+        private bool isContructed = false;
+        public bool IsContructed
+        {
+            get => isContructed;
+            set
+            {
+                if (isContructed == value)
+                    return;
+                else
+                {
+                    isContructed = value;
+                    
+                    if(isContructed)
+                        SetInvisible();
+                    else
+                        SetVisible();
+                }
+            }
+        }
         public Vector3 ConstructedPosition;
         private MeshRenderer visulaizer;
 
 
         public void SetVisible()
         {
-            visulaizer.enabled = true;
+            if(visulaizer != null)
+                visulaizer.enabled = true;
         }
 
         public void SetInvisible()
         {
-            visulaizer.enabled = false;
+            if (visulaizer != null)
+                visulaizer.enabled = false;
         }
     }
 }

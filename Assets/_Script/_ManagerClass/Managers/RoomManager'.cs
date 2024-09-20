@@ -59,7 +59,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public void AddSummoned(int summoned_ID, IController summonedAttachedController)
         {
             ID_ControllerDictionary.Add(summoned_ID, summonedAttachedController);
-            Room_ID++; ;
+            Room_ID++;
         }
 
         public void DestroyGameObject(GameObject prefabInstance)
@@ -70,6 +70,11 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public void RemoveSummoned(int summoned_ID)
         {
             ID_ControllerDictionary.Remove(summoned_ID);
+        }
+
+        public void AddRoom(string RoomName) //Todo: Remove
+        {
+            Debug.Log("Built Room Name : " + RoomName);
         }
     }
 

@@ -8,8 +8,15 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public GameManager_ OwnerManager { get; set; }
 
         private GameStateManager_ GameStateManager { get; set; }
+        private DungeonConstructManager DungeonConstructManager { get; set; }
 
-        public GameObject mainCursor { get; private set; }
+        public GameObject GridCursor { get; private set; }
+        public GameObject FollowCursor { get; private set; }
+
+
+        public bool isAttachedOnGridCursor = false;
+        public string attachedNameOnGridCursor;
+
 
         private void Update()
         {
@@ -25,14 +32,29 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                     Debug.Log(hit.transform.gameObject.name + " has Clicked!!");
                 }
             }
+
+            if (isAttachedOnGridCursor)
+            {
+                if (Input.GetMouseButtonDown(0))
+                    keypress = true;
+
+                if (Input.GetMouseButtonUp(0) && keypress)
+                {
+                    DungeonConstructManager.JudgeConstruction(GridCursor.transform.position, attachedNameOnGridCursor);
+                    keypress = false;
+                }
+            }
         }
+        private bool keypress = false; //Todo: Remove
 
         public void InitializeManager(GameManager_ gameManager_)
         {
             OwnerManager = gameManager_;
-            GameStateManager = OwnerManager.GameStateManager_;
+            this.GameStateManager = OwnerManager.GameStateManager_;
+            this.DungeonConstructManager = OwnerManager.DungeonConstructManager_;
             GameStateManager.OnGameStateChanged += GameStateReaction;
-            mainCursor = GameObject.FindGameObjectWithTag("MainCursor");
+            GridCursor = GameObject.FindGameObjectWithTag("GridCursor");
+            FollowCursor = GameObject.FindGameObjectWithTag("MainCursor");
         }
 
         public void GameStateReaction(GameState gameState)
@@ -51,5 +73,34 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                     return;
             }
         }
+
+        public void AttachGameObjectToCursor(CursorType cursorToAttach, GameObject gameObjectToAttach, string attachedName)
+        {
+            GameObject tempCursor;
+
+            switch (cursorToAttach)
+            {
+                case CursorType.FollowCursor:
+                    tempCursor = FollowCursor;
+                    break;
+                case CursorType.GridCursor:
+                    tempCursor = GridCursor;
+                    isAttachedOnGridCursor = true;
+                    attachedNameOnGridCursor = attachedName;
+                    break;
+                default:
+                    tempCursor = null;
+                    return;
+            }
+
+            gameObjectToAttach.transform.parent = tempCursor.transform;
+            gameObjectToAttach.transform.localPosition = Vector3.zero;
+        }
+    }
+
+    public enum CursorType
+    {
+        FollowCursor,
+        GridCursor,
     }
 }

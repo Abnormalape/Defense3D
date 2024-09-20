@@ -29,7 +29,7 @@ namespace BHSSolo.DungeonDefense.Controller
             }
         }
 
-        private CursorManager cursorManager;
+        private CursorManager cursorManager { get; set; }
         private DungeonConstructManager dungeonConstructManager;
 
         private List<GameObject> bluePrints = new(10); //Todo:
@@ -78,53 +78,30 @@ namespace BHSSolo.DungeonDefense.Controller
         {
             if (myCanvas.enabled == false)
                 return;
-
-
-            if (isAttached == true) //Todo: Remove
-            {
-                passedTime += Time.deltaTime;
-                if (passedTime > 1f)
-                {
-                    passedTime = 0f;
-
-                    int tempXSize = 0;
-                    int tempZSize = 0;
-
-                    if (xSize % 2 == 1)
-                        tempXSize = (xSize - 1) / 2;
-                    if (zSize % 2 == 1)
-                        tempZSize = (zSize - 1) / 2;
-
-                    Vector3 tempPosition = summoned.transform.position;
-
-                    for (int ix = -tempXSize; ix < tempXSize + 1; ix++)
-                    {
-                        for (int iz = -tempZSize; iz < tempZSize + 1; iz++)
-                        {
-                            if (dungeonConstructManager.GridDatas.ContainsKey(new Vector3(tempPosition.x + (ix * 5f), 0.05f, tempPosition.z + (iz * 5f))))
-                                Debug.Log("Vector3 Found");
-                            //Debug.Log(new Vector3(tempPosition.x + (ix * 5f), tempPosition.y, tempPosition.z + (iz * 5f)));
-                        }
-                    }
-                }
-            }
         }
 
         [SerializeField] private GameObject tempPrefab; //Todo: Remove
         private bool isAttached = false; //Todo: Remove
         private float passedTime = 0f; //Todo: Remove
         private GameObject summoned = null; //Todo: Remove
-        private int xSize = 3;
-        private int zSize = 3;
+        private int xSize = 3; //Todo: Adjust
+        private int zSize = 3; //Todo: Adjust
         private void BluePrintClicked(string ButtonString) //Todo: temp Method
         {
+            //if(isAttached) 
+            //    return;
+
             Debug.Log($"{ButtonString} Clicked.");
 
             //Find Prefab to Instantiate with string ButtonString.
             //Like => Resources.Load($"Prefab/Rooms/{ButtonString}") as GameObject
 
-            isAttached = true;
-            summoned = Instantiate(tempPrefab, cursorManager.mainCursor.transform);
+            //isAttached = true;
+
+            GameObject tempConstructure = Instantiate(tempPrefab);
+
+            dungeonConstructManager.ConstructurePlaceHolder = tempConstructure;
+            cursorManager.AttachGameObjectToCursor(CursorType.GridCursor, tempConstructure, ButtonString);
         }
     }
 }
