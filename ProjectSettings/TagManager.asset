@@ -14,9 +14,9 @@ TagManager:
   - Water
   - UI
   - InteractableObject
-  - 
-  - 
-  - 
+  - Ally
+  - Enemy
+  - Room
   - 
   - 
   - 
