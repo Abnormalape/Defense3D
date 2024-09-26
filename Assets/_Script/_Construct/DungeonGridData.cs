@@ -17,7 +17,7 @@ namespace BHSSolo.DungeonDefense.Contruct
             get => gridObject;
             set
             {
-                gridObject = value; 
+                gridObject = value;
                 visulaizer = gridObject.GetComponent<MeshRenderer>();
             }
         }
@@ -34,8 +34,8 @@ namespace BHSSolo.DungeonDefense.Contruct
                 else
                 {
                     isContructed = value;
-                    
-                    if(isContructed)
+
+                    if (isContructed)
                         SetInvisible();
                     else
                         SetVisible();
@@ -45,10 +45,11 @@ namespace BHSSolo.DungeonDefense.Contruct
         public Vector3 ConstructedPosition;
         private MeshRenderer visulaizer;
 
+        public bool IsRoad { get; private set; } = true; //Todo: Adjust
 
         public void SetVisible()
         {
-            if(visulaizer != null)
+            if (visulaizer != null)
                 visulaizer.enabled = true;
         }
 

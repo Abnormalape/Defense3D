@@ -2,13 +2,13 @@
 
 namespace BHSSolo.DungeonDefense.Controller
 {
-    public class SamplePassage : RoomController, IController
-    {
-        public IManagerClass OwnerManager { get; set; }
+    //public class SamplePassage : RoomController, IController
+    //{
+    //    public IManagerClass OwnerManager { get; set; }
 
-        public void ControllerInitializer(IManagerClass ownerManager)
-        {
-            OwnerManager = ownerManager;
-        }
-    }
+    //    public void ControllerInitializer(IManagerClass ownerManager)
+    //    {
+    //        OwnerManager = ownerManager;
+    //    }
+    //}
 }

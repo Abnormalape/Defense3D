@@ -1,4 +1,5 @@
 ﻿using BHSSolo.DungeonDefense.Contruct;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -110,8 +111,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             //Find Constructure Data By Name In DataManager.
             //Use Construture's xSize, zSize
 
-            int xSize = 3;
-            int zSize = 3;
+            int xSize = 3; //Todo: Use Data
+            int zSize = 3; //Todo: Use Data
             int tempXSize = 0;
             int tempZSize = 0;
 
@@ -145,6 +146,55 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                 }
             }
 
+            List<Vector3> outLinePositions = new();
+
+            for (int ix = -tempXSize; ix < (tempXSize + 1); ix++)
+            {
+                outLinePositions.Add(new Vector3(tempPosition.x + (ix * 5f), tempPosition.y, tempPosition.z + (-(tempZSize + 1) * 5f)));
+                outLinePositions.Add(new Vector3(tempPosition.x + (ix * 5f), tempPosition.y, tempPosition.z + ((tempZSize + 1) * 5f)));
+            }
+
+            for (int iz = -tempZSize; iz < (tempZSize + 1); iz++)
+            {
+                outLinePositions.Add(new Vector3(tempPosition.x + (-(tempXSize + 1) * 5f), tempPosition.y, tempPosition.z + (iz * 5f)));
+                outLinePositions.Add(new Vector3(tempPosition.x + ((tempXSize + 1) * 5f), tempPosition.y, tempPosition.z + (iz * 5f)));
+            }
+
+            Debug.Log("Found Outlines : " + outLinePositions.Count);
+
+            foreach (var aa in outLinePositions) //Todo: Remove
+            {
+                Debug.Log("OutLinePosition : " + aa);
+            }
+
+            bool foundRoad = false;
+
+            foreach (var aa in outLinePositions)
+            {
+                if (GridDatas.ContainsKey(aa))
+                {
+                    if (GridDatas[aa].IsRoad)
+                    {
+                        Debug.Log("There is Road.");
+                        Debug.Log("BREAK!");
+                        foundRoad = true;
+                        break;
+                    }
+                    else
+                    {
+                        Debug.Log("There is No Road.");
+                        continue;
+                    }
+                }
+                else
+                {
+                    Debug.Log("Outline is on Border.");
+                    continue;
+                }
+            }
+
+            if (!foundRoad) { Debug.Log("No Road Found."); }
+
             Debug.Log("Construction Success."); //Todo:
 
             for (int ix = -tempXSize; ix < tempXSize + 1; ix++)
@@ -156,6 +206,11 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
                     GridDatas[tempGridPostition].IsContructed = true;
                 }
+            }
+
+            foreach (var aa in outLinePositions) //Todo: Remove
+            {
+                GridDatas[aa].IsContructed = true;
             }
 
             this.RoomManager.AddRoom(attachedConstructureName);

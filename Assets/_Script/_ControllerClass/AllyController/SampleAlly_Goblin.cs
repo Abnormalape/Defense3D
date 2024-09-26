@@ -23,6 +23,7 @@ namespace BHSSolo.DungeonDefense.Controller
         {
             OwnerManager = ownerManager;
             AllyManager_ = OwnerManager as AllyManager_;
+            UnityEngine.Debug.Log("I am Goblin");
         }
 
         /// <summary>
@@ -37,12 +38,7 @@ namespace BHSSolo.DungeonDefense.Controller
         private float passedTime =0f;
         private void Update()
         {
-            passedTime += Time.deltaTime;
-            if(passedTime > 5f)
-            {
-                UnityEngine.Debug.Log("I am Goblin");
-                passedTime = 0f;
-            }
+
         }
     }
 }
