@@ -1,8 +1,9 @@
 ﻿using BHSSolo.DungeonDefense.State;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
@@ -13,67 +14,76 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         private GameStateManager_ GameStateManager { get; set; }
         private DungeonConstructManager DungeonConstructManager { get; set; }
 
-        public GameObject GridCursor { get; private set; }
         public GameObject FollowCursor { get; private set; }
         public IState_ CurrentState { get; set; } //Todo: CursorState
-        public Dictionary<Enum, IState_> Type_StateDictionary { get; set; } //Todo: CursorState
+        public Dictionary<Enum, IState_> Type_StateDictionary { get; set; } = new(); //Todo: CursorState
         public StateMachineBehaviour_ StateMachineBehaviour_ { get; set; } //Todo: CursorState
 
         public bool isAttachedOnGridCursor = false;
         public string attachedNameOnGridCursor;
 
+        private const string GRID_TARGET_PATH = "Prefabs/RoomSilhouette/GridTarget";
+        private GameObject GridTargetPrefab;
+        public GameObject GridTarget { get; private set; }
+
+        public string HoldingRoomName { get; private set; }
+        public Vector2 HoldingRoomSize { get; private set; }
+        public void SetHoldingRoomData(string holdingRoomName, int holdingRoomSizeX, int holdingRoomSizeZ)
+        {
+            HoldingRoomName = holdingRoomName;
+            HoldingRoomSize = new Vector2(holdingRoomSizeX,holdingRoomSizeZ);
+        }
+
+
 
         private void Update()
         {
-            CurrentState.StateUpdate();
+            CurrentState.StateUpdate(); //Todo: CursorState
 
-            if (Input.GetMouseButtonUp(0)) // This should go to each cursor state.
-            {
-                Debug.Log("Cursor Clicked");
+            //if (Input.GetMouseButtonUp(0)) // This should go to each cursor state.
+            //{
+            //    Debug.Log("Cursor Clicked");
 
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
+            //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            //    RaycastHit hit;
 
-                if (Physics.Raycast(ray, out hit, 1000f, 1 << LayerMask.NameToLayer("ClickableObject")))
-                {
-                    Debug.Log(hit.transform.gameObject.name + " has Clicked!!");
-                }
-            }
-
-            if (isAttachedOnGridCursor) // This should go to each cursor state (state Construction Grid).
-            {
-                if (Input.GetMouseButtonDown(0))
-                    keypress = true;
-
-                if (Input.GetMouseButtonUp(0) && keypress)
-                {
-                    DungeonConstructManager.JudgeConstruction(GridCursor.transform.position, attachedNameOnGridCursor);
-                    keypress = false;
-                }
-            }
+            //    if (Physics.Raycast(ray, out hit, 1000f, 1 << LayerMask.NameToLayer("ClickableObject")))
+            //    {
+            //        Debug.Log(hit.transform.gameObject.name + " has Clicked!!");
+            //    }
+            //}
         }
-        private bool keypress = false; //Todo: Remove
+        
 
         public void InitializeManager(GameManager_ gameManager_)
         {
             OwnerManager = gameManager_;
             this.GameStateManager = OwnerManager.GameStateManager_;
             this.DungeonConstructManager = OwnerManager.DungeonConstructManager_;
-            GameStateManager.OnGameStateChanged += GameStateReaction;
-            GridCursor = GameObject.FindGameObjectWithTag("GridCursor");
+            GameStateManager.OnGameStateChanged += GameStateReaction; //Reaction.
+            GridTargetPrefab = Resources.Load(GRID_TARGET_PATH) as GameObject;
             FollowCursor = GameObject.FindGameObjectWithTag("MainCursor"); //Null
+
+            OnInitializeManager_StateMachine();
         }
 
-        public void GameStateReaction(GameState gameState)
+
+
+        public void GameStateReaction(GameState gameState) //Todo:
         {
             switch (gameState)
             {
                 case GameState.Dungeon_ObserveState:
-                    //Todo: Current Cursor State = Clickable
-                    Debug.Log("Cursor State Clickable");
+
+                    ChangeManagerState(CursorState.OnManage_Idle);
+                    Debug.Log("Cursor State : OnManager_Idle");
+
                     return;
                 case GameState.Dungeon_ConstructionState:
-                    Debug.Log("Cursor State Construct");
+
+                    ChangeManagerState(CursorState.OnManage_Idle);
+                    Debug.Log("Cursor State : OnManager_Idle");
+
                     return;
                 default:
                     Debug.Log("Cursor State Default");
@@ -81,64 +91,85 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             }
         }
 
-        public void AttachGameObjectToCursor(CursorType cursorToAttach, GameObject gameObjectToAttach, string attachedName)
-        {
-            GameObject tempCursor;
-
-            switch (cursorToAttach)
-            {
-                case CursorType.FollowCursor:
-                    //ChangeManagerState(CursorType); //Todo: Cursor State
-                    tempCursor = FollowCursor;
-                    break;
-                case CursorType.GridCursor:
-                    //ChangeManagerState(CursorType); //Todo: Cursor State
-                    tempCursor = GridCursor;
-                    isAttachedOnGridCursor = true;
-                    attachedNameOnGridCursor = attachedName;
-                    break;
-                default:
-                    tempCursor = null;
-                    return;
-            }
-
-            gameObjectToAttach.transform.parent = tempCursor.transform;
-            gameObjectToAttach.transform.localPosition = Vector3.zero;
-        }
-
         public void OnInitializeManager_StateMachine()
         {
-            //Todo: CursorState
-            //Todo: Find CursorStates
+            FindCursorStates();
+        }
+
+        private void FindCursorStates()
+        {
+            var cursorStates = Assembly.GetExecutingAssembly().GetTypes()
+                                .Where(t => typeof(IState_).IsAssignableFrom(t)
+                                         && typeof(ICursorState).IsAssignableFrom(t)
+                                         && !t.IsInterface
+                                         && !t.IsAbstract).ToList();
+
+            foreach (var cursorState in cursorStates)
+            {
+                var tempCursorState = Activator.CreateInstance(cursorState);
+
+                ICursorState tempIGameState = tempCursorState as ICursorState;
+                tempIGameState.InitialzieCursorState(this);
+                AddState(tempIGameState.CursorState, tempIGameState as IState_);
+            }
+
+            ChangeManagerState(CursorState.OnPlayer);
         }
 
         public void AddState(Enum stateName, IState_ state_)
         {
-            //Todo: CursorState
+            Type_StateDictionary.Add(stateName, state_);
         }
 
         public void RemoveState(Enum stateName)
         {
-            //Todo: CursorState
+            Type_StateDictionary.Remove(stateName);
         }
 
         public void ChangeManagerState(Enum stateName)
         {
-            //Todo: CursorState, Judge changing state is current state.
-            CurrentState.StateExit();
-            CurrentState = Type_StateDictionary[stateName]; //Todo: Find IState with Enum.
+            if (CurrentState == stateName) return;
+
+            CurrentState?.StateExit();
+            CurrentState = Type_StateDictionary[stateName];
+            OnChangeManagerState();
             CurrentState.StateEnter();
         }
 
         public void OnChangeManagerState()
         {
-            //Todo: CursorState
+            Debug.Log("Cursor State Changed.");
         }
+
+        #region For GridCursorState
+        public void SummonGridTarget()
+        {
+            GridTarget = Instantiate(GridTargetPrefab); //Instantiate.
+
+            CursorGridTargetController cursorGridTargetController //Get ref.
+                = GridTarget.GetComponent<CursorGridTargetController>();
+
+            string roomToSummonPath = $"Prefabs/RoomSilhouette/{HoldingRoomName}";
+            Debug.Log(roomToSummonPath);
+            GameObject roomToSummon = Resources.Load(roomToSummonPath) as GameObject;
+
+            cursorGridTargetController.InitializeGridTarget(roomToSummon, HoldingRoomSize); //Initialize Grid Target.
+        }
+
+        public void DestroyGridTarget()
+        {
+            Destroy(GridTarget);
+            SetHoldingRoomData("", 0, 0); //Reset HoldingRoomData.
+        }
+        #endregion For GridCursorState
     }
 
-    public enum CursorType
+    public enum CursorState
     {
-        FollowCursor,
-        GridCursor,
+        OnPlayer, //Hide Cursor
+        OnManage_Idle, //Show Cursor, Free Move
+        OnManage_TargetNPC, //Show Cursor, Free Move, OnClickTarget : Ally
+        OnManage_TargetRoom, //Show Cursor, Free Move, OnClickTarget : Room
+        OnManage_Grid, //Show Cursor, Grid Move
     }
 }

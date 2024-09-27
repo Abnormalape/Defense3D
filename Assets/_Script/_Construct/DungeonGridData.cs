@@ -4,9 +4,10 @@ namespace BHSSolo.DungeonDefense.Contruct
 {
     public class DungeonGridData
     {
-        public DungeonGridData(bool isConstructed, Vector3 constructedPosition)
+        public DungeonGridData(bool isConstructed, bool isRoad, Vector3 constructedPosition)
         {
             IsContructed = isConstructed;
+            IsRoad = isRoad;
             ConstructedPosition = constructedPosition;
         }
 
@@ -19,6 +20,20 @@ namespace BHSSolo.DungeonDefense.Contruct
             {
                 gridObject = value;
                 visulaizer = gridObject.GetComponent<MeshRenderer>();
+            }
+        }
+
+
+        private DungeonGridData[] connectedRooms = new DungeonGridData[4];
+        public DungeonGridData[] ConnectedRooms
+        {
+            get
+            {
+                return connectedRooms;
+            }
+            set
+            {
+                connectedRooms = value;
             }
         }
 
@@ -45,7 +60,7 @@ namespace BHSSolo.DungeonDefense.Contruct
         public Vector3 ConstructedPosition;
         private MeshRenderer visulaizer;
 
-        public bool IsRoad { get; private set; } = true; //Todo: Adjust
+        public bool IsRoad { get; set; } //Todo: Adjust
 
         public void SetVisible()
         {

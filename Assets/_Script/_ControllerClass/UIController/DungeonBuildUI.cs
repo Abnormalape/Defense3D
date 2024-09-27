@@ -1,5 +1,5 @@
 ﻿using BHSSolo.DungeonDefense.ManagerClass;
-using JetBrains.Annotations;
+using BHSSolo.DungeonDefense.State;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -15,9 +15,6 @@ namespace BHSSolo.DungeonDefense.Controller
         public IManagerClass OwnerManager { get; set; }
 
         [SerializeField]
-        private GameObject ConstructureBluePrintPrefab; //Todo: Prefab
-
-        [SerializeField]
         private GameObject constructureBluePrintHolder;
         public GameObject ConstructureBluePrintHolder
         {
@@ -30,8 +27,6 @@ namespace BHSSolo.DungeonDefense.Controller
         }
 
         private CursorManager cursorManager { get; set; }
-        private DungeonConstructManager dungeonConstructManager;
-
         private List<GameObject> bluePrints = new(10); //Todo:
 
 
@@ -44,15 +39,26 @@ namespace BHSSolo.DungeonDefense.Controller
         {
             OwnerManager = ownerManager;
             myCanvas = GetComponent<Canvas>();
-            this.cursorManager = OwnerManager.OwnerManager.CursorManager_;
-            this.dungeonConstructManager = OwnerManager.OwnerManager.DungeonConstructManager_;
+            cursorManager = OwnerManager.OwnerManager.CursorManager_;
 
+            UIControllerInitializer();
+        }
+
+        public void UIControllerInitializer()
+        {
             int blueprintscount = constructureBluePrintHolder.transform.childCount; //Todo: Instantiate BluePrint GameObject. Counts of bluepirnts.
+
             for (int i = 0; i < blueprintscount; i++)
             {
                 bluePrints.Add(ConstructureBluePrintHolder.transform.GetChild(i).gameObject);
 
-                string buttonstring = $"{i} Button"; //Todo: Use Constructure Data to Fill Component
+                string buttonstring;
+
+                if (i < 5) //Todo: Remove
+                { buttonstring = $"SamplePassage"; }//Todo: Use Constructure Data to Fill Component
+                else
+                { buttonstring = $"SampleRoom"; }
+
                 bluePrints[i].GetComponentInChildren<Button>().onClick.AddListener(() => BluePrintClicked(buttonstring)); //Todo: Use Constructure Data to Fill Component
                 bluePrints[i].GetComponentInChildren<TextMeshProUGUI>().text = $"{i} : Blue Print"; //Todo: Use Constructure Data to Fill Component
             }
@@ -80,28 +86,24 @@ namespace BHSSolo.DungeonDefense.Controller
                 return;
         }
 
-        [SerializeField] private GameObject tempPrefab; //Todo: Remove
-        private bool isAttached = false; //Todo: Remove
-        private float passedTime = 0f; //Todo: Remove
-        private GameObject summoned = null; //Todo: Remove
+        //==============//
+
         private int xSize = 3; //Todo: Adjust
         private int zSize = 3; //Todo: Adjust
-        private void BluePrintClicked(string ButtonString) //Todo: temp Method
+
+        private void BluePrintClicked(string ButtonString) //Todo: Adjust
         {
-            //if(isAttached) 
-            //    return;
+            //Block Reaction
+            if ((cursorManager.CurrentState as ICursorState).CursorState != CursorState.OnManage_Idle)
+                return;
 
             Debug.Log($"{ButtonString} Clicked.");
 
-            //Find Prefab to Instantiate with string ButtonString.
-            //Like => Resources.Load($"Prefab/Rooms/{ButtonString}") as GameObject
+            if (ButtonString == "SamplePassage") { xSize = 1; zSize = 1; }
+            else if (ButtonString == "SampleRoom") { xSize = 3; zSize = 3; }
 
-            //isAttached = true;
-
-            GameObject tempConstructure = Instantiate(tempPrefab);
-
-            dungeonConstructManager.ConstructurePlaceHolder = tempConstructure;
-            cursorManager.AttachGameObjectToCursor(CursorType.GridCursor, tempConstructure, ButtonString);
+            cursorManager.SetHoldingRoomData(ButtonString, xSize, zSize);
+            cursorManager.ChangeManagerState(CursorState.OnManage_Grid);
         }
     }
 }

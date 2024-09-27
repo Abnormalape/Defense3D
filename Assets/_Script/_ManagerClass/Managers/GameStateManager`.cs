@@ -8,22 +8,20 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    public class GameStateManager_ : MonoBehaviour, IManagerClass, IManagerStateMachine
+    public class GameStateManager_ : MonoBehaviour, IManagerClass
     {
         public GameManager_ OwnerManager { get; set; }
         public IState_ CurrentState { get; set; }
         public Dictionary<Enum, IState_> Type_StateDictionary { get; set; } = new(10);
-        public StateMachineBehaviour_ StateMachineBehaviour_ { get; set; }
 
 
         private void Start()
         {
-            
+
         }
 
         private void Update()
         {
-            StateMachineBehaviour_?.OnStateUpdate();
         }
 
 
@@ -37,7 +35,6 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void OnInitializeManager_StateMachine()
         {
-            StateMachineBehaviour_ = new StateMachineBehaviour_();
             FindGameState();
         }
 

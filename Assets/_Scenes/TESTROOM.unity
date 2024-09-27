@@ -14428,9 +14428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4c9e2bdac7a20cb4daeb1ce20d4926df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConstructureBluePrintPrefab: {fileID: 0}
   constructureBluePrintHolder: {fileID: 952752236}
-  tempPrefab: {fileID: 6847687097104176902, guid: e2f06346e46d58c4aa281b63ecf4ccf2, type: 3}
 --- !u!1 &2022457753
 GameObject:
   m_ObjectHideFlags: 0

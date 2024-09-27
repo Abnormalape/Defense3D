@@ -12,7 +12,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         private GameStateManager_ gameStateManager; //Todo:
         private RoomManager_ RoomManager;
-        private CursorManager cursorManager;
+        private CursorManager CursorManager_;
         private DungeonGridSpwner dungeonGridSpwner;
         public Dictionary<Vector3, DungeonGridData> GridDatas = new(10000);
 
@@ -31,7 +31,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             OwnerManager = gameManager_;
 
             this.RoomManager = OwnerManager.RoomManager_;
-            this.cursorManager = OwnerManager.CursorManager_;
+            this.CursorManager_ = OwnerManager.CursorManager_;
             gameStateManager = OwnerManager.GameStateManager_;
             gameStateManager.OnGameStateChanged += GameStateReaction;
 
@@ -42,9 +42,13 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                 for (int iz = 0; iz < 101; iz++)
                 {
                     bool tempIsBuilt = false;
+                    bool tempIsRoad = false;
 
                     if (ix == 0 && iz == 0)
+                    {
                         tempIsBuilt = true;
+                        tempIsRoad = true;
+                    }
 
 
                     float tempX = ix;
@@ -54,6 +58,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                         new Vector3(tempX, 0.01f, tempZ) * 5f
                         , new DungeonGridData(
                             tempIsBuilt
+                            , tempIsRoad
                             , new Vector3(tempX, 0.01f, tempZ) * 5f));
                 }
             }
@@ -100,124 +105,184 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             }
         }
 
-        /// <summary>
-        /// Find constructure's size by Name in DataManager.
-        /// Then Judge Constructure can Constuct.
-        /// </summary>
-        /// <param name="constructionPoint">Center Point a.k.a Grid Cursor Position </param>
-        /// <param name="attachedConstructureName">Constructure Name. Find Data In DataManager</param>
-        public void JudgeConstruction(Vector3 constructionPoint, string attachedConstructureName)
+        public void JudgeIsBuildable()
         {
-            //Find Constructure Data By Name In DataManager.
-            //Use Construture's xSize, zSize
+            #region Field
+            Vector3 tempGridTargetPosition = CursorManager_.GridTarget.transform.position;
 
-            int xSize = 3; //Todo: Use Data
-            int zSize = 3; //Todo: Use Data
-            int tempXSize = 0;
-            int tempZSize = 0;
+            float gridTargetYPosition = tempGridTargetPosition.y;
+            int holdingRoomXSize = (int)CursorManager_.HoldingRoomSize.x;
+            int holdingRoomZSize = (int)CursorManager_.HoldingRoomSize.y;
 
-            if (xSize % 2 == 1)
-                tempXSize = (xSize - 1) / 2;
-            if (zSize % 2 == 1)
-                tempZSize = (zSize - 1) / 2;
+            List<int> xList = new List<int>(holdingRoomXSize);
+            List<int> zList = new List<int>(holdingRoomZSize);
 
-            Vector3 tempPosition = constructionPoint;
+            int roadCounts = (holdingRoomXSize + holdingRoomZSize) * 2;
+            List<Vector2> roadPositions = new(roadCounts);
 
-            for (int ix = -tempXSize; ix < tempXSize + 1; ix++)
+            bool roadFound = false;
+            #endregion Field
+
+            Debug.Log("Judge IsBuildable.");
+            Debug.Log($"Grid Target Position :  {tempGridTargetPosition}");
+            Debug.Log($"Holding Room Size :  ({holdingRoomXSize}, {holdingRoomZSize})");
+
+            #region Set Positions
+            if (holdingRoomXSize == 0 || holdingRoomZSize == 0) { Debug.LogAssertion("Room Size Can't Be Zero!"); return; }
+
+            //XPositions.
+            if (holdingRoomXSize % 2 == 0) //IsEven
             {
-                for (int iz = -tempZSize; iz < tempZSize + 1; iz++)
+                int xEvenCount = (holdingRoomXSize / 2);
+                for (int ix = -xEvenCount; ix <= xEvenCount; ix++)
                 {
-                    Vector3 tempGridPostition
-                        = new Vector3(tempPosition.x + (ix * 5f), tempPosition.y, tempPosition.z + (iz * 5f));
+                    if (ix == 0) continue;
 
-                    if (GridDatas.ContainsKey(tempGridPostition))
+                    int multiplier;
+                    if (ix < 0) multiplier = -1;
+                    else multiplier = 1;
+
+                    xList.Add((int)(tempGridTargetPosition.x + ((ix - (multiplier)) * 5) + (multiplier * 2.5f)));
+                }
+            }
+            else //IsOdd
+            {
+                int xOddCount = (holdingRoomXSize - 1) / 2;
+                for (int ix = -xOddCount; ix <= xOddCount; ix++)
+                {
+                    xList.Add((int)(tempGridTargetPosition.x + (ix * 5)));
+                }
+            }
+
+            //ZPositions.
+            if (holdingRoomZSize % 2 == 0) //IsEven
+            {
+                int zEvenCount = (holdingRoomZSize / 2);
+                for (int iz = -zEvenCount; iz <= zEvenCount; iz++)
+                {
+                    if (iz == 0) continue;
+
+                    int multiplier;
+                    if (iz < 0) multiplier = -1;
+                    else multiplier = 1;
+
+                    zList.Add((int)(tempGridTargetPosition.z + ((iz - (multiplier)) * 5) + (multiplier * 2.5f)));
+                }
+            }
+            else //IsOdd
+            {
+                int zOddCount = (holdingRoomZSize - 1) / 2;
+                for (int iz = -zOddCount; iz <= zOddCount; iz++)
+                {
+                    zList.Add((int)(tempGridTargetPosition.z + (iz * 5)));
+                }
+            }
+
+
+            //Road Positions.
+            foreach (int z in zList)
+            {
+                roadPositions.Add(new Vector2(xList[0] - 5, z));
+                roadPositions.Add(new Vector2(xList[xList.Count - 1] + 5, z));
+            }
+            foreach (int x in xList)
+            {
+                roadPositions.Add(new Vector2(x, zList[0] - 5));
+                roadPositions.Add(new Vector2(x, zList[zList.Count - 1] + 5));
+            }
+
+            //Check Positions.
+            foreach (int x in xList)
+            {
+                foreach (int z in zList)
+                {
+                    Debug.Log($"Room Positions are : ({x},{z})");
+                }
+            }
+            foreach (Vector2 roadPos in roadPositions)
+            {
+                Debug.Log($"Road Positions are : ({roadPos.x},{roadPos.y})");
+            }
+            #endregion Set Positions
+
+            #region IsBuildable
+            foreach (int x in xList)
+            {
+                foreach (int z in zList)
+                {
+                    Vector3 tempRoomPosition = new(x, gridTargetYPosition, z);
+                    if (!GridDatas.ContainsKey(tempRoomPosition))
                     {
-                        if (GridDatas[tempGridPostition].IsContructed)
+                        Debug.Log("Out Of Boundary."); //Todo:
+                        return;
+                    }
+                    else
+                    {
+                        if (GridDatas[tempRoomPosition].IsContructed)
                         {
-                            Debug.Log("There is already a building at that location.");
+                            Debug.Log("Already Builded."); //Todo:
                             return;
                         }
                     }
-                    else
+                }
+            }
+            foreach (Vector2 road in roadPositions)
+            {
+                Vector3 tempRoadPosition = new(road.x, gridTargetYPosition, road.y);
+                if (GridDatas.ContainsKey(tempRoadPosition))
+                {
+                    if (CursorManager_.HoldingRoomName == "SamplePassage")
                     {
-                        Debug.Log("It's not allowed position.");
-                        return;
+                        if (GridDatas[tempRoadPosition].IsRoad || GridDatas[tempRoadPosition].IsContructed)
+                        {
+                            Debug.Log("Can Build Passage");
+                            roadFound = true;
+                            break;
+                        }
+                        else
+                        {
+                            Debug.Log("There is Nothing Nearby");
+                        }
+                    }
+                    else if (CursorManager_.HoldingRoomName == "SampleRoom")
+                    {
+                        if (GridDatas[tempRoadPosition].IsRoad)
+                        {
+                            Debug.Log("There Is Road");
+                            roadFound = true;
+                            break;
+                        }
+                        else
+                        {
+                            Debug.Log("There is No Road");
+                        }
                     }
                 }
             }
+            #endregion IsBuildable
 
-            List<Vector3> outLinePositions = new();
+            if (!roadFound) //Todo:
+                return;
 
-            for (int ix = -tempXSize; ix < (tempXSize + 1); ix++)
+            Debug.Log("You Made A New Room!!");
+
+            //Todo: Set GridData's constructed = true.
+            foreach (int x in xList)
             {
-                outLinePositions.Add(new Vector3(tempPosition.x + (ix * 5f), tempPosition.y, tempPosition.z + (-(tempZSize + 1) * 5f)));
-                outLinePositions.Add(new Vector3(tempPosition.x + (ix * 5f), tempPosition.y, tempPosition.z + ((tempZSize + 1) * 5f)));
-            }
-
-            for (int iz = -tempZSize; iz < (tempZSize + 1); iz++)
-            {
-                outLinePositions.Add(new Vector3(tempPosition.x + (-(tempXSize + 1) * 5f), tempPosition.y, tempPosition.z + (iz * 5f)));
-                outLinePositions.Add(new Vector3(tempPosition.x + ((tempXSize + 1) * 5f), tempPosition.y, tempPosition.z + (iz * 5f)));
-            }
-
-            Debug.Log("Found Outlines : " + outLinePositions.Count);
-
-            foreach (var aa in outLinePositions) //Todo: Remove
-            {
-                Debug.Log("OutLinePosition : " + aa);
-            }
-
-            bool foundRoad = false;
-
-            foreach (var aa in outLinePositions)
-            {
-                if (GridDatas.ContainsKey(aa))
+                foreach (int z in zList)
                 {
-                    if (GridDatas[aa].IsRoad)
-                    {
-                        Debug.Log("There is Road.");
-                        Debug.Log("BREAK!");
-                        foundRoad = true;
-                        break;
-                    }
-                    else
-                    {
-                        Debug.Log("There is No Road.");
-                        continue;
-                    }
-                }
-                else
-                {
-                    Debug.Log("Outline is on Border.");
-                    continue;
+                    Vector3 tempRoomPosition = new(x, gridTargetYPosition, z);
+
+                    GridDatas[tempRoomPosition].IsContructed = true;
+
+                    if (CursorManager_.HoldingRoomName == "SamplePassage") //Todo:
+                    { GridDatas[tempRoomPosition].IsRoad = true; }
                 }
             }
+            //Todo: Set GridData's IsRoad as proper Bool.
+            RoomManager.AddRoom(CursorManager_.HoldingRoomName);
 
-            if (!foundRoad) { Debug.Log("No Road Found."); }
-
-            Debug.Log("Construction Success."); //Todo:
-
-            for (int ix = -tempXSize; ix < tempXSize + 1; ix++)
-            {
-                for (int iz = -tempZSize; iz < tempZSize + 1; iz++)
-                {
-                    Vector3 tempGridPostition
-                        = new Vector3(tempPosition.x + (ix * 5f), tempPosition.y, tempPosition.z + (iz * 5f));
-
-                    GridDatas[tempGridPostition].IsContructed = true;
-                }
-            }
-
-            foreach (var aa in outLinePositions) //Todo: Remove
-            {
-                GridDatas[aa].IsContructed = true;
-            }
-
-            this.RoomManager.AddRoom(attachedConstructureName);
-            Destroy(ConstructurePlaceHolder);
-
-            this.cursorManager.isAttachedOnGridCursor = false; //Todo:
-            this.cursorManager.attachedNameOnGridCursor = ""; //Todo: 
+            CursorManager_.ChangeManagerState(CursorState.OnManage_Idle);
         }
     }
 }

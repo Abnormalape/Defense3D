@@ -6,7 +6,6 @@
 
         public GameState GameState { get; set; }
 
-
         public void InitialzieGameState();
     }
 }
