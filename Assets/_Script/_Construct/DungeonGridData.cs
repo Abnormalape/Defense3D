@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.Contruct
 {
@@ -24,8 +25,8 @@ namespace BHSSolo.DungeonDefense.Contruct
         }
 
 
-        private DungeonGridData[] connectedRooms = new DungeonGridData[4];
-        public DungeonGridData[] ConnectedRooms
+        private List<DungeonGridData> connectedRooms = new(4);
+        public List<DungeonGridData> ConnectedRooms
         {
             get
             {
@@ -46,32 +47,34 @@ namespace BHSSolo.DungeonDefense.Contruct
             {
                 if (isContructed == value)
                     return;
-                else
-                {
-                    isContructed = value;
 
-                    if (isContructed)
-                        SetInvisible();
-                    else
-                        SetVisible();
-                }
+                isContructed = value;
             }
         }
-        public Vector3 ConstructedPosition;
+
+        public Vector3 ConstructedPosition { get; private set; }
         private MeshRenderer visulaizer;
+
+        public bool IsVisible { get; private set; }
 
         public bool IsRoad { get; set; } //Todo: Adjust
 
         public void SetVisible()
         {
             if (visulaizer != null)
+            {
                 visulaizer.enabled = true;
+                IsVisible = true;
+            }
         }
 
         public void SetInvisible()
         {
             if (visulaizer != null)
+            {
                 visulaizer.enabled = false;
+                IsVisible = false;
+            }
         }
     }
 }

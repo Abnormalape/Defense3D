@@ -36,25 +36,38 @@ namespace BHSSolo.DungeonDefense.Contruct
                     Instantiate(GridPrefab, data.Value.ConstructedPosition, Quaternion.identity, GridHolder.transform);
             }
 
-            HideGrid();
+            //foreach (Vector3 gridPosition in gridPositions)
+            //{
+            //    Instantiate(GridPrefab, gridPosition, Quaternion.identity, GridHolder.transform);
+            //}
+
+            HideAllGrids(gridDatas);
         }
 
-        public void HideGrid()
+        public void HideAllGrids(Dictionary<Vector3, DungeonGridData> dungeonGridDatas)
         {
-            GridHolder.SetActive(false);
-        }
-
-        public void ShowGrid(Dictionary<Vector3,DungeonGridData> dungeonGridDatas)
-        {
-            GridHolder.SetActive(true);
-
-            foreach(var data in dungeonGridDatas)
+            foreach (var data in dungeonGridDatas)
             {
-                if(!data.Value.IsContructed)
-                    data.Value.SetVisible();
-                else
-                    data.Value.SetInvisible();
+                data.Value.SetInvisible();
             }
+        }
+
+        public void HideGrid(DungeonGridData dungeonGridData)
+        {
+            dungeonGridData.SetInvisible();
+        }
+
+        public void ShowAllGrids(Dictionary<Vector3, DungeonGridData> dungeonGridDatas)
+        {
+            foreach (var data in dungeonGridDatas)
+            {
+                    data.Value.SetVisible();
+            }
+        }
+
+        public void ShowGrid(DungeonGridData dungeonGridData)
+        {
+            dungeonGridData.SetVisible();
         }
     }
 }

@@ -8,7 +8,6 @@ namespace BHSSolo.DungeonDefense.ManagerClass
     public class PlayerManager_ : MonoBehaviour, IManagerClass, IManagerStateMachine
     {
         public GameManager_ OwnerManager { get; set; }
-        public StateMachineBehaviour_ StateMachineBehaviour_ { get; set; }
         public IState_ CurrentState { get; set; }
         public Dictionary<Enum, IState_> Type_StateDictionary { get; set; } = new();
 
@@ -18,6 +17,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         private void Update()
         {
+            if(OwnerManager == null) return;
+
             CurrentState.StateUpdate();
             //StateMachineBehaviour_.OnStateUpdate();
         }
@@ -34,7 +35,6 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void OnInitializeManager_StateMachine()
         {
-            StateMachineBehaviour_ = new();
             FindPlayerState();
         }
 

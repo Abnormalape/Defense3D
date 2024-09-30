@@ -35,22 +35,19 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void FindAllInScene()
         {
-            //AllyController_[] allysInMap = FindObjectsByType<AllyController_>(FindObjectsSortMode.None);
+            EnemyController_[] enemies = FindObjectsByType<EnemyController_>(FindObjectsSortMode.None);
 
-            //foreach (AllyController_ e in allysInMap)
-            //{
-            //    ((IController)e).ControllerInitializer(this); //Controller Initialize
-            //    e.AllyControllerInitializer(BaseDataDictionary[e.AllyEnum_]); //Ally Controller Initialize
+            foreach(EnemyController_ e in enemies)
+            {
+                ((IController)e).ControllerInitializer(this); //=> this also executes InitializeEnemyController
 
-            //    e.Ally_ID = Ally_ID;
-            //    Ally_ID++;
+                e.Enemy_ID = Enemy_ID;
+                Enemy_ID++;
 
-            //    AddSummoned(e.Ally_ID, e as IController);
-            //}
+                AddSummoned(e.Enemy_ID, e as IController);
+            }
 
-            //Debug.Log($"Found, Set, Registet Complete.\n{allysInMap.Length} Allys in map.");
-
-            AddSummoned(Enemy_ID, null); //Todo:
+            Debug.Log($"Found, Set, Registet Complete.\n{enemies.Length} Enemies in map.");
         }
 
         public void SummonGameObject(GameObject prefab, Transform summonPoint)

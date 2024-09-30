@@ -5,10 +5,7 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    /// <summary>
-    /// Same as Ally
-    /// </summary>
-    public class RoomManager_ : MonoBehaviour, IManagerClass, IManagerFactory<RoomBaseData>
+    public class RoomManager_ : MonoBehaviour, IManagerClass, IManagerFactory<RoomBaseData> //Like Ally
     {
         public GameManager_ OwnerManager { get; set; }
         public Dictionary<int, IController> ID_ControllerDictionary { get; set; } = new();
@@ -54,6 +51,10 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void SummonGameObject(GameObject prefab, Transform summonPoint)
         {
+            GameObject tempSummoned 
+                = Instantiate(prefab, summonPoint.position, summonPoint.rotation, null); //Todo: null Is for RoomHolder.
+
+            AddSummoned(Room_ID, tempSummoned.GetComponent<IController>());
         }
 
         public void AddSummoned(int summoned_ID, IController summonedAttachedController)
