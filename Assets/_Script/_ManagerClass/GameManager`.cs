@@ -48,6 +48,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             this.DataManager_.InitializeManager(this); //DataManager First.
             this.UIManager_.InitializeManager(this);
             this.RoomManager_.InitializeManager(this);
+            this.DungeonConstructManager_.InitializeManager(this); //DungeonConstructManager Must Come Before AllyManager and EnemyManager.
             this.AllyManager_.InitializeManager(this);
             this.AudioManager_.InitializeManager(this);
             this.SceneManager_.InitializeManager(this);
@@ -57,7 +58,6 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             this.InteractableManager_.InitializeManager(this);
             this.EventManager_.InitializeManager(this);
             this.CameraManager_.InitializeManager(this);
-            this.DungeonConstructManager_.InitializeManager(this);
             this.CursorManager_.InitializeManager(this);
             this.GameStateManager_.InitializeManager(this); //GameStateManager Last.
         }

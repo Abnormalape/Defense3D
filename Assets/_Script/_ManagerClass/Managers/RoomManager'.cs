@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
+    public class RoomManager_ : MonoBehaviour, IManagerClass, IManagerFactory<RoomBaseData> //Like Ally
     /// <summary>
     /// 
     /// </summary>
@@ -59,6 +60,10 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void SummonGameObject(GameObject prefab, Transform summonPoint)
         {
+            GameObject tempSummoned 
+                = Instantiate(prefab, summonPoint.position, summonPoint.rotation, null); //Todo: null Is for RoomHolder.
+
+            AddSummoned(Room_ID, tempSummoned.GetComponent<IController>());
         }
 
         public void AddSummoned(int summoned_ID, IController summonedAttachedController)

@@ -1,7 +1,6 @@
 ﻿using BHSSolo.DungeonDefense.State;
 using System;
 using System.Collections.Generic;
-using UnityEngine.UI;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
@@ -10,8 +9,6 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public IState_ CurrentState { get; set; }
 
         public Dictionary<Enum, IState_> Type_StateDictionary { get; set; }
-
-        public StateMachineBehaviour_ StateMachineBehaviour_ { get; set; }
 
         public void OnInitializeManager_StateMachine();
 

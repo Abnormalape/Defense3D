@@ -1,6 +1,7 @@
 ﻿using BHSSolo.DungeonDefense.Contruct;
 using System;
 using System.Collections.Generic;
+using Unity.Loading;
 using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
@@ -13,10 +14,10 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         private GameStateManager_ gameStateManager; //Todo:
         private RoomManager_ RoomManager;
         private CursorManager CursorManager_;
-        private DungeonGridSpwner dungeonGridSpwner;
-        public Dictionary<Vector3, DungeonGridData> GridDatas = new(10000);
+        private DungeonGridSpwner dungeonGridSpawner;
+        public Dictionary<Vector3, DungeonGridData> GridDatas { get; private set; } = new(10000);
+        public Dictionary<Vector3, DungeonGridData> RoomSideGrids { get; private set; } = new(24);
 
-        private bool showingGrid = false;
 
         private GameObject constructurePlaceHolder;
         public GameObject ConstructurePlaceHolder
@@ -35,9 +36,29 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             gameStateManager = OwnerManager.GameStateManager_;
             gameStateManager.OnGameStateChanged += GameStateReaction;
 
-            dungeonGridSpwner = FindFirstObjectByType<DungeonGridSpwner>();
+            dungeonGridSpawner = FindFirstObjectByType<DungeonGridSpwner>();
 
-            for (int ix = -50; ix < 51; ix++)
+            SetGridData();
+            MakeGrid(GridDatas);
+        }
+
+        private void GameStateReaction(GameState gameState)
+        {
+            switch (gameState)
+            {
+                case GameState.Dungeon_ConstructionState:
+                    ShowGrids(GridDatas);
+                    return;
+
+                default:
+                    HideGrids(GridDatas);
+                    return;
+            }
+        }
+
+        public void SetGridData()
+        {
+            for (int ix = -50; ix < 51; ix++) //Todo: not strict Size
             {
                 for (int iz = 0; iz < 101; iz++)
                 {
@@ -50,7 +71,6 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                         tempIsRoad = true;
                     }
 
-
                     float tempX = ix;
                     float tempZ = iz;
 
@@ -62,47 +82,43 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                             , new Vector3(tempX, 0.01f, tempZ) * 5f));
                 }
             }
-
-            MakeGrid(GridDatas);
-        }
-
-        private void GameStateReaction(GameState gameState)
-        {
-            switch (gameState)
-            {
-                case GameState.Dungeon_ConstructionState:
-                    ShowGrid(GridDatas);
-                    return;
-
-                default:
-                    HideGrid();
-                    return;
-            }
         }
 
         public void MakeGrid(Dictionary<Vector3, DungeonGridData> gridDatas)
         {
-            dungeonGridSpwner.MakeGrid(gridDatas);
+            dungeonGridSpawner.MakeGrid(gridDatas);
         }
 
-        public void ShowGrid(Dictionary<Vector3, DungeonGridData> gridDatas)
+        public void ShowAllGrids()
         {
-            if (!showingGrid)
-            {
-                Debug.Log("Show Grid");
-                showingGrid = true;
-                dungeonGridSpwner.ShowGrid(gridDatas);
-            }
+            dungeonGridSpawner.ShowAllGrids(GridDatas);
         }
 
-        public void HideGrid()
+        public void ShowGrids(Dictionary<Vector3, DungeonGridData> gridDatas)
         {
-            if (showingGrid)
-            {
-                Debug.Log("Hide Grid");
-                showingGrid = false;
-                dungeonGridSpwner.HideGrid();
-            }
+            Debug.Log("Show Grid");
+            dungeonGridSpawner.ShowAllGrids(gridDatas);
+        }
+
+        public void HideAllGrids()
+        {
+            dungeonGridSpawner.HideAllGrids(GridDatas);
+        }
+
+        public void HideGrids(Dictionary<Vector3, DungeonGridData> gridDatas)
+        {
+            Debug.Log("Hide Grid");
+            dungeonGridSpawner.HideAllGrids(gridDatas);
+        }
+
+        public void ShowGrid(DungeonGridData gridData)
+        {
+            dungeonGridSpawner.ShowGrid(gridData);
+        }
+
+        public void HideGrid(DungeonGridData gridData)
+        {
+            dungeonGridSpawner.HideGrid(gridData);
         }
 
         public void JudgeIsBuildable()
@@ -267,22 +283,53 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             Debug.Log("You Made A New Room!!");
 
             //Todo: Set GridData's constructed = true.
+            //foreach (int x in xList)
+            //{
+            //    foreach (int z in zList)
+            //    {
+            //        Vector3 tempRoomPosition = new(x, gridTargetYPosition, z);
+
+            //        GridDatas[tempRoomPosition].IsContructed = true;
+
+            //        if (CursorManager_.HoldingRoomName == "SamplePassage") //Todo:
+            //        { GridDatas[tempRoomPosition].IsRoad = true; }
+            //    }
+            //}
+
+            HideGrids(GridDatas);
+
             foreach (int x in xList)
             {
                 foreach (int z in zList)
                 {
                     Vector3 tempRoomPosition = new(x, gridTargetYPosition, z);
+                    DungeonGridData tempGridData = GridDatas[tempRoomPosition];
 
-                    GridDatas[tempRoomPosition].IsContructed = true;
+                    //Todo: Condition => if(NearbyRoom == roomType.Passage)
+                    Debug.Log(tempRoomPosition);
 
-                    if (CursorManager_.HoldingRoomName == "SamplePassage") //Todo:
-                    { GridDatas[tempRoomPosition].IsRoad = true; }
+                    RoomSideGrids.Add(tempRoomPosition, tempGridData);
                 }
             }
-            //Todo: Set GridData's IsRoad as proper Bool.
-            RoomManager.AddRoom(CursorManager_.HoldingRoomName);
 
-            CursorManager_.ChangeManagerState(CursorState.OnManage_Idle);
+            //foreach (var e in roadPositions)
+            //{
+            //    Vector3 tempRoadPosition = new(e.x, gridTargetYPosition, e.y);
+            //    if (GridDatas.ContainsKey(tempRoadPosition))
+            //    {
+            //        DungeonGridData tempGridData = GridDatas[tempRoadPosition];
+
+            //        //Todo: Condition => if(myRoomType == roomType.Passage)
+            //        ShowGrid(tempGridData);
+            //    }
+            //}
+
+            CursorManager_.ChangeManagerState(CursorState.OnManage_Grid_FirstBuildDrag);
+
+            //Todo: Set GridData's IsRoad as proper Bool.
+            //RoomManager.AddRoom(CursorManager_.HoldingRoomName); // 9/30 
+
+            //CursorManager_.ChangeManagerState(CursorState.OnManage_Idle); // 9/30
         }
     }
 }

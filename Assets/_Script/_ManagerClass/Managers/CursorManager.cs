@@ -17,7 +17,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public GameObject FollowCursor { get; private set; }
         public IState_ CurrentState { get; set; } //Todo: CursorState
         public Dictionary<Enum, IState_> Type_StateDictionary { get; set; } = new(); //Todo: CursorState
-        public StateMachineBehaviour_ StateMachineBehaviour_ { get; set; } //Todo: CursorState
+        
 
         public bool isAttachedOnGridCursor = false;
         public string attachedNameOnGridCursor;
@@ -47,7 +47,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             //    RaycastHit hit;
 
-            //    if (Physics.Raycast(ray, out hit, 1000f, 1 << LayerMask.NameToLayer("ClickableObject")))
+            //    if (Physics.Raycast(ray, out hit, 1000f, LayerMask.NameToLayer("ClickableObject")))
             //    {
             //        Debug.Log(hit.transform.gameObject.name + " has Clicked!!");
             //    }
@@ -171,5 +171,6 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         OnManage_TargetNPC, //Show Cursor, Free Move, OnClickTarget : Ally
         OnManage_TargetRoom, //Show Cursor, Free Move, OnClickTarget : Room
         OnManage_Grid, //Show Cursor, Grid Move
+        OnManage_Grid_FirstBuildDrag //Drag Movement when Room was First Build.
     }
 }
