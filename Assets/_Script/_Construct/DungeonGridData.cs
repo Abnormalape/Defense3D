@@ -12,7 +12,7 @@ namespace BHSSolo.DungeonDefense.Contruct
         }
 
 
-        private GameObject gridObject;
+        private GameObject gridObject; //Green Grid
         public GameObject GridObject
         {
             get => gridObject;
@@ -57,6 +57,8 @@ namespace BHSSolo.DungeonDefense.Contruct
                 }
             }
         }
+
+
         public Vector3 ConstructedPosition;
         private MeshRenderer visulaizer;
 

@@ -1,6 +1,6 @@
 ﻿using BHSSolo.DungeonDefense.ManagerClass;
-using BHSSolo.DungeonDefense.NPCs;
-using System.Collections.Generic;
+using System;
+using System.Text;
 using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.Controller
@@ -8,11 +8,11 @@ namespace BHSSolo.DungeonDefense.Controller
     public class SSamplePassage : RoomController, IController
     {
         public IManagerClass OwnerManager { get; set; }
+        public override int Room_ID { get; set; }
 
         public void ControllerInitializer(IManagerClass ownerManager)
         {
             OwnerManager = ownerManager;
-            RoomControllerInitializer();
         }
 
         public override void RoomControllerInitializer()

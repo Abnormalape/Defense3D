@@ -92,7 +92,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                 AddSummoned(e.Ally_ID, e as IController);
             }
 
-            Debug.Log($"Found, Set, Registet Complete.\n{allysInMap.Length} Allys in map.");
+            Debug.Log($"Found, Set, Register Complete.\n{allysInMap.Length} Allys in map.");
         }
 
         public void SummonGameObject(GameObject prefab, Transform summonPoint)

@@ -27,8 +27,9 @@ namespace BHSSolo.DungeonDefense.Controller
         }
 
         /// <summary>
-        /// Manager runs this.
+        /// Ally should have its status Data when initialize
         /// </summary>
+        /// <param name="statusFound">Data which each ally need.</param>
         public override void AllyControllerInitializer(AllyBaseStatus statusFound)
         {
             AllyStatusModifier = new(this);

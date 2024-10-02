@@ -1,7 +1,5 @@
-﻿using BHSSolo.DungeonDefense.NPCs;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using static BHSSolo.DungeonDefense.Controller.RoomController;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
@@ -11,6 +9,7 @@ namespace BHSSolo.DungeonDefense.Controller
         protected List<AllyController_> EnteredAllys { get; set; } = new();
         protected List<EnemyController_> EnteredEnemys { get; set; } = new();
 
+        public abstract int Room_ID { get; set; }
 
         public virtual void RoomControllerInitializer()
         {
@@ -55,6 +54,7 @@ namespace BHSSolo.DungeonDefense.Controller
             else
             {
                 Debug.Log("Incorrect Layer Found.");
+                Debug.Log(LayerMask.LayerToName(tempCollider.gameObject.layer));
             }
         }
 
@@ -75,6 +75,7 @@ namespace BHSSolo.DungeonDefense.Controller
             else
             {
                 Debug.Log("Incorrect Layer Found.");
+                Debug.Log(LayerMask.LayerToName(tempCollider.gameObject.layer));
             }
         }
 

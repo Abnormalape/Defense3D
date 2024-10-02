@@ -6,7 +6,7 @@ using UnityEngine;
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
     /// <summary>
-    /// Same as Ally
+    /// 
     /// </summary>
     public class RoomManager_ : MonoBehaviour, IManagerClass, IManagerFactory<RoomBaseData>
     {
@@ -34,22 +34,27 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void FindAllInScene()
         {
-            //AllyController_[] allysInMap = FindObjectsByType<AllyController_>(FindObjectsSortMode.None);
+            RoomController[] roomsInMap = FindObjectsByType<RoomController>(FindObjectsSortMode.None);
 
-            //foreach (AllyController_ e in allysInMap)
-            //{
-            //    ((IController)e).ControllerInitializer(this); //Controller Initialize
-            //    e.AllyControllerInitializer(BaseDataDictionary[e.AllyEnum_]); //Ally Controller Initialize
+            foreach (RoomController e in roomsInMap)
+            {
+                //Must execute A and B separately.
+                ((IController)e).ControllerInitializer(this); //Controller Initialize
+                e.RoomControllerInitializer(); //Ally Controller Initialize
 
-            //    e.Ally_ID = Ally_ID;
-            //    Ally_ID++;
+                //e.AllyControllerInitializer(BaseDataDictionary[e.AllyEnum_]); //=> AllyController Needs its Data.
+                //But how on Room? Does Room Need Data?
+                //==> Yes. 
 
-            //    AddSummoned(e.Ally_ID, e as IController);
-            //}
+                e.Room_ID = Room_ID;
+                Room_ID++;
 
-            //Debug.Log($"Found, Set, Registet Complete.\n{allysInMap.Length} Allys in map.");
+                AddSummoned(e.Room_ID, e as IController);
+            }
 
-            AddSummoned(Room_ID, null);//Todo:
+            Debug.Log($"Found, Set, Register Complete.\n{roomsInMap.Length} Rooms in map.");
+
+            //AddSummoned(Room_ID, null);//Todo: ? For what?
         }
 
         public void SummonGameObject(GameObject prefab, Transform summonPoint)
