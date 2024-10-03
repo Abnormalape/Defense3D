@@ -5,10 +5,6 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    public class RoomManager_ : MonoBehaviour, IManagerClass, IManagerFactory<RoomBaseData> //Like Ally
-    /// <summary>
-    /// 
-    /// </summary>
     public class RoomManager_ : MonoBehaviour, IManagerClass, IManagerFactory<RoomBaseData>
     {
         public GameManager_ OwnerManager { get; set; }
