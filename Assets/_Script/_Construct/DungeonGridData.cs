@@ -12,6 +12,19 @@ namespace BHSSolo.DungeonDefense.Contruct
             ConstructedPosition = constructedPosition;
         }
 
+        public DungeonGridData() //Todo:Remove
+        {
+        }
+
+        
+        public void SetConnectedRooms(List<DungeonGridData> connectedRooms, string name) //Todo:Remove
+        {
+            List<DungeonGridData> temp = new List<DungeonGridData>(connectedRooms);
+            namename = name;
+            ConnectedRooms = temp;
+        }
+        public string namename;
+
 
         private GameObject gridObject; //Green Grid
         public GameObject GridObject

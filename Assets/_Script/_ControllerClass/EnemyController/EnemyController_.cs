@@ -80,13 +80,6 @@ namespace BHSSolo.DungeonDefense.Controller
         {
             SearchedPath.Clear();
             SearchedPath = searchedPath;
-
-            startGrid = SearchedPath[0];
-            //startGrid = SearchedPath.First();
-            endGrid = SearchedPath[SearchedPath.Count - 1];
-            //endGrid = SearchedPath.Last();
-
-            //Todo: travledForks.Add();
         }
     }
 }

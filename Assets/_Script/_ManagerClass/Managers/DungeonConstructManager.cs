@@ -1,4 +1,5 @@
-﻿using BHSSolo.DungeonDefense.Contruct;
+﻿using BHSSolo.DungeonDefense.Controller;
+using BHSSolo.DungeonDefense.Contruct;
 using System;
 using System.Collections.Generic;
 using Unity.Loading;

@@ -24,7 +24,7 @@ namespace BHSSolo.DungeonDefense.State
 
         public void StateUpdate()
         {
-            Debug.Log("Current Cursor State : OnPlayerCursor");
+            //Debug.Log("Current Cursor State : OnPlayerCursor");
         }
     }
 }

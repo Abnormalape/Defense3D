@@ -13,7 +13,11 @@ namespace BHSSolo.DungeonDefense.State
 
         private DungeonConstructManager dungeonConstructManager;
 
-        private List<DungeonGridData> searchedPath = new(20); //Todo: 
+        private List<DungeonGridData> searchedPath = new(20);
+
+
+        private List<DungeonGridData> excludeGrids = new(10);
+
 
         public void InitializeEnemyState(EnemyController_ enemyController_)
         {
@@ -42,86 +46,34 @@ namespace BHSSolo.DungeonDefense.State
 
             if (Physics.Raycast(ray, out hit, 1f, 1 << LayerMask.NameToLayer("GridFloor")))
             {
-                Vector3 floorGridPosition = hit.transform.position;
-
-                if (dungeonConstructManager.GridDatas.ContainsKey(floorGridPosition))
+                if (dungeonConstructManager.GridDatas.ContainsKey(hit.transform.position))
                 {
-                    Debug.Log($"{dungeonConstructManager.GridDatas[floorGridPosition].ConnectedRooms.Count} Path To Go.");
+                    DungeonGridData standingGrid = dungeonConstructManager.GridDatas[hit.transform.position];
 
-                    //Todo: Redo Until (ConnectedRooms.Count != 2) or (RoomType == RoomType.Room)
-                    //Todo: Then execute EnemyController.SetSearchedPath(searchedPath);
+                    GridPathFinder.FindPathWithNoGoal(standingGrid, excludeGrids, out searchedPath);
 
-                    SearchPath(dungeonConstructManager.GridDatas[floorGridPosition]);
+                    if (searchedPath.Count > 0)
+                    {
+                        foreach (var eachGrid in searchedPath)
+                        {
+                            Debug.Log("Path Searched");
+                            if (eachGrid != null)
+                            { Debug.Log(eachGrid.ConstructedPosition); }
+                        }
+
+                    }
+                    else
+                    {
+                        Debug.Log("No Path Found");
+                    }
                 }
                 else
                 {
-                    Debug.Log("Enemy is standing on grid floor which not found in GridManager");
-                    Debug.Log($"Enemy is now standing on ({floorGridPosition})");
+                    Debug.Log("No Grid Data Standing On");
                 }
             }
-            else
-            {
-                Debug.Log("No Grid Floor Found");
-            }
-        }
 
-        private void SearchPath(DungeonGridData startGrid)
-        {
-            searchedPath.Add(startGrid);
-
-            if(startGrid.ConnectedRooms.Count == 0)
-            {
-                Debug.Log("It can't be [Connected Room Count] Equals Zero.");
-                return;
-            }
-            RecursiveSearchPath(startGrid.ConnectedRooms[0]);
-        }
-
-        private void RecursiveSearchPath(DungeonGridData grid)
-        {
-            searchedPath.Add(grid);
-
-            if (!grid.IsRoad) //If Room
-            {
-                //traveled rooms. Add
-                EndSearchPath();
-                return;
-            }
-            else if (grid.ConnectedRooms.Count == 2)
-            {
-                DungeonGridData tempGridData
-                    = searchedPath.Find(DungeonGridData => DungeonGridData == grid.ConnectedRooms[0]);
-
-                if(tempGridData == null) //{grid.ConnectedRooms[0]} Not On List.
-                {
-                    RecursiveSearchPath(tempGridData);
-                }
-                else //{grid.ConnectedRooms[0]} On List.
-                {
-                    RecursiveSearchPath(grid.ConnectedRooms[1]);
-                }
-            }
-            else if(grid.ConnectedRooms.Count == 1) //Dead End
-            {
-                EndSearchPath();
-                return;
-            }
-            else if(grid.ConnectedRooms.Count == 0)
-            {
-                Debug.Log("This Is Error");
-                EndSearchPath();
-            }
-            else //Connected Room >= 3. Equals CrossRoad.
-            {
-                EndSearchPath();
-                return;
-            }
-        }
-
-        private void EndSearchPath()
-        {
-            Debug.Log("Search Path Ended");
-            Debug.Log($"{searchedPath.Count} Passages to Go.");
+            //Todo:
             enemyController.SetSearchedPath(searchedPath);
             enemyController.ChangeControllerState(EnemyStates.Moving);
         }

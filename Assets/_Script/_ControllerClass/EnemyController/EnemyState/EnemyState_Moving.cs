@@ -17,6 +17,7 @@ namespace BHSSolo.DungeonDefense.State
         public void StateEnter()
         {
             Debug.Log("Enemy Moving State Enter");
+            Debug.Log(enemyController.SearchedPath.Count);
         }
 
         public void StateExit()
