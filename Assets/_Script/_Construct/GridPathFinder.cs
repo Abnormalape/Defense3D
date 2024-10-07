@@ -1,8 +1,14 @@
 ﻿using BHSSolo.DungeonDefense.Contruct;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Text;
+using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.InputSystem.iOS;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
@@ -228,5 +234,220 @@ namespace BHSSolo.DungeonDefense.Controller
                 }
             }
         }
+
+
+        public static void SetNodeGrids(List<DungeonGridData> Grids)
+        {
+            Dictionary<DungeonGridData, GridNode> gridNodeDictionary = new(300);
+            List<GridNode> NODES = new(300);
+
+            foreach (DungeonGridData grid in Grids)
+            {
+                if (!grid.IsContructed) { continue; }
+
+                if (grid.ConnectedRooms.Count != 2)
+                {
+                    gridNodeDictionary.Add(grid, new(grid));
+                }
+                else if (!grid.IsRoad)
+                {
+                    gridNodeDictionary.Add(grid, new(grid));
+                }
+            }
+
+            foreach (var e in gridNodeDictionary)
+            {
+                GridNode node;
+                node = e.Value;
+
+                List<DungeonGridData> exclude = new(1);
+                exclude.Add(node.NodeGrid);
+                int loops = 0;
+                
+                foreach (DungeonGridData connectedGrid in node.NodeGrid.ConnectedRooms)
+                {
+
+                    List<DungeonGridData> nodePath = new(30);
+
+                    if (connectedGrid.ConnectedRooms.Count != 2) //연결된 그리드가 바로 교차로일때
+                    {
+                        nodePath.Add(connectedGrid);
+                    }
+                    else if (!connectedGrid.IsRoad) //연결된 그리드가 바로 방일때
+                    {
+                        nodePath.Add(connectedGrid);
+                    }
+                    else
+                    {
+                        FindPathWithNoGoal(connectedGrid, exclude, out nodePath);
+                    }
+                    //위의 메소드는 시작점과 도착점의 그리드를 전부 반환한다.
+                    //마지막 grid는 crossRoad이며, Node이다.
+                    //마지막 grid가 Room이면 가중치가 추가된다.
+
+
+                    DungeonGridData nextNode = nodePath.Last();
+
+                    node.ConnectedNode[loops] = gridNodeDictionary[nextNode];
+                    node.ConnectedNodePath[loops] = new List<DungeonGridData>(nodePath);
+
+                    if (!node.ConnectedNode[loops].NodeGrid.IsRoad) //isRoom
+                    {
+                        node.ConnectedNodePathWeight[loops] = node.ConnectedNodePath[loops].Count + 2;
+                    }
+                    else
+                    {
+                        node.ConnectedNodePathWeight[loops] = node.ConnectedNodePath[loops].Count;
+                    }
+                    loops++;
+                }
+
+                NODES.Add(node);
+            }
+
+            FindShortestWay(NODES[NODES.Count - 3], NODES[NODES.Count - 2], NODES);
+        }
+
+        private static void FindShortestWay(GridNode startNode, GridNode endNode, List<GridNode> nodes)
+        {
+            Dictionary<GridNode, int> nodeDistance = new();
+            Dictionary<GridNode, GridNode> prevNodes = new();
+            List<GridNode> unvisitedNodes = new();
+            List<GridNode> tempVisitedNodes = new();
+
+            foreach (var e in nodes)
+            {
+                nodeDistance.Add(e, int.MaxValue);
+                prevNodes.Add(e, null);
+            }
+
+            nodeDistance[startNode] = 0;
+
+            for (int i = 0; i < startNode.ConnectedNode.Length; i++)
+            {
+                nodeDistance[startNode.ConnectedNode[i]] = startNode.ConnectedNodePathWeight[i];
+                unvisitedNodes.Add(startNode.ConnectedNode[i]);
+            }
+
+            tempVisitedNodes.Add(startNode);
+
+            foreach (var e in unvisitedNodes)
+            {
+                tempVisitedNodes.Add(e);
+
+                FindShortestWayRecursive(
+                    e,
+                    endNode,
+                    tempVisitedNodes,
+                    nodeDistance[e],
+                    ref nodeDistance,
+                    ref prevNodes);
+
+                prevNodes[e] = startNode;
+
+                tempVisitedNodes.Remove(e);
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append("[");
+
+            foreach (var e in nodeDistance)
+            {
+                sb.Append(e.Value.ToString());
+                sb.Append(", ");
+            }
+            sb.Remove(sb.Length - 2, 2);
+            sb.Append("]");
+
+            Debug.Log(sb.ToString());
+
+            List<DungeonGridData> path =
+                FindGridPath(endNode, startNode, prevNodes);
+
+            foreach (var e in path)
+            {
+                Debug.Log(e.namename);
+            }
+        }
+
+        private static void FindShortestWayRecursive(
+            GridNode startNode,
+            GridNode endNode,
+            List<GridNode> visitedNodes,
+            int currentDistance,
+            ref Dictionary<GridNode, int> nodeDistance,
+            ref Dictionary<GridNode, GridNode> linkedNodes)
+        {
+            if (startNode == endNode) { return; }
+
+            List<GridNode> tempVisitedNodes = new List<GridNode>(visitedNodes);
+
+            for (int i = 0; i < startNode.ConnectedNode.Length; i++)
+            {
+                if (visitedNodes.Contains(startNode.ConnectedNode[i])) { continue; }
+
+                if (currentDistance + startNode.ConnectedNodePathWeight[i] < nodeDistance[startNode.ConnectedNode[i]])
+                {
+                    nodeDistance[startNode.ConnectedNode[i]] = currentDistance + startNode.ConnectedNodePathWeight[i];
+                    linkedNodes[startNode.ConnectedNode[i]] = startNode;
+
+                    tempVisitedNodes.Add(startNode.ConnectedNode[i]);
+
+                    FindShortestWayRecursive(
+                        startNode.ConnectedNode[i],
+                        endNode,
+                        tempVisitedNodes,
+                        nodeDistance[startNode.ConnectedNode[i]],
+                        ref nodeDistance,
+                        ref linkedNodes);
+
+                    tempVisitedNodes.Remove(startNode.ConnectedNode[i]);
+                }
+            }
+        }
+
+        private static List<DungeonGridData> FindGridPath(GridNode endNode, GridNode startNode, Dictionary<GridNode, GridNode> linkedNodes)
+        {
+            GridNode currentNode = endNode;
+            List<DungeonGridData> path = new();
+
+            while (currentNode != startNode)
+            {
+                for (int i = 0; i < linkedNodes[currentNode].ConnectedNode.Length; i++)
+                {
+                    if (linkedNodes[currentNode].ConnectedNode[i] == currentNode)
+                    {
+                        List<DungeonGridData> tempPath = new();
+                        tempPath.AddRange(linkedNodes[currentNode].ConnectedNodePath[i]);
+                        tempPath.AddRange(path);
+                        path = tempPath;
+                        currentNode = linkedNodes[currentNode];
+                        break;
+                    }
+                }
+            }
+
+            return path;
+        }
+    }
+
+    public class GridNode
+    {
+        public GridNode(DungeonGridData grid)
+        {
+            NodeGrid = grid;
+            int connections = NodeGrid.ConnectedRooms.Count;
+            ConnectedNode = new GridNode[connections];
+            ConnectedNodePath = new List<DungeonGridData>[connections];
+            ConnectedNodePathWeight = new int[connections];
+        }
+
+        public DungeonGridData NodeGrid { get; private set; }
+
+        public GridNode[] ConnectedNode;
+        public List<DungeonGridData>[] ConnectedNodePath;
+        public int[] ConnectedNodePathWeight;
     }
 }
+
+

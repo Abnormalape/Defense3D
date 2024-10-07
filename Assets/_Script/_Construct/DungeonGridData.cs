@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BHSSolo.DungeonDefense.Contruct
 {
@@ -17,11 +18,19 @@ namespace BHSSolo.DungeonDefense.Contruct
         }
 
         
-        public void SetConnectedRooms(List<DungeonGridData> connectedRooms, string name) //Todo:Remove
+        public void SetConnectedRooms(List<DungeonGridData> connectedRooms) //Todo:Remove
         {
             List<DungeonGridData> temp = new List<DungeonGridData>(connectedRooms);
-            namename = name;
             ConnectedRooms = temp;
+        }
+        public void SetName(string name)
+        {
+            namename = name;
+        }
+
+        public void SetBuilt(bool isBuilt)
+        {
+            isContructed = isBuilt;
         }
         public string namename;
 
@@ -72,7 +81,7 @@ namespace BHSSolo.DungeonDefense.Contruct
 
         public bool IsVisible { get; private set; }
 
-        public bool IsRoad { get; set; } //Todo: Adjust
+        public bool IsRoad { get; set; } = true; //Todo: Adjust
 
         public void SetVisible()
         {
