@@ -2,7 +2,9 @@
 using BHSSolo.DungeonDefense.Contruct;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using Unity.Loading;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
@@ -16,6 +18,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         private RoomManager_ RoomManager;
         private CursorManager CursorManager_;
         private DungeonGridSpwner dungeonGridSpawner;
+        private DataManager_ dataManager_;
+
         public Dictionary<Vector3, DungeonGridData> GridDatas { get; private set; } = new(10000);
         public Dictionary<Vector3, DungeonGridData> RoomSideGrids { get; private set; } = new(24);
 
@@ -34,12 +38,13 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
             this.RoomManager = OwnerManager.RoomManager_;
             this.CursorManager_ = OwnerManager.CursorManager_;
+            this.dataManager_ = OwnerManager.DataManager_;
             gameStateManager = OwnerManager.GameStateManager_;
             gameStateManager.OnGameStateChanged += GameStateReaction;
 
             dungeonGridSpawner = FindFirstObjectByType<DungeonGridSpwner>();
 
-            SetGridData();
+            SetGridDataUsingMap();
             MakeGrid(GridDatas);
         }
 
@@ -57,32 +62,162 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             }
         }
 
-        public void SetGridData()
+        public void SetGridDataUsingMap()
         {
-            for (int ix = -50; ix < 51; ix++) //Todo: not strict Size
+            string mapData = dataManager_.defaultMapTextAsset.text;
+
+            string[] rows = mapData.Trim('\r').Trim('\n').Split('\n');
+            Array.Reverse(rows);
+
+            Dictionary<Vector3, DungeonGridData> tempGridMap = new(rows.Length * rows[0].Trim(',').Length);
+
+            int iy = 0;
+            foreach (string row in rows)
             {
-                for (int iz = 0; iz < 101; iz++)
+                string tempRow = row.Replace(",", "").Replace("\n", "").Replace("\r", "");
+
+                int ix = 0;
+                foreach (char c in tempRow)
                 {
-                    bool tempIsBuilt = false;
-                    bool tempIsRoad = false;
-
-                    if (ix == 0 && iz == 0)
-                    {
-                        tempIsBuilt = true;
-                        tempIsRoad = true;
-                    }
-
-                    float tempX = ix;
-                    float tempZ = iz;
-
-                    GridDatas.Add(
-                        new Vector3(tempX, 0.01f, tempZ) * 5f
-                        , new DungeonGridData(
-                            tempIsBuilt
-                            , tempIsRoad
-                            , new Vector3(tempX, 0.01f, tempZ) * 5f));
+                    Vector3 tempGridPosition = new Vector3(ix * 5f, 0.01f, iy * 5f);
+                    DungeonGridData tempGrid = new(this, tempGridPosition);
+                    tempGridMap.Add(tempGridPosition, tempGrid);
+                    ix++;
                 }
+                iy++;
             }
+
+            iy = 0;
+
+            GridDatas.AddRange(tempGridMap);
+
+            foreach (string row in rows)
+            {
+                string[] tempRow = row.Replace("\n", "").Replace("\r", "").Split(",");
+
+                int ix = 0;
+                foreach (string s in tempRow)
+                {
+                    Vector3 tempGridPosition = new Vector3(ix * 5f, 0.01f, iy * 5f);
+                    DungeonGridData tempGrid = GridDatas[tempGridPosition];
+
+                    switch (s)
+                    {
+                        case string str when str.StartsWith("R"):
+                            tempGrid.SetRoomCore();
+                            break;
+                        case "R":
+                            tempGrid.SetRoomCore();
+                            break;
+                        case "e":
+                            tempGrid.SetEmpty();
+                            break;
+                        case "E":
+                            tempGrid.SetEntrance();
+                            break;
+                        case "r":
+                            tempGrid.SetRoom();
+                            break;
+                        case "+":
+                            tempGrid.SetPassage();
+                            tempGrid.SetConnectedRooms(true, true, true, true);
+                            break;
+                        case "│":
+                            tempGrid.SetPassage();
+                            tempGrid.SetConnectedRooms(true, true, false, false);
+                            break;
+                        case "─":
+                            tempGrid.SetPassage();
+                            tempGrid.SetConnectedRooms(false, false, true, true);
+                            break;
+                        case "┴":
+                            tempGrid.SetPassage();
+                            tempGrid.SetConnectedRooms(true, false, true, true);
+                            break;
+                        case "┬":
+                            tempGrid.SetPassage();
+                            tempGrid.SetConnectedRooms(false, true, true, true);
+                            break;
+                        case "┤":
+                            tempGrid.SetPassage();
+                            tempGrid.SetConnectedRooms(true, true, true, false);
+                            break;
+                        case "├":
+                            tempGrid.SetPassage();
+                            tempGrid.SetConnectedRooms(true, true, false, true);
+                            break;
+                        case "┘":
+                            tempGrid.SetPassage();
+                            tempGrid.SetConnectedRooms(true, false, true, false);
+                            break;
+                        case "┐":
+                            tempGrid.SetPassage();
+                            tempGrid.SetConnectedRooms(false, true, true, false);
+                            break;
+                        case "└":
+                            tempGrid.SetPassage();
+                            tempGrid.SetConnectedRooms(true, false, false, true);
+                            break;
+                        case "┌":
+                            tempGrid.SetPassage();
+                            tempGrid.SetConnectedRooms(false, true, false, true);
+                            break;
+                        case "╵": //UP
+                            tempGrid.SetPassage();
+                            tempGrid.SetConnectedRooms(true, false, false, false);
+                            break;
+                        case "╷": //DOWN
+                            tempGrid.SetPassage();
+                            tempGrid.SetConnectedRooms(false, true, false, false);
+                            break;
+                        case "╴": //LEFT
+                            tempGrid.SetPassage();
+                            tempGrid.SetConnectedRooms(false, false, true, false);
+                            break;
+                        case "╶": //RIGHT
+                            tempGrid.SetPassage();
+                            tempGrid.SetConnectedRooms(false, false, false, true);
+                            break;
+                        case "N":
+                            GridDatas.Remove(tempGridPosition);
+                            break;
+                        default:
+                            Debug.Log($"Wrong Word In Map: {s}");
+                            break;
+                    }
+                    ix++;
+                }
+                iy++;
+            }
+
+            
+
+            #region sampleGridData
+            //for (int ix = -50; ix < 51; ix++) //Todo: not strict Size
+            //{
+            //    for (int iz = 0; iz < 101; iz++)
+            //    {
+            //        bool tempIsBuilt = false;
+            //        bool tempIsRoad = false;
+
+            //        if (ix == 0 && iz == 0)
+            //        {
+            //            tempIsBuilt = true;
+            //            tempIsRoad = true;
+            //        }
+
+            //        float tempX = ix;
+            //        float tempZ = iz;
+
+            //        GridDatas.Add(
+            //            new Vector3(tempX, 0.01f, tempZ) * 5f
+            //            , new DungeonGridData(
+            //                tempIsBuilt
+            //                , tempIsRoad
+            //                , new Vector3(tempX, 0.01f, tempZ) * 5f));
+            //    }
+            //}
+            #endregion sampleGridData
         }
 
         public void MakeGrid(Dictionary<Vector3, DungeonGridData> gridDatas)

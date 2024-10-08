@@ -29,7 +29,7 @@ namespace BHSSolo.DungeonDefense.Controller
             List<DungeonGridData> tempPath = new();
 
             List<DungeonGridData> connectedRooms = new List<DungeonGridData>(
-                startGrid.ConnectedRooms.Where(room => !excludeGrids.Contains(room))); //Find Forks which is not included in EcludeGrids.
+                startGrid.ConnectedGrids.Where(room => !excludeGrids.Contains(room))); //Find Forks which is not included in EcludeGrids.
 
             if (connectedRooms.Count == 0)
             {
@@ -67,21 +67,21 @@ namespace BHSSolo.DungeonDefense.Controller
             List<DungeonGridData> tempGridPath = previousGridPath;
             tempGridPath.Add(startGrid);
 
-            if (startGrid.ConnectedRooms.Count == 2)
+            if (startGrid.ConnectedGrids.Count == 2)
             {
-                if (startGrid.ConnectedRooms[0] == prevGrid)
+                if (startGrid.ConnectedGrids[0] == prevGrid)
                 {
-                    FindPathWithNoGoalRecursive(startGrid.ConnectedRooms[1], startGrid, crossroadFork, tempExcludeGridDatas, tempGridPath, out tempExcludeGridDatas, out tempGridPath);
+                    FindPathWithNoGoalRecursive(startGrid.ConnectedGrids[1], startGrid, crossroadFork, tempExcludeGridDatas, tempGridPath, out tempExcludeGridDatas, out tempGridPath);
                 }
                 else
                 {
-                    FindPathWithNoGoalRecursive(startGrid.ConnectedRooms[0], startGrid, crossroadFork, tempExcludeGridDatas, tempGridPath, out tempExcludeGridDatas, out tempGridPath);
+                    FindPathWithNoGoalRecursive(startGrid.ConnectedGrids[0], startGrid, crossroadFork, tempExcludeGridDatas, tempGridPath, out tempExcludeGridDatas, out tempGridPath);
                 }
 
                 excludeGrids = tempExcludeGridDatas;
                 gridPath = tempGridPath;
             }
-            else if (startGrid.ConnectedRooms.Count == 1) //DeadEnd. Add This Path's fork to excludeGrid.
+            else if (startGrid.ConnectedGrids.Count == 1) //DeadEnd. Add This Path's fork to excludeGrid.
             {
                 tempExcludeGridDatas.Add(crossroadFork);
                 excludeGrids = tempExcludeGridDatas;
@@ -111,21 +111,19 @@ namespace BHSSolo.DungeonDefense.Controller
             List<DungeonGridData> excludeGrids = new();
             excludeGrids.Add(startGrid);
 
-            Debug.Log("Start Grid : " + startGrid.namename);
-
-            if (startGrid.ConnectedRooms.Count == 1)
+            if (startGrid.ConnectedGrids.Count == 1)
             {
                 tempGridPath.Add(startGrid);
 
-                FindPathToGoalRecursive(startGrid.ConnectedRooms.First(), endGrid, startGrid, ref excludeGrids, ref crossroadGrids, ref tempGridPath);
+                FindPathToGoalRecursive(startGrid.ConnectedGrids.First(), endGrid, startGrid, ref excludeGrids, ref crossroadGrids, ref tempGridPath);
             }
-            else if (startGrid.ConnectedRooms.Count >= 2)
+            else if (startGrid.ConnectedGrids.Count >= 2)
             {
                 tempGridPath.Add(startGrid);
                 crossroadGrids.Add(startGrid);
 
-                int randomFork = UnityEngine.Random.Range(0, startGrid.ConnectedRooms.Count);
-                DungeonGridData forkGrid = startGrid.ConnectedRooms[randomFork];
+                int randomFork = UnityEngine.Random.Range(0, startGrid.ConnectedGrids.Count);
+                DungeonGridData forkGrid = startGrid.ConnectedGrids[randomFork];
 
                 excludeGrids.Add(forkGrid);
 
@@ -147,8 +145,6 @@ namespace BHSSolo.DungeonDefense.Controller
             ref List<DungeonGridData> crossroadGrids,
             ref List<DungeonGridData> gridPath)
         {
-            Debug.Log($"On Grid {startGrid.namename}.");
-
             gridPath.Add(startGrid);
 
             if (startGrid == endGrid) //Arrive to End.
@@ -161,7 +157,7 @@ namespace BHSSolo.DungeonDefense.Controller
 
             List<DungeonGridData> connectedRooms
                 = new List<DungeonGridData>(
-                startGrid.ConnectedRooms.Where(room => !tempExcludeGrids.Contains(room)));
+                startGrid.ConnectedGrids.Where(room => !tempExcludeGrids.Contains(room)));
 
             if (connectedRooms.Count == 0)
             {
@@ -179,7 +175,6 @@ namespace BHSSolo.DungeonDefense.Controller
                 DungeonGridData lastCrossRoad = crossroadGrids.Last();
 
                 int lastCrossRoadIndex = gridPath.IndexOf(lastCrossRoad);
-                Debug.Log($"Moving to crossroad name {gridPath[lastCrossRoadIndex].namename}");
                 gridPath.RemoveRange(lastCrossRoadIndex, gridPath.Count - lastCrossRoadIndex);
 
                 FindPathToGoalRecursive(crossroadGrids.Last(), endGrid, startGrid, ref excludeGrids, ref crossroadGrids, ref gridPath);
@@ -221,14 +216,14 @@ namespace BHSSolo.DungeonDefense.Controller
 
         private static void FindShortcutToGoalRecursive(DungeonGridData startGrid, DungeonGridData endGrid, ref List<DungeonGridData> gridPath)
         {
-            if (startGrid.ConnectedRooms.Contains(endGrid))
+            if (startGrid.ConnectedGrids.Contains(endGrid))
             {
                 Debug.Log("Found!");
                 return;
             }
             else
             {
-                foreach (DungeonGridData grid in startGrid.ConnectedRooms)
+                foreach (DungeonGridData grid in startGrid.ConnectedGrids)
                 {
                     FindShortcutToGoalRecursive(grid, endGrid, ref gridPath);
                 }
@@ -244,8 +239,9 @@ namespace BHSSolo.DungeonDefense.Controller
             foreach (DungeonGridData grid in Grids)
             {
                 if (!grid.IsContructed) { continue; }
+                if (grid.ConnectedGrids.Count == 0) { continue; }
 
-                if (grid.ConnectedRooms.Count != 2)
+                if (grid.ConnectedGrids.Count != 2)
                 {
                     gridNodeDictionary.Add(grid, new(grid));
                 }
@@ -263,13 +259,13 @@ namespace BHSSolo.DungeonDefense.Controller
                 List<DungeonGridData> exclude = new(1);
                 exclude.Add(node.NodeGrid);
                 int loops = 0;
-                
-                foreach (DungeonGridData connectedGrid in node.NodeGrid.ConnectedRooms)
+
+                foreach (DungeonGridData connectedGrid in node.NodeGrid.ConnectedGrids)
                 {
 
                     List<DungeonGridData> nodePath = new(30);
 
-                    if (connectedGrid.ConnectedRooms.Count != 2) //연결된 그리드가 바로 교차로일때
+                    if (connectedGrid.ConnectedGrids.Count != 2) //연결된 그리드가 바로 교차로일때
                     {
                         nodePath.Add(connectedGrid);
                     }
@@ -363,11 +359,6 @@ namespace BHSSolo.DungeonDefense.Controller
 
             List<DungeonGridData> path =
                 FindGridPath(endNode, startNode, prevNodes);
-
-            foreach (var e in path)
-            {
-                Debug.Log(e.namename);
-            }
         }
 
         private static void FindShortestWayRecursive(
@@ -436,7 +427,7 @@ namespace BHSSolo.DungeonDefense.Controller
         public GridNode(DungeonGridData grid)
         {
             NodeGrid = grid;
-            int connections = NodeGrid.ConnectedRooms.Count;
+            int connections = NodeGrid.ConnectedGrids.Count;
             ConnectedNode = new GridNode[connections];
             ConnectedNodePath = new List<DungeonGridData>[connections];
             ConnectedNodePathWeight = new int[connections];

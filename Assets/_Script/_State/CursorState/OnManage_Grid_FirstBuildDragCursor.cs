@@ -146,10 +146,10 @@ namespace BHSSolo.DungeonDefense.Controller
                             //Like => if(tempGridData.IsRoad)
                             Debug.Log("That Room Is Visible.");
 
-                            selectedGrid.ConnectedRooms.Add(tempGridData);
-                            tempGridData.ConnectedRooms.Add(selectedGrid);
+                            selectedGrid.ConnectedGrids.Add(tempGridData);
+                            tempGridData.ConnectedGrids.Add(selectedGrid);
 
-                            Debug.Log($"Grid on Position : ({selectedGrid.ConstructedPosition}) is Connected to Grid on Position : ({selectedGrid.ConnectedRooms[0].ConstructedPosition})");
+                            Debug.Log($"Grid on Position : ({selectedGrid.ConstructedPosition}) is Connected to Grid on Position : ({selectedGrid.ConnectedGrids[0].ConstructedPosition})");
 
                             roomManager_.SummonGameObject(null , null); //Todo:
                             ExitConstructionState(); //Todo: Adjust

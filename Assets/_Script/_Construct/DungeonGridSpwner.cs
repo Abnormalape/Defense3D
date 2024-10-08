@@ -33,7 +33,8 @@ namespace BHSSolo.DungeonDefense.Contruct
             foreach (var data in gridDatas)
             {
                 data.Value.GridObject =
-                    Instantiate(GridPrefab, data.Value.ConstructedPosition, Quaternion.identity, GridHolder.transform);
+                    Instantiate(GridPrefab, data.Key, Quaternion.identity, GridHolder.transform);
+                //Instantiate(GridPrefab, data.Value.ConstructedPosition, Quaternion.identity, GridHolder.transform);
             }
 
             //foreach (Vector3 gridPosition in gridPositions)
@@ -61,7 +62,7 @@ namespace BHSSolo.DungeonDefense.Contruct
         {
             foreach (var data in dungeonGridDatas)
             {
-                    data.Value.SetVisible();
+                data.Value.SetVisible();
             }
         }
 

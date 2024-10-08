@@ -8,124 +8,124 @@ namespace BHSSolo.DungeonDefense.Controller
     {
         private void Start()
         {
-            Dictionary<Vector2, DungeonGridData> gridDictionary = new();
-            List<DungeonGridData> List = new(10000);
+            //Dictionary<Vector2, DungeonGridData> gridDictionary = new();
+            //List<DungeonGridData> List = new(10000);
 
-            for (int i = 0; i < 100; i++)
-            {
-                for (int j = 0; j < 100; j++)
-                {
-                    DungeonGridData tempGridData = new();
-                    tempGridData.SetName($"Grid: ({i},{j})");
-                    gridDictionary.Add(new Vector2(i, j), tempGridData);
+            //for (int i = 0; i < 100; i++)
+            //{
+            //    for (int j = 0; j < 100; j++)
+            //    {
+            //        DungeonGridData tempGridData = new();
+            //        tempGridData.SetName($"Grid: ({i},{j})");
+            //        gridDictionary.Add(new Vector2(i, j), tempGridData);
 
-                    List.Add(tempGridData);
-                }
-            }
+            //        List.Add(tempGridData);
+            //    }
+            //}
 
-            List<DungeonGridData> connections = new();
-            Vector2 gridposition = new Vector2();
+            //List<DungeonGridData> connections = new();
+            //Vector2 gridposition = new Vector2();
 
 
-            gridposition = new Vector2(50, 0);
-            connections.Add(gridDictionary[new Vector2(50, 1)]);
-            gridDictionary[gridposition].SetConnectedRooms(connections);
-            gridDictionary[gridposition].SetBuilt(true);
-            connections.Clear();
+            //gridposition = new Vector2(50, 0);
+            //connections.Add(gridDictionary[new Vector2(50, 1)]);
+            //gridDictionary[gridposition].SetConnectedRooms(connections);
+            //gridDictionary[gridposition].SetBuilt(true);
+            //connections.Clear();
 
-            gridposition = new Vector2(50, 1);
-            connections.Add(gridDictionary[new Vector2(50, 0)]);
-            connections.Add(gridDictionary[new Vector2(50, 2)]);
-            connections.Add(gridDictionary[new Vector2(51, 1)]);
-            connections.Add(gridDictionary[new Vector2(49, 1)]);
-            gridDictionary[gridposition].SetConnectedRooms(connections);
-            gridDictionary[gridposition].SetBuilt(true);
-            connections.Clear();
+            //gridposition = new Vector2(50, 1);
+            //connections.Add(gridDictionary[new Vector2(50, 0)]);
+            //connections.Add(gridDictionary[new Vector2(50, 2)]);
+            //connections.Add(gridDictionary[new Vector2(51, 1)]);
+            //connections.Add(gridDictionary[new Vector2(49, 1)]);
+            //gridDictionary[gridposition].SetConnectedRooms(connections);
+            //gridDictionary[gridposition].SetBuilt(true);
+            //connections.Clear();
 
-            gridposition = new Vector2(51, 1);
-            connections.Add(gridDictionary[new Vector2(50, 1)]);
-            gridDictionary[gridposition].SetConnectedRooms(connections);
-            gridDictionary[gridposition].SetBuilt(true);
-            connections.Clear();
+            //gridposition = new Vector2(51, 1);
+            //connections.Add(gridDictionary[new Vector2(50, 1)]);
+            //gridDictionary[gridposition].SetConnectedRooms(connections);
+            //gridDictionary[gridposition].SetBuilt(true);
+            //connections.Clear();
 
-            gridposition = new Vector2(49, 1);
-            connections.Add(gridDictionary[new Vector2(50, 1)]);
-            gridDictionary[gridposition].SetConnectedRooms(connections);
-            gridDictionary[gridposition].SetBuilt(true);
-            connections.Clear();
+            //gridposition = new Vector2(49, 1);
+            //connections.Add(gridDictionary[new Vector2(50, 1)]);
+            //gridDictionary[gridposition].SetConnectedRooms(connections);
+            //gridDictionary[gridposition].SetBuilt(true);
+            //connections.Clear();
 
-            gridposition = new Vector2(50, 2);
-            connections.Add(gridDictionary[new Vector2(50, 1)]);
-            connections.Add(gridDictionary[new Vector2(50, 3)]);
-            gridDictionary[gridposition].SetConnectedRooms(connections);
-            gridDictionary[gridposition].SetBuilt(true);
-            connections.Clear();
+            //gridposition = new Vector2(50, 2);
+            //connections.Add(gridDictionary[new Vector2(50, 1)]);
+            //connections.Add(gridDictionary[new Vector2(50, 3)]);
+            //gridDictionary[gridposition].SetConnectedRooms(connections);
+            //gridDictionary[gridposition].SetBuilt(true);
+            //connections.Clear();
 
-            gridposition = new Vector2(50, 3);
-            connections.Add(gridDictionary[new Vector2(50, 2)]);
-            connections.Add(gridDictionary[new Vector2(50, 4)]);
-            gridDictionary[gridposition].SetConnectedRooms(connections);
-            gridDictionary[gridposition].SetBuilt(true);
-            connections.Clear();
+            //gridposition = new Vector2(50, 3);
+            //connections.Add(gridDictionary[new Vector2(50, 2)]);
+            //connections.Add(gridDictionary[new Vector2(50, 4)]);
+            //gridDictionary[gridposition].SetConnectedRooms(connections);
+            //gridDictionary[gridposition].SetBuilt(true);
+            //connections.Clear();
 
-            gridposition = new Vector2(50, 4);
-            connections.Add(gridDictionary[new Vector2(50, 3)]);
-            connections.Add(gridDictionary[new Vector2(50, 5)]);
-            gridDictionary[gridposition].SetConnectedRooms(connections);
-            gridDictionary[gridposition].SetBuilt(true);
-            connections.Clear();
+            //gridposition = new Vector2(50, 4);
+            //connections.Add(gridDictionary[new Vector2(50, 3)]);
+            //connections.Add(gridDictionary[new Vector2(50, 5)]);
+            //gridDictionary[gridposition].SetConnectedRooms(connections);
+            //gridDictionary[gridposition].SetBuilt(true);
+            //connections.Clear();
 
-            gridposition = new Vector2(50, 5);
-            connections.Add(gridDictionary[new Vector2(50, 4)]);
-            connections.Add(gridDictionary[new Vector2(51, 5)]);
-            connections.Add(gridDictionary[new Vector2(49, 5)]);
-            gridDictionary[gridposition].SetConnectedRooms(connections);
-            gridDictionary[gridposition].SetBuilt(true);
-            connections.Clear();
+            //gridposition = new Vector2(50, 5);
+            //connections.Add(gridDictionary[new Vector2(50, 4)]);
+            //connections.Add(gridDictionary[new Vector2(51, 5)]);
+            //connections.Add(gridDictionary[new Vector2(49, 5)]);
+            //gridDictionary[gridposition].SetConnectedRooms(connections);
+            //gridDictionary[gridposition].SetBuilt(true);
+            //connections.Clear();
 
-            gridposition = new Vector2(51, 5);
-            connections.Add(gridDictionary[new Vector2(50, 5)]);
-            connections.Add(gridDictionary[new Vector2(51, 6)]);
-            gridDictionary[gridposition].SetConnectedRooms(connections);
-            gridDictionary[gridposition].SetBuilt(true);
-            connections.Clear();
+            //gridposition = new Vector2(51, 5);
+            //connections.Add(gridDictionary[new Vector2(50, 5)]);
+            //connections.Add(gridDictionary[new Vector2(51, 6)]);
+            //gridDictionary[gridposition].SetConnectedRooms(connections);
+            //gridDictionary[gridposition].SetBuilt(true);
+            //connections.Clear();
 
-            gridposition = new Vector2(49, 5);
-            connections.Add(gridDictionary[new Vector2(50, 5)]);
-            connections.Add(gridDictionary[new Vector2(49, 6)]);
-            gridDictionary[gridposition].SetConnectedRooms(connections);
-            gridDictionary[gridposition].SetBuilt(true);
-            connections.Clear();
+            //gridposition = new Vector2(49, 5);
+            //connections.Add(gridDictionary[new Vector2(50, 5)]);
+            //connections.Add(gridDictionary[new Vector2(49, 6)]);
+            //gridDictionary[gridposition].SetConnectedRooms(connections);
+            //gridDictionary[gridposition].SetBuilt(true);
+            //connections.Clear();
 
-            gridposition = new Vector2(49, 6);
-            connections.Add(gridDictionary[new Vector2(49, 5)]);
-            connections.Add(gridDictionary[new Vector2(50, 6)]);
-            gridDictionary[gridposition].SetConnectedRooms(connections);
-            gridDictionary[gridposition].SetBuilt(true);
-            connections.Clear();
+            //gridposition = new Vector2(49, 6);
+            //connections.Add(gridDictionary[new Vector2(49, 5)]);
+            //connections.Add(gridDictionary[new Vector2(50, 6)]);
+            //gridDictionary[gridposition].SetConnectedRooms(connections);
+            //gridDictionary[gridposition].SetBuilt(true);
+            //connections.Clear();
 
-            gridposition = new Vector2(50, 6);
-            connections.Add(gridDictionary[new Vector2(49, 6)]);
-            connections.Add(gridDictionary[new Vector2(51, 6)]);
-            gridDictionary[gridposition].SetConnectedRooms(connections);
-            gridDictionary[gridposition].SetBuilt(true);
-            connections.Clear();
+            //gridposition = new Vector2(50, 6);
+            //connections.Add(gridDictionary[new Vector2(49, 6)]);
+            //connections.Add(gridDictionary[new Vector2(51, 6)]);
+            //gridDictionary[gridposition].SetConnectedRooms(connections);
+            //gridDictionary[gridposition].SetBuilt(true);
+            //connections.Clear();
 
-            gridposition = new Vector2(51, 6);
-            connections.Add(gridDictionary[new Vector2(50, 6)]);
-            connections.Add(gridDictionary[new Vector2(51, 5)]);
-            connections.Add(gridDictionary[new Vector2(51, 7)]);
-            gridDictionary[gridposition].SetConnectedRooms(connections);
-            gridDictionary[gridposition].SetBuilt(true);
-            connections.Clear();
+            //gridposition = new Vector2(51, 6);
+            //connections.Add(gridDictionary[new Vector2(50, 6)]);
+            //connections.Add(gridDictionary[new Vector2(51, 5)]);
+            //connections.Add(gridDictionary[new Vector2(51, 7)]);
+            //gridDictionary[gridposition].SetConnectedRooms(connections);
+            //gridDictionary[gridposition].SetBuilt(true);
+            //connections.Clear();
 
-            gridposition = new Vector2(51, 7);
-            connections.Add(gridDictionary[new Vector2(51, 6)]);
-            gridDictionary[gridposition].SetConnectedRooms(connections);
-            gridDictionary[gridposition].SetBuilt(true);
-            connections.Clear();
+            //gridposition = new Vector2(51, 7);
+            //connections.Add(gridDictionary[new Vector2(51, 6)]);
+            //gridDictionary[gridposition].SetConnectedRooms(connections);
+            //gridDictionary[gridposition].SetBuilt(true);
+            //connections.Clear();
 
-            GridPathFinder.SetNodeGrids(List);
+            //GridPathFinder.SetNodeGrids(List);
         }
 
         //List<DungeonGridData> SampleMap = new(13);

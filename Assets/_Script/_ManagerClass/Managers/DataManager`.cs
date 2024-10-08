@@ -18,14 +18,18 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         }
 
         #region SetGameData
-        private readonly string ALLY_DATA_PATH = "GameData/AllyData";
-        private readonly string ENEMY_DATA_PATH = "GameData/EnemyData";
-        private TextAsset allyBaseTextAsset;
-        private TextAsset enemyBaseTextAsset;
+        private const string ALLY_DATA_PATH = "GameData/AllyData";
+        private const string ENEMY_DATA_PATH = "GameData/EnemyData";
+        private const string DEFAULT_MAP_DATA_PATH = "GameData/MapData/DefaultDungeonMap";
+        public TextAsset allyBaseTextAsset { get; private set; }
+        public TextAsset enemyBaseTextAsset { get; private set; }
+        public TextAsset defaultMapTextAsset { get; private set; }
         private Dictionary<string, Dictionary<string, string>> allyBaseData;
         private Dictionary<string, Dictionary<string, string>> enemyBaseData;
+        private Dictionary<string, Dictionary<string, string>> defaultMapData;
         public Dictionary<string, Dictionary<string, string>> AllyBaseData { get => allyBaseData; }
         public Dictionary<string, Dictionary<string, string>> EnemyBaseData { get => enemyBaseData; }
+        public Dictionary<string, Dictionary<string, string>> DefaultMapData { get => defaultMapData; }
 
 
         public void InitializeGameData()
@@ -38,16 +42,18 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         {
             allyBaseTextAsset = Resources.Load(ALLY_DATA_PATH) as TextAsset;
             //enemyBaseTextAsset = Resources.Load(ENEMY_DATA_PATH) as TextAsset;
+            defaultMapTextAsset = Resources.Load(DEFAULT_MAP_DATA_PATH) as TextAsset;
         }
 
         private void SetBaseData()
         {
-            ParseTextAsset(allyBaseTextAsset.text, out allyBaseData);
+            ParseCsvToDictionaryWithHeader(allyBaseTextAsset.text, out allyBaseData);
             //ParseTextAsset(enemyBaseTextAsset.text, out enemyBaseData);
+            //ParseCsvToDictionaryWithHeader(defaultMapTextAsset.text, out defaultMapData); //Map Data don't need parse with header.
         }
 
         #endregion
-        private void ParseTextAsset(string inputText, out Dictionary<string, Dictionary<string, string>> doubleDictionary)
+        private void ParseCsvToDictionaryWithHeader(string inputText, out Dictionary<string, Dictionary<string, string>> doubleDictionary)
         {
             string[] rows = inputText.Replace("\r", "").Trim('\n').Split('\n');
 
@@ -83,5 +89,6 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
             doubleDictionary = tempDoubleDictionary;
         }
+
     }
 }
