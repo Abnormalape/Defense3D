@@ -64,6 +64,11 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void SetGridDataUsingMap()
         {
+
+            MakeTempGrid();
+            SetTempGridData();
+            ConnectGrids();
+
             string mapData = dataManager_.defaultMapTextAsset.text;
 
             string[] rows = mapData.Trim('\r').Trim('\n').Split('\n');
@@ -104,10 +109,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                     switch (s)
                     {
                         case string str when str.StartsWith("R"):
-                            tempGrid.SetRoomCore();
-                            break;
-                        case "R":
-                            tempGrid.SetRoomCore();
+                            int roomSize = Convert.ToInt32(s.Replace("R", ""));
+                            tempGrid.SetRoomCore(roomSize);
                             break;
                         case "e":
                             tempGrid.SetEmpty();
@@ -218,6 +221,21 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             //    }
             //}
             #endregion sampleGridData
+        }
+
+        private void MakeTempGrid()
+        {
+
+        }
+
+        private void SetTempGridData()
+        {
+
+        }
+
+        private void ConnectGrids()
+        {
+
         }
 
         public void MakeGrid(Dictionary<Vector3, DungeonGridData> gridDatas)

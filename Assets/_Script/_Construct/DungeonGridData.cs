@@ -99,7 +99,44 @@ namespace BHSSolo.DungeonDefense.Contruct
         public void SetEmpty() { this.GridType = GridType.Empty; }
         public void SetEntrance() { this.GridType = GridType.Entrance; this.ContainingRoom = null; } //Todo: Grid Need To Have Containing Room.
         public void SetRoom() { this.GridType = GridType.Room; this.ContainingRoom = null; } //Todo: Grid Need To Have Containing Room.
-        public void SetRoomCore() { this.GridType = GridType.Room; this.ContainingRoom = null; } //Todo: Grid Need To Have Containing Room.
+        public void SetRoomCore(int roomSize) //Todo: Grid Need To Have Containing Room.
+        {
+            this.GridType = GridType.Room;
+            List<Vector3> roomGridVectors = new(25);
+
+            if (roomSize % 2 == 0) //Is Even
+            {
+                int loops = roomSize / 2;
+
+                for (int ix = -loops + 1; ix <= loops; ix++)
+                {
+                    for (int iz = -loops + 1; iz <= loops; iz++)
+                    {
+                        roomGridVectors.Add(ConstructedPosition + (new Vector3(ix, 0, iz) * 5f));
+                    }
+                }
+            }
+            else //Is Odd
+            {
+                int loops = (roomSize - 1) / 2;
+
+                for (int ix = -loops; ix <= loops; ix++)
+                {
+                    for (int iz = -loops; iz <= loops; iz++)
+                    {
+                        roomGridVectors.Add(ConstructedPosition + (new Vector3(ix, 0, iz) * 5f));
+                    }
+                }
+            }
+
+            foreach(Vector3 v in roomGridVectors)
+            {
+                dungeonConstructManager.GridDatas[v].ContainingRoom = this; //This???
+                Debug.Log($"Room Core Contains: {v}");
+            }
+
+            this.ContainingRoom = null;
+        }
         public void SetPassage() { this.GridType = GridType.Passage; this.ContainingRoom = null; } //Todo: Grid Need To Have Containing Room.
         public void SetConnectedRooms(bool isUp, bool isDown, bool isLeft, bool isRight)
         {
