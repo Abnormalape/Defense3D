@@ -10,9 +10,9 @@ namespace BHSSolo.DungeonDefense.State
         public CursorState CursorState { get; set; } = CursorState.OnManage_Grid;
 
         private DungeonConstructManager DungeonConstructManager_ { get; set; }
-        private Vector2 CenterPosition;
         private bool mousePressed = false;
 
+        private GameObject gridObject;
 
         public void InitialzieCursorState(CursorManager cursorManager)
         {
@@ -23,7 +23,7 @@ namespace BHSSolo.DungeonDefense.State
         public void StateEnter()
         {
             Debug.Log("Cursor State : Manage_Grid");
-            CursorManager_.SummonGridTarget();
+            gridObject = CursorManager_.SummonGridTarget();
         }
 
         public void StateExit()
@@ -44,9 +44,9 @@ namespace BHSSolo.DungeonDefense.State
 
             if (Input.GetMouseButtonUp(0) && mousePressed)
             {
-                Debug.Log("You clicked on Manage_GridCursor State.");
-                DungeonConstructManager_.JudgeIsBuildable();
                 mousePressed = false;
+                Debug.Log("You clicked on Manage_GridCursor State.");
+                DungeonConstructManager_.JudgeIsBuildable(gridObject);
             }
         }
     }

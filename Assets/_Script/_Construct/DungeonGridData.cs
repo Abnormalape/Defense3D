@@ -4,6 +4,7 @@ using UnityEditor.MemoryProfiler;
 using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 namespace BHSSolo.DungeonDefense.Contruct
 {
@@ -34,8 +35,8 @@ namespace BHSSolo.DungeonDefense.Contruct
         private MeshRenderer visulaizer;
 
 
-        private DungeonGridData containingRoom; //Todo: NOT GridData. Use Room DataInstead.
-        public DungeonGridData ContainingRoom { get => containingRoom; set => value = containingRoom; } //Todo: NOT GridData. Use Room DataInstead.
+        private GameObject containingRoom; //Todo: NOT GridData. Use Room DataInstead.
+        public GameObject ContainingRoom { get => containingRoom; set => containingRoom = value; } //Todo: NOT GridData. Use Room DataInstead.
 
         private List<DungeonGridData> connectedGrids = new(4);
         public List<DungeonGridData> ConnectedGrids
@@ -50,8 +51,21 @@ namespace BHSSolo.DungeonDefense.Contruct
             }
         }
 
-        private List<DungeonGridData> connectedRooms = new(4); //Todo: NOT GridData. Use Room DataInstead.
-        public List<DungeonGridData> ConnectedRooms { get => connectedRooms; set => value = connectedRooms; } //Todo: NOT GridData. Use Room DataInstead.
+        private DungeonGridData roomCoreGrid;
+        public DungeonGridData RoomCoreGrid
+        {
+            get
+            {
+                return roomCoreGrid;
+            }
+            set
+            {
+                roomCoreGrid = value;
+            }
+        }
+
+        private List<DungeonGridData> roomCorePartGrid;
+        public List<DungeonGridData> RoomCorePartGrid { get => roomCorePartGrid; set => roomCorePartGrid = value; }
 
 
         private bool isContructed = false;
@@ -64,6 +78,14 @@ namespace BHSSolo.DungeonDefense.Contruct
                     return;
 
                 isContructed = value;
+                //if (IsContructed)
+                //{
+                //    SetVisible();
+                //}
+                //else
+                //{
+                //    SetInvisible();
+                //}
             }
         }
 
@@ -96,13 +118,36 @@ namespace BHSSolo.DungeonDefense.Contruct
         private const int GRID_INTERVAL = 5;
 
 
-        public void SetEmpty() { this.GridType = GridType.Empty; }
-        public void SetEntrance() { this.GridType = GridType.Entrance; this.ContainingRoom = null; } //Todo: Grid Need To Have Containing Room.
-        public void SetRoom() { this.GridType = GridType.Room; this.ContainingRoom = null; } //Todo: Grid Need To Have Containing Room.
-        public void SetRoomCore(int roomSize) //Todo: Grid Need To Have Containing Room.
+        public void SetEmpty() { GridType = GridType.Empty; }
+        public void SetRoom()
         {
-            this.GridType = GridType.Room;
+            GridType = GridType.Room;
+            isContructed = true;
+        } //Todo: Grid Need To Have Containing Room.
+        public void SetEntrance(GameObject InputEntrance)//Todo: Grid Need To Have Containing Room.
+        {
+            GridType = GridType.Entrance;
+            isContructed = true;
+            ContainingRoom = InputEntrance;
+            ContainingRoom.transform.position = ConstructedPosition;
+        }
+        public void SetPassage(GameObject InputPassage)//Todo: Grid Need To Have Containing Room.
+        {
+            GridType = GridType.Passage;
+            isContructed = true;
+            ContainingRoom = InputPassage;
+            ContainingRoom.transform.position = ConstructedPosition;
+        }
+        public void SetRoomCore(int roomSize, GameObject InputRoom) //Todo: Grid Need To Have Containing Room.
+        {
+            GridType = GridType.RoomCore;
+            isContructed = true;
+            ContainingRoom = InputRoom;
+            ContainingRoom.transform.position = ConstructedPosition;
+            roomCorePartGrid = new();
+
             List<Vector3> roomGridVectors = new(25);
+            List<Vector3> roomSidePositions = new(16);
 
             if (roomSize % 2 == 0) //Is Even
             {
@@ -112,7 +157,9 @@ namespace BHSSolo.DungeonDefense.Contruct
                 {
                     for (int iz = -loops + 1; iz <= loops; iz++)
                     {
-                        roomGridVectors.Add(ConstructedPosition + (new Vector3(ix, 0, iz) * 5f));
+                        Vector3 tempPosition = ConstructedPosition + (new Vector3(ix, 0, iz) * 5f);
+
+                        roomGridVectors.Add(tempPosition);
                     }
                 }
             }
@@ -124,20 +171,21 @@ namespace BHSSolo.DungeonDefense.Contruct
                 {
                     for (int iz = -loops; iz <= loops; iz++)
                     {
-                        roomGridVectors.Add(ConstructedPosition + (new Vector3(ix, 0, iz) * 5f));
+                        Vector3 tempPosition = ConstructedPosition + (new Vector3(ix, 0, iz) * 5f);
+
+                        roomGridVectors.Add(tempPosition);
                     }
                 }
             }
 
-            foreach(Vector3 v in roomGridVectors)
+            foreach (Vector3 v in roomGridVectors)
             {
-                dungeonConstructManager.GridDatas[v].ContainingRoom = this; //This???
-                Debug.Log($"Room Core Contains: {v}");
+                DungeonGridData tempPart = dungeonConstructManager.GridDatas[v];
+                RoomCorePartGrid.Add(tempPart);
+                tempPart.ContainingRoom = this.ContainingRoom;
+                tempPart.RoomCoreGrid = this;
             }
-
-            this.ContainingRoom = null;
         }
-        public void SetPassage() { this.GridType = GridType.Passage; this.ContainingRoom = null; } //Todo: Grid Need To Have Containing Room.
         public void SetConnectedRooms(bool isUp, bool isDown, bool isLeft, bool isRight)
         {
             List<Vector3> connections = new();
@@ -164,17 +212,18 @@ namespace BHSSolo.DungeonDefense.Contruct
 
             foreach (Vector3 connection in connections)
             {
-                Debug.Log(connection);
-
                 DungeonGridData tempGrid = dungeonConstructManager.GridDatas[connection];
 
                 ConnectedGrids.Add(tempGrid);
-                ConnectedRooms.Add(tempGrid.ContainingRoom);
 
-                if (tempGrid.GridType == GridType.Entrance || tempGrid.GridType == GridType.Room)
+                if (tempGrid.GridType == GridType.Entrance)
                 {
                     tempGrid.SetConnection(this);
-                    tempGrid.ConnectedRooms.Add(this.ContainingRoom);
+                }
+                else if (tempGrid.GridType == GridType.Room || tempGrid.GridType == GridType.RoomCore)
+                {
+                    tempGrid.SetConnection(this);
+                    tempGrid.RoomCoreGrid.SetConnection(this);
                 }
             }
         }
@@ -190,5 +239,6 @@ namespace BHSSolo.DungeonDefense.Contruct
         Entrance,
         Passage,
         Room,
+        RoomCore,
     }
 }

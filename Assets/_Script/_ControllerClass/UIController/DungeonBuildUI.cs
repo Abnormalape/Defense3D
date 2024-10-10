@@ -1,5 +1,7 @@
-﻿using BHSSolo.DungeonDefense.ManagerClass;
+﻿using BHSSolo.DungeonDefense.DungeonRoom;
+using BHSSolo.DungeonDefense.ManagerClass;
 using BHSSolo.DungeonDefense.State;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -13,6 +15,10 @@ namespace BHSSolo.DungeonDefense.Controller
         public override UI_enum UIType { get; set; } = UI_enum.BuildDungeon;
         public override Canvas myCanvas { get; set; }
         public IManagerClass OwnerManager { get; set; }
+
+        private DataManager_ dataManager_ { get; set; }
+        private DungeonConstructManager dungeonConstructManager_ { get; set; }
+
 
         [SerializeField]
         private GameObject constructureBluePrintHolder;
@@ -40,12 +46,44 @@ namespace BHSSolo.DungeonDefense.Controller
             OwnerManager = ownerManager;
             myCanvas = GetComponent<Canvas>();
             cursorManager = OwnerManager.OwnerManager.CursorManager_;
+            dataManager_ = OwnerManager.OwnerManager.DataManager_;
+            dungeonConstructManager_ = OwnerManager.OwnerManager.DungeonConstructManager_;
 
             UIControllerInitializer();
         }
 
         public void UIControllerInitializer()
         {
+            // Todo: Get Data.
+            Dictionary<string, bool> tempBluePrintChecker = dataManager_.UserSaveData.BluePrints;
+            Dictionary<string, RoomData> tempRoomDatas = dataManager_.DungeonData.RoomDatas;
+
+            foreach (var bluePrint in tempBluePrintChecker)
+            {
+                if (bluePrint.Value) //If bluePrint Activated.
+                {
+                    GameObject tempBluePrint = Instantiate(bluePrintPrefab, constructureBluePrintHolder);
+                    var bluePrintKey = bluePrint.Key;
+
+                    BlueprintButtonController tempBlueprintButton = tempBluePrint.GetComponent<BlueprintButtonController>();
+
+                    tempBlueprintButton.BluePrintButtonInitializer(); //Room Name, Type, Size, Resource Needed, Conditions etc...
+
+                    //Todo: Delegate method below might be move into BluePrintButtonInitializer.
+                    tempBluePrint.GetComponent<Button>().onClick.AddListener(() =>
+                    {
+                        RoomData tempRoomData = tempRoomDatas[bluePrintKey];
+                        string roomName = tempRoomData.Name;
+                        int xSize = tempRoomData.XSize;
+                        int zSize = tempRoomData.ZSize;
+                        RoomType roomType = tempRoomData.RoomType;
+
+                        SendSelectedRoomData(roomName, xSize, zSize, roomType);
+                    });
+                }
+            }
+
+
             int blueprintscount = constructureBluePrintHolder.transform.childCount; //Todo: Instantiate BluePrint GameObject. Counts of bluepirnts.
 
             for (int i = 0; i < blueprintscount; i++)
@@ -91,9 +129,31 @@ namespace BHSSolo.DungeonDefense.Controller
         private int xSize = 3; //Todo: Adjust
         private int zSize = 3; //Todo: Adjust
 
+        private void SendSelectedRoomData(string roomName, int xSize, int zSize, RoomType roomType)
+        {
+            if (roomType == RoomType.Passage)
+            {
+                dungeonConstructManager_.PrepareConstructionPassage();
+                cursorManager.ChangeManagerState(CursorState.OnManage_Grid);
+            }
+            else if (roomType == RoomType.Room)
+            {
+                dungeonConstructManager_.PrepareConstructionRoom();
+                cursorManager.ChangeManagerState(CursorState.OnManage_Grid);
+            }
+
+            StartCoroutine(QuitSelectionState());
+        }
+
+        private IEnumerator QuitSelectionState()
+        {
+            yield return Input.GetMouseButtonDown(2);
+            //Quit Selection State
+        }
+
         private void BluePrintClicked(string ButtonString) //Todo: Adjust
         {
-            //Block Reaction
+            //Block Action
             if ((cursorManager.CurrentState as ICursorState).CursorState != CursorState.OnManage_Idle)
                 return;
 

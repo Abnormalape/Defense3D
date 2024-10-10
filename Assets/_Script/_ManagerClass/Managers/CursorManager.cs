@@ -142,7 +142,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         }
 
         #region For GridCursorState
-        public void SummonGridTarget()
+        public GameObject SummonGridTarget()
         {
             GridTarget = Instantiate(GridTargetPrefab); //Instantiate.
 
@@ -154,6 +154,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             GameObject roomToSummon = Resources.Load(roomToSummonPath) as GameObject;
 
             cursorGridTargetController.InitializeGridTarget(roomToSummon, HoldingRoomSize); //Initialize Grid Target.
+
+            return GridTarget;
         }
 
         public void DestroyGridTarget()

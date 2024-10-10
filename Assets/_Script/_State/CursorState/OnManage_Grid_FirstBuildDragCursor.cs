@@ -151,7 +151,8 @@ namespace BHSSolo.DungeonDefense.Controller
 
                             Debug.Log($"Grid on Position : ({selectedGrid.ConstructedPosition}) is Connected to Grid on Position : ({selectedGrid.ConnectedGrids[0].ConstructedPosition})");
 
-                            roomManager_.SummonGameObject(null , null); //Todo:
+                            //roomManager_.SummonGameObject(null , null); //Todo:
+
                             ExitConstructionState(); //Todo: Adjust
                             return;
                         }

@@ -1,9 +1,9 @@
 ﻿using BHSSolo.DungeonDefense.Controller;
 using BHSSolo.DungeonDefense.Contruct;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-using Unity.Loading;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -53,7 +53,9 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             switch (gameState)
             {
                 case GameState.Dungeon_ConstructionState:
-                    ShowGrids(GridDatas);
+                    ShowGrids(GridDatas
+                        .Where((t) => !t.Value.IsContructed)
+                        .ToDictionary(t => t.Key, t => t.Value));
                     return;
 
                 default:
@@ -64,20 +66,38 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void SetGridDataUsingMap()
         {
-
-            MakeTempGrid();
-            SetTempGridData();
-            ConnectGrids();
-
             string mapData = dataManager_.defaultMapTextAsset.text;
+            Dictionary<Vector3, DungeonGridData> tempGridMap = new();
+            string[] rows;
 
-            string[] rows = mapData.Trim('\r').Trim('\n').Split('\n');
-            Array.Reverse(rows);
+            MakeTempGrid(mapData, ref tempGridMap, out rows);
+            SetTempGridData(rows);
+            ConnectGrids(rows);
 
-            Dictionary<Vector3, DungeonGridData> tempGridMap = new(rows.Length * rows[0].Trim(',').Length);
+            Vector3 start = new Vector3(250f, 0.01f, 0f);
+            Vector3 end = new Vector3(250f, 0.01f, 80f);
+
+            //Todo: Remove
+            List<DungeonGridData> Grids = new();
+            foreach (var e in GridDatas) { Grids.Add(e.Value); }
+            List<GridNode> nodes;
+
+            GridPathFinder.SetNodeGrids(Grids, out nodes);
+            GridPathFinder.FindShortestWay(nodes[0], nodes[9], nodes);
+            //Todo: Remove
+        }
+
+        private void MakeTempGrid(string mapData, ref Dictionary<Vector3, DungeonGridData> tempGridMap, out string[] rows)
+        {
+            string[] internalRows = mapData.Trim('\r').Trim('\n').Split('\n');
+            Array.Reverse(internalRows);
+
+            rows = internalRows; //Out
+
+            tempGridMap = new(internalRows.Length * internalRows[0].Trim(',').Length);
 
             int iy = 0;
-            foreach (string row in rows)
+            foreach (string row in internalRows)
             {
                 string tempRow = row.Replace(",", "").Replace("\n", "").Replace("\r", "");
 
@@ -92,10 +112,12 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                 iy++;
             }
 
-            iy = 0;
-
             GridDatas.AddRange(tempGridMap);
+        }
 
+        private void SetTempGridData(string[] rows)
+        {
+            int iy = 0;
             foreach (string row in rows)
             {
                 string[] tempRow = row.Replace("\n", "").Replace("\r", "").Split(",");
@@ -104,87 +126,51 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                 foreach (string s in tempRow)
                 {
                     Vector3 tempGridPosition = new Vector3(ix * 5f, 0.01f, iy * 5f);
-                    DungeonGridData tempGrid = GridDatas[tempGridPosition];
+                    DungeonGridData tempGrid;
+
+                    if (!GridDatas.TryGetValue(tempGridPosition, out tempGrid))
+                    { continue; }
+
 
                     switch (s)
                     {
-                        case string str when str.StartsWith("R"):
+                        case string str when str.StartsWith("R"): //RoomCore
                             int roomSize = Convert.ToInt32(s.Replace("R", ""));
-                            tempGrid.SetRoomCore(roomSize);
+                            GameObject tempRoom = RoomManager.TempBuildRoomMethodUsingCsvData(s); //Todo:
+                            tempGrid.SetRoomCore(roomSize, tempRoom);
                             break;
-                        case "e":
+                        case "e": //Empty
                             tempGrid.SetEmpty();
                             break;
-                        case "E":
-                            tempGrid.SetEntrance();
+                        case "E": //Entrance
+                            GameObject tempEntrance = RoomManager.TempBuildRoomMethodUsingCsvData("Entrance"); //Todo:
+                            tempGrid.SetEntrance(tempEntrance);
                             break;
-                        case "r":
+                        case "r": //Room
                             tempGrid.SetRoom();
                             break;
-                        case "+":
-                            tempGrid.SetPassage();
-                            tempGrid.SetConnectedRooms(true, true, true, true);
-                            break;
+                        case "+": //Passage
                         case "│":
-                            tempGrid.SetPassage();
-                            tempGrid.SetConnectedRooms(true, true, false, false);
-                            break;
                         case "─":
-                            tempGrid.SetPassage();
-                            tempGrid.SetConnectedRooms(false, false, true, true);
-                            break;
                         case "┴":
-                            tempGrid.SetPassage();
-                            tempGrid.SetConnectedRooms(true, false, true, true);
-                            break;
                         case "┬":
-                            tempGrid.SetPassage();
-                            tempGrid.SetConnectedRooms(false, true, true, true);
-                            break;
                         case "┤":
-                            tempGrid.SetPassage();
-                            tempGrid.SetConnectedRooms(true, true, true, false);
-                            break;
                         case "├":
-                            tempGrid.SetPassage();
-                            tempGrid.SetConnectedRooms(true, true, false, true);
-                            break;
                         case "┘":
-                            tempGrid.SetPassage();
-                            tempGrid.SetConnectedRooms(true, false, true, false);
-                            break;
                         case "┐":
-                            tempGrid.SetPassage();
-                            tempGrid.SetConnectedRooms(false, true, true, false);
-                            break;
                         case "└":
-                            tempGrid.SetPassage();
-                            tempGrid.SetConnectedRooms(true, false, false, true);
-                            break;
                         case "┌":
-                            tempGrid.SetPassage();
-                            tempGrid.SetConnectedRooms(false, true, false, true);
-                            break;
                         case "╵": //UP
-                            tempGrid.SetPassage();
-                            tempGrid.SetConnectedRooms(true, false, false, false);
-                            break;
                         case "╷": //DOWN
-                            tempGrid.SetPassage();
-                            tempGrid.SetConnectedRooms(false, true, false, false);
-                            break;
                         case "╴": //LEFT
-                            tempGrid.SetPassage();
-                            tempGrid.SetConnectedRooms(false, false, true, false);
-                            break;
                         case "╶": //RIGHT
-                            tempGrid.SetPassage();
-                            tempGrid.SetConnectedRooms(false, false, false, true);
+                            GameObject tempPassage = RoomManager.TempBuildRoomMethodUsingCsvData("Passage"); //Todo:
+                            tempGrid.SetPassage(tempPassage);
                             break;
-                        case "N":
+                        case "N": //Void
                             GridDatas.Remove(tempGridPosition);
                             break;
-                        default:
+                        default: //Error
                             Debug.Log($"Wrong Word In Map: {s}");
                             break;
                     }
@@ -192,50 +178,78 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                 }
                 iy++;
             }
-
-            
-
-            #region sampleGridData
-            //for (int ix = -50; ix < 51; ix++) //Todo: not strict Size
-            //{
-            //    for (int iz = 0; iz < 101; iz++)
-            //    {
-            //        bool tempIsBuilt = false;
-            //        bool tempIsRoad = false;
-
-            //        if (ix == 0 && iz == 0)
-            //        {
-            //            tempIsBuilt = true;
-            //            tempIsRoad = true;
-            //        }
-
-            //        float tempX = ix;
-            //        float tempZ = iz;
-
-            //        GridDatas.Add(
-            //            new Vector3(tempX, 0.01f, tempZ) * 5f
-            //            , new DungeonGridData(
-            //                tempIsBuilt
-            //                , tempIsRoad
-            //                , new Vector3(tempX, 0.01f, tempZ) * 5f));
-            //    }
-            //}
-            #endregion sampleGridData
         }
 
-        private void MakeTempGrid()
+        private void ConnectGrids(string[] rows)
         {
+            int iy = 0;
+            foreach (string row in rows)
+            {
+                string[] tempRow = row.Replace("\n", "").Replace("\r", "").Split(",");
 
-        }
+                int ix = 0;
+                foreach (string s in tempRow)
+                {
+                    Vector3 tempGridPosition = new Vector3(ix * 5f, 0.01f, iy * 5f);
+                    DungeonGridData tempGrid;
 
-        private void SetTempGridData()
-        {
+                    if (!GridDatas.TryGetValue(tempGridPosition, out tempGrid))
+                    { continue; }
 
-        }
-
-        private void ConnectGrids()
-        {
-
+                    switch (s)
+                    {
+                        case "+":
+                            tempGrid.SetConnectedRooms(true, true, true, true);
+                            break;
+                        case "│":
+                            tempGrid.SetConnectedRooms(true, true, false, false);
+                            break;
+                        case "─":
+                            tempGrid.SetConnectedRooms(false, false, true, true);
+                            break;
+                        case "┴":
+                            tempGrid.SetConnectedRooms(true, false, true, true);
+                            break;
+                        case "┬":
+                            tempGrid.SetConnectedRooms(false, true, true, true);
+                            break;
+                        case "┤":
+                            tempGrid.SetConnectedRooms(true, true, true, false);
+                            break;
+                        case "├":
+                            tempGrid.SetConnectedRooms(true, true, false, true);
+                            break;
+                        case "┘":
+                            tempGrid.SetConnectedRooms(true, false, true, false);
+                            break;
+                        case "┐":
+                            tempGrid.SetConnectedRooms(false, true, true, false);
+                            break;
+                        case "└":
+                            tempGrid.SetConnectedRooms(true, false, false, true);
+                            break;
+                        case "┌":
+                            tempGrid.SetConnectedRooms(false, true, false, true);
+                            break;
+                        case "╵": //UP
+                            tempGrid.SetConnectedRooms(true, false, false, false);
+                            break;
+                        case "╷": //DOWN
+                            tempGrid.SetConnectedRooms(false, true, false, false);
+                            break;
+                        case "╴": //LEFT
+                            tempGrid.SetConnectedRooms(false, false, true, false);
+                            break;
+                        case "╶": //RIGHT
+                            tempGrid.SetConnectedRooms(false, false, false, true);
+                            break;
+                        default:
+                            break;
+                    }
+                    ix++;
+                }
+                iy++;
+            }
         }
 
         public void MakeGrid(Dictionary<Vector3, DungeonGridData> gridDatas)
@@ -275,10 +289,10 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             dungeonGridSpawner.HideGrid(gridData);
         }
 
-        public void JudgeIsBuildable()
+        public void JudgeIsBuildable(GameObject gridTarget) //Todo: 
         {
             #region Field
-            Vector3 tempGridTargetPosition = CursorManager_.GridTarget.transform.position;
+            Vector3 tempGridTargetPosition = CursorManager_.GridTarget.transform.position; //Todo: use gridTarget in parameter Instead
 
             float gridTargetYPosition = tempGridTargetPosition.y;
             int holdingRoomXSize = (int)CursorManager_.HoldingRoomSize.x;
@@ -432,9 +446,17 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             #endregion IsBuildable
 
             if (!roadFound) //Todo:
-                return;
+            { Debug.Log("No Road Found"); return; }
 
-            Debug.Log("You Made A New Room!!");
+            Debug.Log("You Can Made Room");
+
+            //Todo: Passage and Room Must be Different
+            if(tempRoomType == RoomType.Passage)
+            {
+            }
+            else if (tempRoomType == RoomType.Room)
+            {
+            }
 
             //Todo: Set GridData's constructed = true.
             //foreach (int x in xList)
@@ -486,7 +508,18 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             //CursorManager_.ChangeManagerState(CursorState.OnManage_Idle); // 9/30
         }
 
+        public void PrepareConstructionPassage() //Todo: Adjust
+        { BuildCondition; }
+        private void JudgePassageBuildable() //Click position must be on Construction. On of the four grid around click position must be empty.
+        { StretchPassage(); } 
+        private void StretchPassage() { }
+        private void FinishBuildPassage() { } //If "left shift" is pressed and this method runs, goto StretchPassage Method.
 
-
+        public void PrepareConstructionRoom() //Todo: Adjust
+        { BuildCondition; }
+        private void JudgeRoomBuildable() //One of the Grid around room grids except corner, must contains passage grid. Also room grid can't be on Construction.
+        { ConnectRoomToPassage(); } 
+        private void ConnectRoomToPassage() { }
+        private void FinishBuildRoom() { }
     }
 }

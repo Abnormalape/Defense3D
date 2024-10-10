@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
@@ -10,6 +11,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public GameManager_ OwnerManager { get; set; }
         public Dictionary<int, IController> ID_ControllerDictionary { get; set; } = new();
         public Dictionary<Enum, RoomBaseData> BaseDataDictionary { get; set; } = new();
+
+        public const string ROOM_PATH = "RoomPrefab";
 
         public static int Room_ID { get; private set; }
 
@@ -56,7 +59,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void SummonGameObject(GameObject prefab, Transform summonPoint)
         {
-            GameObject tempSummoned 
+            GameObject tempSummoned
                 = Instantiate(prefab, summonPoint.position, summonPoint.rotation, null); //Todo: null Is for RoomHolder.
 
             AddSummoned(Room_ID, tempSummoned.GetComponent<IController>());
@@ -68,19 +71,38 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             Room_ID++;
         }
 
-        public void DestroyGameObject(GameObject prefabInstance)
-        {
-            Destroy(prefabInstance);
-        }
-
         public void RemoveSummoned(int summoned_ID)
         {
             ID_ControllerDictionary.Remove(summoned_ID);
         }
 
+        public void DestroyGameObject(GameObject prefabInstance)
+        {
+            Destroy(prefabInstance);
+        }
+
         public void AddRoom(string RoomName) //Todo: Remove
         {
             Debug.Log("Built Room Name : " + RoomName);
+        }
+
+        public GameObject TempBuildRoomMethodUsingCsvData(string MapCodeOnCsv) //Todo:
+        {
+            GameObject t;
+            if (MapCodeOnCsv.StartsWith("R"))
+            {
+                t = Instantiate(Resources.Load("Prefabs/Room/StandardSmallRoom") as GameObject);
+            }
+            else
+            {
+                t = Instantiate(Resources.Load("Prefabs/Room/StandardSmallPassage") as GameObject);
+            }
+
+            IController tempController = t.GetComponent<IController>();
+            tempController.ControllerInitializer(this);
+
+            AddSummoned(Room_ID, t.GetComponent<IController>());
+            return t;
         }
     }
 
