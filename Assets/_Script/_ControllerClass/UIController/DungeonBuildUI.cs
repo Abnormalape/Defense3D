@@ -1,9 +1,11 @@
-﻿using BHSSolo.DungeonDefense.DungeonRoom;
+﻿using BHSSolo.DungeonDefense.Data;
+using BHSSolo.DungeonDefense.DungeonRoom;
 using BHSSolo.DungeonDefense.ManagerClass;
 using BHSSolo.DungeonDefense.State;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -55,33 +57,44 @@ namespace BHSSolo.DungeonDefense.Controller
         public void UIControllerInitializer()
         {
             // Todo: Get Data.
-            Dictionary<string, bool> tempBluePrintChecker = dataManager_.UserSaveData.BluePrints;
-            Dictionary<string, RoomData> tempRoomDatas = dataManager_.DungeonData.RoomDatas;
+            List<RoomBluePrint> tempBluePrints = dataManager_.PlayerData.RoomBluePrints;
+            Dictionary<int, RoomBuildData> tempIDRoomData = dataManager_.ID_RoomBuildData;
 
-            foreach (var bluePrint in tempBluePrintChecker)
+            foreach (var bluePrint in tempBluePrints)
             {
-                if (bluePrint.Value) //If bluePrint Activated.
+                if(bluePrint.acquired) //Blueprint acquired.
                 {
-                    GameObject tempBluePrint = Instantiate(bluePrintPrefab, constructureBluePrintHolder);
-                    var bluePrintKey = bluePrint.Key;
+                    RoomBuildData tempRoomBuildData = tempIDRoomData[bluePrint.RoomID];
 
-                    BlueprintButtonController tempBlueprintButton = tempBluePrint.GetComponent<BlueprintButtonController>();
-
-                    tempBlueprintButton.BluePrintButtonInitializer(); //Room Name, Type, Size, Resource Needed, Conditions etc...
-
-                    //Todo: Delegate method below might be move into BluePrintButtonInitializer.
-                    tempBluePrint.GetComponent<Button>().onClick.AddListener(() =>
-                    {
-                        RoomData tempRoomData = tempRoomDatas[bluePrintKey];
-                        string roomName = tempRoomData.Name;
-                        int xSize = tempRoomData.XSize;
-                        int zSize = tempRoomData.ZSize;
-                        RoomType roomType = tempRoomData.RoomType;
-
-                        SendSelectedRoomData(roomName, xSize, zSize, roomType);
-                    });
+                    Debug.Log($"You have Blueprint of {tempRoomBuildData.name}. Its size is {tempRoomBuildData.Width} * {tempRoomBuildData.Depth}");
                 }
             }
+
+
+            //foreach (var bluePrint in tempBluePrintChecker) // 10/10 
+            //{
+            //    if (bluePrint.Value) //If bluePrint Activated.
+            //    {
+            //        GameObject tempBluePrint = Instantiate(bluePrintPrefab, constructureBluePrintHolder);
+            //        var bluePrintKey = bluePrint.Key;
+
+            //        BlueprintButtonController tempBlueprintButton = tempBluePrint.GetComponent<BlueprintButtonController>();
+
+            //        tempBlueprintButton.BluePrintButtonInitializer(); //Room Name, Type, Size, Resource Needed, Conditions etc...
+
+            //        //Todo: Delegate method below might be move into BluePrintButtonInitializer.
+            //        tempBluePrint.GetComponent<Button>().onClick.AddListener(() =>
+            //        {
+            //            RoomData tempRoomData = tempRoomDatas[bluePrintKey];
+            //            string roomName = tempRoomData.Name;
+            //            int xSize = tempRoomData.XSize;
+            //            int zSize = tempRoomData.ZSize;
+            //            RoomType roomType = tempRoomData.RoomType;
+
+            //            SendSelectedRoomData(roomName, xSize, zSize, roomType);
+            //        });
+            //    }
+            //}
 
 
             int blueprintscount = constructureBluePrintHolder.transform.childCount; //Todo: Instantiate BluePrint GameObject. Counts of bluepirnts.
@@ -129,14 +142,14 @@ namespace BHSSolo.DungeonDefense.Controller
         private int xSize = 3; //Todo: Adjust
         private int zSize = 3; //Todo: Adjust
 
-        private void SendSelectedRoomData(string roomName, int xSize, int zSize, RoomType roomType)
+        private void SendSelectedRoomData(string roomName, int xSize, int zSize, RoomBuildType roomBuildType)
         {
-            if (roomType == RoomType.Passage)
+            if (roomBuildType == RoomBuildType.Passage)
             {
                 dungeonConstructManager_.PrepareConstructionPassage();
                 cursorManager.ChangeManagerState(CursorState.OnManage_Grid);
             }
-            else if (roomType == RoomType.Room)
+            else if (roomBuildType == RoomBuildType.Room)
             {
                 dungeonConstructManager_.PrepareConstructionRoom();
                 cursorManager.ChangeManagerState(CursorState.OnManage_Grid);
@@ -165,5 +178,11 @@ namespace BHSSolo.DungeonDefense.Controller
             cursorManager.SetHoldingRoomData(ButtonString, xSize, zSize);
             cursorManager.ChangeManagerState(CursorState.OnManage_Grid);
         }
+    }
+
+    public enum RoomBuildType //Todo: Move to other namespace.
+    {
+        Passage,
+        Room,
     }
 }

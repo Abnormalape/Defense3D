@@ -1,4 +1,5 @@
 ﻿using BHSSolo.DungeonDefense.Controller;
+using BHSSolo.DungeonDefense.Data;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,9 @@ namespace BHSSolo.DungeonDefense.ManagerClass
     {
         public GameManager_ OwnerManager { get; set; }
 
+        public PlayerData PlayerData { get; private set; } //Data can only be changed in this class.
+        public Dictionary<int, RoomBuildData> ID_RoomBuildData { get; private set; }
+
 
         public void InitializeManager(GameManager_ gameManager_)
         {
@@ -18,9 +22,18 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         }
 
         #region SetGameData
-        private const string ALLY_DATA_PATH = "GameData/AllyData";
-        private const string ENEMY_DATA_PATH = "GameData/EnemyData";
-        private const string DEFAULT_MAP_DATA_PATH = "GameData/MapData/DefaultDungeonMap";
+        private const string USER_SAVE_DATA_PATH = "UserSaveData/UserSaveData"; //Json
+        private TextAsset userSaveData { get { return Resources.Load(USER_SAVE_DATA_PATH) as TextAsset; } }
+
+        private const string ROOM_BUILD_DATA_PATH = "GameData/RoomBuildData"; //Json
+        private TextAsset roomBuildData { get { return Resources.Load(ROOM_BUILD_DATA_PATH) as TextAsset; } }
+
+
+        private const string ALLY_DATA_PATH = "GameData/AllyData"; //Csv
+        private const string ENEMY_DATA_PATH = "GameData/EnemyData"; //NONE
+        private const string DEFAULT_MAP_DATA_PATH = "GameData/MapData/DefaultDungeonMap"; //Csv
+
+
         public TextAsset allyBaseTextAsset { get; private set; }
         public TextAsset enemyBaseTextAsset { get; private set; }
         public TextAsset defaultMapTextAsset { get; private set; }
@@ -34,8 +47,33 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void InitializeGameData()
         {
+            InitializeClassWithJson();
             LoadAllTextAsset();
             SetBaseData();
+        }
+
+        private void InitializeClassWithJson()
+        {
+            InitializePlayerSaveData();
+            InitializeRoomBuildData();
+        }
+
+        private void InitializePlayerSaveData()
+        {
+            string tempSaveDataText = userSaveData.text;
+            this.PlayerData = JsonUtility.FromJson<PlayerData>(tempSaveDataText);
+        }
+
+        private void InitializeRoomBuildData()
+        {
+            string tempRoomBuildDataText = roomBuildData.text;
+            RoomBuildDataWrapper wrapper
+                = JsonUtility.FromJson<RoomBuildDataWrapper>(tempRoomBuildDataText);
+            ID_RoomBuildData = new(wrapper.RoomBuildData.Count);
+            foreach (var item in wrapper.RoomBuildData)
+            {
+                ID_RoomBuildData.Add(item.RoomID, item);
+            }
         }
 
         private void LoadAllTextAsset()
@@ -55,6 +93,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         #endregion
         private void ParseCsvToDictionaryWithHeader(string inputText, out Dictionary<string, Dictionary<string, string>> doubleDictionary)
         {
+
+
             string[] rows = inputText.Replace("\r", "").Trim('\n').Split('\n');
 
             string[] keys = rows[0].Split(',');
@@ -90,5 +130,9 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             doubleDictionary = tempDoubleDictionary;
         }
 
+        private void SetJsonDataToClass()
+        {
+
+        }
     }
 }

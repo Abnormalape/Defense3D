@@ -451,10 +451,12 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             Debug.Log("You Can Made Room");
 
             //Todo: Passage and Room Must be Different
-            if(tempRoomType == RoomType.Passage)
+            RoomBuildType tempRoomBuildType = RoomBuildType.Passage;//Todo: Remove
+
+            if (tempRoomBuildType == RoomBuildType.Passage)
             {
             }
-            else if (tempRoomType == RoomType.Room)
+            else if (tempRoomBuildType == RoomBuildType.Room)
             {
             }
 
@@ -509,16 +511,18 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         }
 
         public void PrepareConstructionPassage() //Todo: Adjust
-        { BuildCondition; }
+        { //BuildCondition; 
+        }
         private void JudgePassageBuildable() //Click position must be on Construction. On of the four grid around click position must be empty.
-        { StretchPassage(); } 
+        { StretchPassage(); }
         private void StretchPassage() { }
         private void FinishBuildPassage() { } //If "left shift" is pressed and this method runs, goto StretchPassage Method.
 
         public void PrepareConstructionRoom() //Todo: Adjust
-        { BuildCondition; }
+        { //BuildCondition; 
+        }
         private void JudgeRoomBuildable() //One of the Grid around room grids except corner, must contains passage grid. Also room grid can't be on Construction.
-        { ConnectRoomToPassage(); } 
+        { ConnectRoomToPassage(); }
         private void ConnectRoomToPassage() { }
         private void FinishBuildRoom() { }
     }

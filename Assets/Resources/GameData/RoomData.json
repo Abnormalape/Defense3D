@@ -1,0 +1,74 @@
+[
+  {
+    "RoomID": 1,
+    "name": "StandardSmallPassage",
+    "roomType": "Passage",
+    "capacity": 0,
+    "sizeLimit": "Small",
+    "buffs": [
+      {
+        "buffType": "None"
+      }
+    ]
+  },
+  {
+    "RoomID": 2,
+    "name": "StandardSmallRoom",
+    "roomType": "Room",
+    "capacity": 3,
+    "sizeLimit": "Small",
+    "buffs": [
+      {
+        "buffType": "None"
+      }
+    ]
+  },
+  {
+    "RoomID": 3,
+    "name": "StandardMidiumPassage",
+    "roomType": "Passage",
+    "capacity": 0,
+    "sizeLimit": "Midium",
+    "buffs": [
+      {
+        "buffType": "None"
+      }
+    ]
+  },
+  {
+    "RoomID": 4,
+    "name": "StandardMidiumRoom",
+    "roomType": "Room",
+    "capacity": 6,
+    "sizeLimit": "Midium",
+    "buffs": [
+      {
+        "buffType": "None"
+      }
+    ]
+  },
+  {
+    "RoomID": 5,
+    "name": "StandardLargePassage",
+    "roomType": "Passage",
+    "capacity": 0,
+    "sizeLimit": "Large",
+    "buffs": [
+      {
+        "buffType": "None"
+      }
+    ]
+  },
+  {
+    "RoomID": 6,
+    "name": "StandardLargeRoom",
+    "roomType": "Room",
+    "capacity": 10,
+    "sizeLimit": "Large",
+    "buffs": [
+      {
+        "buffType": "None"
+      }
+    ]
+  }
+]

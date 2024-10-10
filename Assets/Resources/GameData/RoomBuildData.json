@@ -1,0 +1,82 @@
+{
+  "RoomBuildData": [
+    {
+      "RoomID": 1,
+      "name": "StandardSmallPassage",
+      "roomType": "Passage",
+      "Width": 1,
+      "Depth": 1,
+      "BuildTime": 0,
+      "Requirements": [
+        { "workforce": 10 }
+      ]
+    },
+    {
+      "RoomID": 2,
+      "name": "StandardSmallRoom",
+      "roomType": "Room",
+      "Width": 3,
+      "Depth": 3,
+      "BuildTime": 1,
+      "Requirements": [
+        { "workforce": 20 }
+      ]
+    },
+    {
+      "RoomID": 3,
+      "name": "StandardMidiumPassage",
+      "roomType": "Passage",
+      "Width": 2,
+      "Depth": 2,
+      "BuildTime": 1,
+      "Requirements": [
+        {
+          "workforce": 15,
+          "soul": 10
+        }
+      ]
+    },
+    {
+      "RoomID": 4,
+      "name": "StandardMidiumRoom",
+      "roomType": "Room",
+      "Width": 4,
+      "Depth": 4,
+      "BuildTime": 2,
+      "Requirements": [
+        {
+          "workforce": 40,
+          "soul": 20
+        }
+      ]
+    },
+    {
+      "RoomID": 5,
+      "name": "StandardLargePassage",
+      "roomType": "Passage",
+      "Width": 2,
+      "Depth": 2,
+      "BuildTime": 2,
+      "Requirements": [
+        {
+          "workforce": 20,
+          "soul": 20
+        }
+      ]
+    },
+    {
+      "RoomID": 6,
+      "name": "StandardLargeRoom",
+      "roomType": "Room",
+      "Width": 5,
+      "Depth": 5,
+      "BuildTime": 4,
+      "Requirements": [
+        {
+          "workforce": 80,
+          "soul": 40
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "RoomBluePrints": [
+    {
+      "RoomID": 1,
+      "name": "StandardSmallPassage",
+      "acquired": true
+    },
+    {
+      "RoomID": 2,
+      "name": "StandardSmallRoom",
+      "acquired": true
+    },
+    {
+      "RoomID": 3,
+      "name": "StandardMidiumPassage",
+      "acquired": false
+    },
+    {
+      "RoomID": 4,
+      "name": "StandardMidiumRoom",
+      "acquired": false
+    },
+    {
+      "RoomID": 5,
+      "name": "StandardLargePassage",
+      "acquired": false
+    },
+    {
+      "RoomID": 6,
+      "name": "StandardLargeRoom",
+      "acquired": false
+    }
+  ],
+  "DungeonResources": {
+    "soul": 0,
+    "nobleSoul": 0,
+    "grandSoul": 0,
+    "treasure": 0,
+    "demonCoin": 0,
+    "workforce": 0
+  },
+  "DungeonGrids": [
+    {
+
+    }
+  ],
+  "DungeonRooms": [
+    {
+      "RoomID": 0,
+      "locateGrid": [ 0, 0, 0 ],
+      "placedAlly": [
+        {
+          "savedAllyID": 0
+        }
+      ],
+      "placedAddOn": [
+        {
+          "placedAddOnID": 0
+        }
+      ]
+    }
+  ],
+  "SavedAlly": [
+    {
+      "savedAllyID": 0,
+      "AllyID": 0,
+      "level": 0,
+      "status": [ 0, 0, 0 ]
+    }
+  ],
+  "SavedAddOn": [
+    {
+      "savedAddOnID": 0,
+      "AddOnID": 0,
+      "level": 0
+    }
+  ]
+}
