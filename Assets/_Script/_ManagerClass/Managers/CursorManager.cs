@@ -19,21 +19,9 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public Dictionary<Enum, IState_> Type_StateDictionary { get; set; } = new(); //Todo: CursorState
         
 
-        public bool isAttachedOnGridCursor = false;
-        public string attachedNameOnGridCursor;
-
         private const string GRID_TARGET_PATH = "Prefabs/RoomSilhouette/GridTarget";
         private GameObject GridTargetPrefab;
         public GameObject GridTarget { get; private set; }
-
-        public string HoldingRoomName { get; private set; }
-        public Vector2 HoldingRoomSize { get; private set; }
-        public void SetHoldingRoomData(string holdingRoomName, int holdingRoomSizeX, int holdingRoomSizeZ)
-        {
-            HoldingRoomName = holdingRoomName;
-            HoldingRoomSize = new Vector2(holdingRoomSizeX,holdingRoomSizeZ);
-        }
-
 
 
         private void Update()
@@ -144,16 +132,16 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         #region For GridCursorState
         public GameObject SummonGridTarget()
         {
-            GridTarget = Instantiate(GridTargetPrefab); //Instantiate.
+            GridTarget = Instantiate(GridTargetPrefab);
 
-            CursorGridTargetController cursorGridTargetController //Get ref.
+            CursorGridTargetController cursorGridTargetController
                 = GridTarget.GetComponent<CursorGridTargetController>();
 
-            string roomToSummonPath = $"Prefabs/RoomSilhouette/{HoldingRoomName}";
-            Debug.Log(roomToSummonPath);
-            GameObject roomToSummon = Resources.Load(roomToSummonPath) as GameObject;
+            Vector2 roomSize = new Vector2(
+                DungeonConstructManager.ConstructionProgress.HoldingRoomWidth, 
+                DungeonConstructManager.ConstructionProgress.HoldingRoomDepth); //Todo:
 
-            cursorGridTargetController.InitializeGridTarget(roomToSummon, HoldingRoomSize); //Initialize Grid Target.
+            cursorGridTargetController.InitializeGridTarget(null,roomSize);
 
             return GridTarget;
         }
@@ -161,7 +149,6 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public void DestroyGridTarget()
         {
             Destroy(GridTarget);
-            SetHoldingRoomData("", 0, 0); //Reset HoldingRoomData.
         }
         #endregion For GridCursorState
     }
@@ -173,6 +160,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         OnManage_TargetNPC, //Show Cursor, Free Move, OnClickTarget : Ally
         OnManage_TargetRoom, //Show Cursor, Free Move, OnClickTarget : Room
         OnManage_Grid, //Show Cursor, Grid Move
-        OnManage_Grid_FirstBuildDrag //Drag Movement when Room was First Build.
+        OnManage_Grid_RoomBuildAfterJudge,
+        OnManage_Grid_PassageBuildAfterJudge,
     }
 }

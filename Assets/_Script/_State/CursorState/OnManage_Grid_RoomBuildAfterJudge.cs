@@ -2,25 +2,23 @@
 using BHSSolo.DungeonDefense.ManagerClass;
 using BHSSolo.DungeonDefense.State;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
-    public class OnManage_Grid_FirstBuildDragCursor : IState_, ICursorState
+    public class OnManage_Grid_RoomBuildAfterJudge : IState_, ICursorState
     {
         public CursorManager CursorManager_ { get; set; }
-        public CursorState CursorState { get; set; } = CursorState.OnManage_Grid_FirstBuildDrag;
+        public CursorState CursorState { get; set; } = CursorState.OnManage_Grid_RoomBuildAfterJudge;
 
         private DungeonConstructManager dungeonConstructManager_;
         private GameStateManager_ gameStateManager_;
         private RoomManager_ roomManager_;
 
         private DungeonGridData selectedGrid = null;
-        private Dictionary<Vector3, DungeonGridData> sideGrids = new(24);
-        private Dictionary<Vector3, DungeonGridData> nearbyGrids = new(4);
+        private List<DungeonGridData> sideGrids { get; set; } = new(24);
+        private Dictionary<Vector3, DungeonGridData> nearbyGrids { get; set; } = new(4);
 
 
         public void InitialzieCursorState(CursorManager cursorManager)
@@ -34,8 +32,8 @@ namespace BHSSolo.DungeonDefense.Controller
         public void StateEnter()
         {
             dungeonConstructManager_.HideAllGrids();
-            dungeonConstructManager_.ShowGrids(dungeonConstructManager_.RoomSideGrids);
-            sideGrids = dungeonConstructManager_.RoomSideGrids;
+            dungeonConstructManager_.ShowGrids(dungeonConstructManager_.ConstructionProgress.TempRoomSideGrids);
+            sideGrids = dungeonConstructManager_.ConstructionProgress.TempRoomSideGrids;
             Debug.Log("Drag State Enter");
         }
 
@@ -46,14 +44,16 @@ namespace BHSSolo.DungeonDefense.Controller
             nearbyGrids.Clear();
             sideGrids.Clear();
             selectedGrid = null;
-            dungeonConstructManager_.RoomSideGrids.Clear(); //Todo: Don't execute this in this class.
+
+            //Todo: Don't do this on this class.
+
 
             Debug.Log("Drag State Exit");
         }
 
         public void StateUpdate()
         {
-            if(Input.GetKey(KeyCode.Escape) || Input.GetMouseButtonDown(1))
+            if (Input.GetKey(KeyCode.Escape) || Input.GetMouseButtonDown(1))
             {
                 ExitConstructionState();
             }
@@ -66,8 +66,6 @@ namespace BHSSolo.DungeonDefense.Controller
         {
             if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject() && selectedGrid == null)
             {
-                Debug.Log("Mouse Button Down");
-
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
 
@@ -116,8 +114,6 @@ namespace BHSSolo.DungeonDefense.Controller
         {
             if (Input.GetMouseButtonUp(0) && selectedGrid != null)
             {
-                Debug.Log("Mouse Button Up");
-
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
 
@@ -131,23 +127,17 @@ namespace BHSSolo.DungeonDefense.Controller
                     {
                         tempGridData = tempGridDatas[hitPosition];
 
-                        if (!tempGridData.IsVisible)
+                        if (!tempGridData.IsVisible || tempGridData.GridType != GridType.Passage)
                         {
-                            Debug.Log("Not Visible Grid. Select Visible Grid.");
+                            Debug.Log("Please Select Correct Grid.");
                             nearbyGrids.Clear();
                             selectedGrid = null;
-                            //Warning UI : Please Select Visible grid.
-
-                            //Nearby But not Connectable.
                         }
                         else
                         {
-                            //Todo: Conditions
-                            //Like => if(tempGridData.IsRoad)
                             Debug.Log("That Room Is Visible.");
 
-                            selectedGrid.ConnectedGrids.Add(tempGridData);
-                            tempGridData.ConnectedGrids.Add(selectedGrid);
+                            dungeonConstructManager_.ConstructionProgress.CompleteRoomBuild(selectedGrid, tempGridData);
 
                             Debug.Log($"Grid on Position : ({selectedGrid.ConstructedPosition}) is Connected to Grid on Position : ({selectedGrid.ConnectedGrids[0].ConstructedPosition})");
 
@@ -159,7 +149,6 @@ namespace BHSSolo.DungeonDefense.Controller
                     }
                     else
                     {
-                        // Warning UI : Not Nearby.
                         Debug.Log("Please Select Nearby Grid.");
                     }
                 }
@@ -174,7 +163,6 @@ namespace BHSSolo.DungeonDefense.Controller
         private void ExitConstructionState()
         {
             CursorManager_.ChangeManagerState(CursorState.OnManage_Idle);
-            
             gameStateManager_.ChangeManagerState(GameState.Dungeon_ConstructionState);
         }
 

@@ -46,7 +46,8 @@ namespace BHSSolo.DungeonDefense.State
             {
                 mousePressed = false;
                 Debug.Log("You clicked on Manage_GridCursor State.");
-                DungeonConstructManager_.JudgeIsBuildable(gridObject);
+
+                DungeonConstructManager_.ConstructionProgress.JudgePositionIsBuildable(gridObject.transform.position);
             }
         }
     }

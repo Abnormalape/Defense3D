@@ -66,6 +66,14 @@ namespace BHSSolo.DungeonDefense.Contruct
             }
         }
 
+        public void ShowAllGrids(List<DungeonGridData> dungeonGridDatas)
+        {
+            foreach (var e in dungeonGridDatas)
+            {
+                e.SetVisible();
+            }
+        }
+
         public void ShowGrid(DungeonGridData dungeonGridData)
         {
             dungeonGridData.SetVisible();

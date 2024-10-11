@@ -2,6 +2,7 @@
 using BHSSolo.DungeonDefense.DungeonRoom;
 using BHSSolo.DungeonDefense.ManagerClass;
 using BHSSolo.DungeonDefense.State;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -34,6 +35,9 @@ namespace BHSSolo.DungeonDefense.Controller
             }
         }
 
+        [SerializeField]
+        private GameObject bluePrintButtonPrefab;
+
         private CursorManager cursorManager { get; set; }
         private List<GameObject> bluePrints = new(10); //Todo:
 
@@ -62,57 +66,31 @@ namespace BHSSolo.DungeonDefense.Controller
 
             foreach (var bluePrint in tempBluePrints)
             {
-                if(bluePrint.acquired) //Blueprint acquired.
+                if (bluePrint.acquired) //Blueprint acquired.
                 {
                     RoomBuildData tempRoomBuildData = tempIDRoomData[bluePrint.RoomID];
 
-                    Debug.Log($"You have Blueprint of {tempRoomBuildData.name}. Its size is {tempRoomBuildData.Width} * {tempRoomBuildData.Depth}");
+                    GameObject tempButton = Instantiate(bluePrintButtonPrefab, constructureBluePrintHolder.transform);
+                    Button blueprintButton = tempButton.GetComponentInChildren<Button>();
+
+                    blueprintButton.onClick.AddListener(() =>
+                    {
+                        int roomId = tempRoomBuildData.RoomID;
+                        string roomName = tempRoomBuildData.name;
+                        int roomDepth = tempRoomBuildData.Depth;
+                        int roomWidth = tempRoomBuildData.Width;
+                        RoomBuildType buildType;
+                        Enum.TryParse(tempRoomBuildData.roomType, out buildType);
+                        Requirement tempRequire = tempRoomBuildData.Requirements;
+
+                        //Todo: Check Requirement To Build. If your gold, workforce or etc is under Requirement value, can't build.
+
+                        SendSelectedRoomData(roomId, roomName, buildType, roomDepth, roomWidth, tempRequire);
+                        BluePrintClicked();
+                    });
                 }
             }
 
-
-            //foreach (var bluePrint in tempBluePrintChecker) // 10/10 
-            //{
-            //    if (bluePrint.Value) //If bluePrint Activated.
-            //    {
-            //        GameObject tempBluePrint = Instantiate(bluePrintPrefab, constructureBluePrintHolder);
-            //        var bluePrintKey = bluePrint.Key;
-
-            //        BlueprintButtonController tempBlueprintButton = tempBluePrint.GetComponent<BlueprintButtonController>();
-
-            //        tempBlueprintButton.BluePrintButtonInitializer(); //Room Name, Type, Size, Resource Needed, Conditions etc...
-
-            //        //Todo: Delegate method below might be move into BluePrintButtonInitializer.
-            //        tempBluePrint.GetComponent<Button>().onClick.AddListener(() =>
-            //        {
-            //            RoomData tempRoomData = tempRoomDatas[bluePrintKey];
-            //            string roomName = tempRoomData.Name;
-            //            int xSize = tempRoomData.XSize;
-            //            int zSize = tempRoomData.ZSize;
-            //            RoomType roomType = tempRoomData.RoomType;
-
-            //            SendSelectedRoomData(roomName, xSize, zSize, roomType);
-            //        });
-            //    }
-            //}
-
-
-            int blueprintscount = constructureBluePrintHolder.transform.childCount; //Todo: Instantiate BluePrint GameObject. Counts of bluepirnts.
-
-            for (int i = 0; i < blueprintscount; i++)
-            {
-                bluePrints.Add(ConstructureBluePrintHolder.transform.GetChild(i).gameObject);
-
-                string buttonstring;
-
-                if (i < 5) //Todo: Remove
-                { buttonstring = $"SamplePassage"; }//Todo: Use Constructure Data to Fill Component
-                else
-                { buttonstring = $"SampleRoom"; }
-
-                bluePrints[i].GetComponentInChildren<Button>().onClick.AddListener(() => BluePrintClicked(buttonstring)); //Todo: Use Constructure Data to Fill Component
-                bluePrints[i].GetComponentInChildren<TextMeshProUGUI>().text = $"{i} : Blue Print"; //Todo: Use Constructure Data to Fill Component
-            }
             Close();
         }
 
@@ -142,46 +120,25 @@ namespace BHSSolo.DungeonDefense.Controller
         private int xSize = 3; //Todo: Adjust
         private int zSize = 3; //Todo: Adjust
 
-        private void SendSelectedRoomData(string roomName, int xSize, int zSize, RoomBuildType roomBuildType)
+        private void SendSelectedRoomData(int roomId, string roomName, 
+            RoomBuildType buildType, int roomWidth, int roomDepth, Requirement tempRequire)
         {
-            if (roomBuildType == RoomBuildType.Passage)
-            {
-                dungeonConstructManager_.PrepareConstructionPassage();
-                cursorManager.ChangeManagerState(CursorState.OnManage_Grid);
-            }
-            else if (roomBuildType == RoomBuildType.Room)
-            {
-                dungeonConstructManager_.PrepareConstructionRoom();
-                cursorManager.ChangeManagerState(CursorState.OnManage_Grid);
-            }
-
-            StartCoroutine(QuitSelectionState());
+            dungeonConstructManager_.ConstructionProgress.SetHoldingBuildData(buildType, roomWidth, roomDepth);
         }
 
-        private IEnumerator QuitSelectionState()
+        private void BluePrintClicked()
         {
-            yield return Input.GetMouseButtonDown(2);
-            //Quit Selection State
-        }
-
-        private void BluePrintClicked(string ButtonString) //Todo: Adjust
-        {
-            //Block Action
+            //Action Blocker
             if ((cursorManager.CurrentState as ICursorState).CursorState != CursorState.OnManage_Idle)
                 return;
 
-            Debug.Log($"{ButtonString} Clicked.");
-
-            if (ButtonString == "SamplePassage") { xSize = 1; zSize = 1; }
-            else if (ButtonString == "SampleRoom") { xSize = 3; zSize = 3; }
-
-            cursorManager.SetHoldingRoomData(ButtonString, xSize, zSize);
             cursorManager.ChangeManagerState(CursorState.OnManage_Grid);
         }
     }
 
     public enum RoomBuildType //Todo: Move to other namespace.
     {
+        None,
         Passage,
         Room,
     }

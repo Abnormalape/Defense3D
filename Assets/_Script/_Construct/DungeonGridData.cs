@@ -94,8 +94,6 @@ namespace BHSSolo.DungeonDefense.Contruct
 
         public bool IsVisible { get; private set; }
 
-        public bool IsRoad { get; set; } = true; //Todo: Adjust
-
         public void SetVisible()
         {
             if (visulaizer != null)

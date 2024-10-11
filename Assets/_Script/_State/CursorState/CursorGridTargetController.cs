@@ -44,7 +44,8 @@ namespace BHSSolo.DungeonDefense.State
             roomSize = roomToSummonSize;
             Debug.Log(roomSize);
 
-            Instantiate(roomToSummon, transform).transform.localPosition = Vector3.zero;
+            if(roomToSummon != null)
+                Instantiate(roomToSummon, transform).transform.localPosition = Vector3.zero;
         }
 
         private float EvenSizeGridPosition(float position)

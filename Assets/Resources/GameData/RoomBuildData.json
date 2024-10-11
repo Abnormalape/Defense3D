@@ -7,9 +7,8 @@
       "Width": 1,
       "Depth": 1,
       "BuildTime": 0,
-      "Requirements": [
-        { "workforce": 10 }
-      ]
+      "Requirements": { "workforce": 10 }
+
     },
     {
       "RoomID": 2,
@@ -18,9 +17,8 @@
       "Width": 3,
       "Depth": 3,
       "BuildTime": 1,
-      "Requirements": [
-        { "workforce": 20 }
-      ]
+      "Requirements": { "workforce": 20 }
+
     },
     {
       "RoomID": 3,
@@ -29,12 +27,11 @@
       "Width": 2,
       "Depth": 2,
       "BuildTime": 1,
-      "Requirements": [
-        {
-          "workforce": 15,
-          "soul": 10
-        }
-      ]
+      "Requirements": {
+        "workforce": 15,
+        "soul": 10
+      }
+
     },
     {
       "RoomID": 4,
@@ -43,12 +40,11 @@
       "Width": 4,
       "Depth": 4,
       "BuildTime": 2,
-      "Requirements": [
-        {
-          "workforce": 40,
-          "soul": 20
-        }
-      ]
+      "Requirements": {
+        "workforce": 40,
+        "soul": 20
+      }
+
     },
     {
       "RoomID": 5,
@@ -57,12 +53,11 @@
       "Width": 2,
       "Depth": 2,
       "BuildTime": 2,
-      "Requirements": [
-        {
-          "workforce": 20,
-          "soul": 20
-        }
-      ]
+      "Requirements": {
+        "workforce": 20,
+        "soul": 20
+      }
+
     },
     {
       "RoomID": 6,
@@ -71,12 +66,10 @@
       "Width": 5,
       "Depth": 5,
       "BuildTime": 4,
-      "Requirements": [
-        {
-          "workforce": 80,
-          "soul": 40
-        }
-      ]
+      "Requirements": {
+        "workforce": 80,
+        "soul": 40
+      }
     }
   ]
 }

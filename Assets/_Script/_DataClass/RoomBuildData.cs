@@ -12,7 +12,7 @@ namespace BHSSolo.DungeonDefense.Data
         public int Width;
         public int Depth;
         public int BuildTime;
-        public List<Requirement> Requirements;
+        public Requirement Requirements;
     }
 
     [System.Serializable]
