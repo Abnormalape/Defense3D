@@ -306,9 +306,22 @@ namespace BHSSolo.DungeonDefense.Controller
             ResetTempRoomData();
         }
 
-        public void CompletePassageBuild()
+        public void JudgeLinkedPassage(List<DungeonGridData> passagePath)
         {
+            foreach(var e in passagePath)
+            {
+                if (e.IsContructed && e != passagePath.Last())
+                {
+                    Debug.Log("There is Something on Passage Path!");
+                    return;
+                }
+            }
+            CompletePassageBuild(passagePath);
+        }
 
+        public void CompletePassageBuild(List<DungeonGridData> passagePath)
+        {
+            //Link Passage Each Other.
         }
     }
 }

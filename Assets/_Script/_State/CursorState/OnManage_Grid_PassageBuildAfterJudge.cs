@@ -1,5 +1,8 @@
-﻿using BHSSolo.DungeonDefense.ManagerClass;
+﻿using BHSSolo.DungeonDefense.Contruct;
+using BHSSolo.DungeonDefense.ManagerClass;
 using BHSSolo.DungeonDefense.State;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -14,6 +17,10 @@ namespace BHSSolo.DungeonDefense.Controller
         private Vector3 gridTargetPosition { get; set; }
         private Vector3 startPosition { get; set; }
 
+        private List<DungeonGridData> pathGrid = new(20);
+
+        private bool clicked;
+
         public void InitialzieCursorState(CursorManager cursorManager)
         {
             CursorManager_ = cursorManager;
@@ -25,6 +32,8 @@ namespace BHSSolo.DungeonDefense.Controller
             gridTarget = CursorManager_.SummonGridTarget();
             gridTargetPosition = gridTarget.transform.position;
             startPosition = dungeonConstructManager.ConstructionProgress.BasePosition;
+
+            dungeonConstructManager.HideAllGrids();
         }
 
         public void StateExit()
@@ -34,28 +43,60 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public void StateUpdate()
         {
+            if (Input.GetMouseButtonDown(0) && !clicked)
+            {
+                clicked = true;
+            }
+
             if (gridTargetPosition != gridTarget.transform.position)
             {
+                pathGrid.Clear();
+
+                dungeonConstructManager.HideAllGrids();
+
                 gridTargetPosition = gridTarget.transform.position;
 
-                Vector3 direction = (gridTargetPosition - startPosition);
-                float distance = Vector3.Distance(startPosition, gridTargetPosition);
+                float xMovement = gridTargetPosition.x - startPosition.x;
+                float zMovement = gridTargetPosition.z - startPosition.z;
 
+                List<Vector3> path = new();
+                Vector3 movement;
+                int countsTogo;
 
-                RaycastHit[] hits = Physics.SphereCastAll(startPosition, 0.1f, direction, distance, 1 << LayerMask.NameToLayer("GridFloor"));
-
-
-                Debug.Log("Start: " + startPosition);
-                Debug.Log("Distance: " + distance);
-                Debug.Log("Vector: " + direction);
-                if (hits.Length > 0)
+                if (Mathf.Abs(xMovement) > Mathf.Abs(zMovement))
                 {
-                    foreach (RaycastHit hit in hits)
-                    {
-                        Debug.Log("Path: " + hit.transform.position);
-                    }
+                    countsTogo = Convert.ToInt32(MathF.Abs(xMovement));
+                    if (xMovement > 0) { movement = new Vector3(5, 0, 0); }
+                    else { movement = new Vector3(-5, 0, 0); }
                 }
-                Debug.Log("End: " + gridTargetPosition);
+                else
+                {
+                    countsTogo = Convert.ToInt32(MathF.Abs(zMovement));
+                    if (zMovement > 0) { movement = new Vector3(0, 0, 5); }
+                    else { movement = new Vector3(0, 0, -5); }
+                }
+
+                countsTogo /= 5;
+
+                for (int i = 1; i < countsTogo + 1; i++)
+                {
+                    path.Add((movement * i) + startPosition);
+                }
+
+                
+
+                foreach (var e in path)
+                {
+                    pathGrid.Add(dungeonConstructManager.GridDatas[e]);
+                }
+
+                dungeonConstructManager.ShowGrids(pathGrid);
+            }
+
+            if(Input.GetMouseButtonUp(0) && clicked)
+            {
+                clicked = false;
+                dungeonConstructManager.ConstructionProgress.JudgeLinkedPassage(pathGrid);
             }
         }
     }
