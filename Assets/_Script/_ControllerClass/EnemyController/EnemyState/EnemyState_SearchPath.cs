@@ -36,7 +36,6 @@ namespace BHSSolo.DungeonDefense.State
 
         public void StateUpdate()
         {
-            Debug.Log("I'm Searching Path!");
         }
 
         private void SetDestination()

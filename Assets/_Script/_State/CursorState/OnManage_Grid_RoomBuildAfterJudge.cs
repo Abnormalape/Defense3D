@@ -39,14 +39,9 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public void StateExit()
         {
-            dungeonConstructManager_.HideAllGrids();
-
             nearbyGrids.Clear();
             sideGrids.Clear();
             selectedGrid = null;
-
-            //Todo: Don't do this on this class.
-
 
             Debug.Log("Drag State Exit");
         }
@@ -139,11 +134,6 @@ namespace BHSSolo.DungeonDefense.Controller
 
                             dungeonConstructManager_.ConstructionProgress.CompleteRoomBuild(selectedGrid, tempGridData);
 
-                            Debug.Log($"Grid on Position : ({selectedGrid.ConstructedPosition}) is Connected to Grid on Position : ({selectedGrid.ConnectedGrids[0].ConstructedPosition})");
-
-                            //roomManager_.SummonGameObject(null , null); //Todo:
-
-                            ExitConstructionState(); //Todo: Adjust
                             return;
                         }
                     }

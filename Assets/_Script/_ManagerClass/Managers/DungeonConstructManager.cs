@@ -54,11 +54,11 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             switch (gameState)
             {
                 case GameState.Dungeon_ConstructionState:
+                    HideAllGrids();
                     ShowGrids(GridDatas
                         .Where((t) => !t.Value.IsContructed)
                         .ToDictionary(t => t.Key, t => t.Value));
                     return;
-
                 default:
                     HideGrids(GridDatas);
                     return;
@@ -74,18 +74,6 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             MakeTempGrid(mapData, ref tempGridMap, out rows);
             SetTempGridData(rows);
             ConnectGrids(rows);
-
-            Vector3 start = new Vector3(250f, 0.01f, 0f);
-            Vector3 end = new Vector3(250f, 0.01f, 80f);
-
-            //Todo: Remove
-            List<DungeonGridData> Grids = new();
-            foreach (var e in GridDatas) { Grids.Add(e.Value); }
-            List<GridNode> nodes;
-
-            GridPathFinder.SetNodeGrids(Grids, out nodes);
-            GridPathFinder.FindShortestWay(nodes[0], nodes[9], nodes);
-            //Todo: Remove
         }
 
         private void MakeTempGrid(string mapData, ref Dictionary<Vector3, DungeonGridData> tempGridMap, out string[] rows)
@@ -291,6 +279,17 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public void HideGrid(DungeonGridData gridData)
         {
             dungeonGridSpawner.HideGrid(gridData);
+        }
+
+        public void TempFindPath_RemoveThisMothod()
+        {
+            List<GridNode> tempNodes = new();
+            GridPathFinder.SetNodeGrids(GridDatas.Values.ToList(), out tempNodes);
+            GridPathFinder.FindShortestWay(tempNodes.First(), tempNodes.Last(), tempNodes);
+
+            Debug.Log("CanRemove: " + GridPathFinder.CanRemoveRoom(tempNodes, tempNodes[1].NodeGrid));
+
+            Debug.Log("CanReach: " + GridPathFinder.CanReachGoal(tempNodes[0], tempNodes[tempNodes.Count - 1]));
         }
     }
 }

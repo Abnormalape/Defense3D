@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
@@ -43,13 +44,17 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public void StateUpdate()
         {
-            if (Input.GetMouseButtonDown(0) && !clicked)
+            if (Input.GetMouseButtonDown(0) && !clicked
+                && !EventSystem.current.IsPointerOverGameObject())
             {
                 clicked = true;
             }
 
             if (gridTargetPosition != gridTarget.transform.position)
             {
+                if (startPosition != dungeonConstructManager.ConstructionProgress.BasePosition) //When Start Position Changed.
+                { startPosition = dungeonConstructManager.ConstructionProgress.BasePosition; }
+
                 pathGrid.Clear();
 
                 dungeonConstructManager.HideAllGrids();
@@ -78,12 +83,11 @@ namespace BHSSolo.DungeonDefense.Controller
 
                 countsTogo /= 5;
 
+                path.Add(startPosition);
                 for (int i = 1; i < countsTogo + 1; i++)
                 {
                     path.Add((movement * i) + startPosition);
                 }
-
-                
 
                 foreach (var e in path)
                 {
@@ -93,7 +97,7 @@ namespace BHSSolo.DungeonDefense.Controller
                 dungeonConstructManager.ShowGrids(pathGrid);
             }
 
-            if(Input.GetMouseButtonUp(0) && clicked)
+            if (Input.GetMouseButtonUp(0) && clicked)
             {
                 clicked = false;
                 dungeonConstructManager.ConstructionProgress.JudgeLinkedPassage(pathGrid);

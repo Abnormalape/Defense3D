@@ -81,9 +81,12 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             Destroy(prefabInstance);
         }
 
-        public void AddRoom(string RoomName) //Todo: Remove
+        public GameObject MakeNewRoom(string RoomName) //Todo: Add Room.
         {
             Debug.Log("Built Room Name : " + RoomName);
+
+            GameObject roomPrefab = Resources.Load($"Prefabs/Room/{RoomName}") as GameObject;
+            return Instantiate(roomPrefab);
         }
 
         public GameObject TempBuildRoomMethodUsingCsvData(string MapCodeOnCsv) //Todo:

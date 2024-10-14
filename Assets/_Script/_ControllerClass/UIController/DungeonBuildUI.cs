@@ -1,12 +1,9 @@
 ﻿using BHSSolo.DungeonDefense.Data;
-using BHSSolo.DungeonDefense.DungeonRoom;
 using BHSSolo.DungeonDefense.ManagerClass;
 using BHSSolo.DungeonDefense.State;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +18,7 @@ namespace BHSSolo.DungeonDefense.Controller
 
         private DataManager_ dataManager_ { get; set; }
         private DungeonConstructManager dungeonConstructManager_ { get; set; }
+        private GameStateManager_ gameStateManager_ { get; set; }
 
 
         [SerializeField]
@@ -53,6 +51,7 @@ namespace BHSSolo.DungeonDefense.Controller
             myCanvas = GetComponent<Canvas>();
             cursorManager = OwnerManager.OwnerManager.CursorManager_;
             dataManager_ = OwnerManager.OwnerManager.DataManager_;
+            gameStateManager_ = OwnerManager.OwnerManager.GameStateManager_;
             dungeonConstructManager_ = OwnerManager.OwnerManager.DungeonConstructManager_;
 
             UIControllerInitializer();
@@ -120,10 +119,13 @@ namespace BHSSolo.DungeonDefense.Controller
         private int xSize = 3; //Todo: Adjust
         private int zSize = 3; //Todo: Adjust
 
-        private void SendSelectedRoomData(int roomId, string roomName, 
+        private void SendSelectedRoomData(int roomId, string roomName,
             RoomBuildType buildType, int roomWidth, int roomDepth, Requirement tempRequire)
         {
-            dungeonConstructManager_.ConstructionProgress.SetHoldingBuildData(buildType, roomWidth, roomDepth);
+            if ((cursorManager.CurrentState as ICursorState).CursorState != CursorState.OnManage_Idle)
+                return;
+
+            dungeonConstructManager_.ConstructionProgress.SetHoldingBuildData(buildType, roomName, roomId, roomWidth, roomDepth, tempRequire);
         }
 
         private void BluePrintClicked()
@@ -132,7 +134,28 @@ namespace BHSSolo.DungeonDefense.Controller
             if ((cursorManager.CurrentState as ICursorState).CursorState != CursorState.OnManage_Idle)
                 return;
 
+            StopCoroutine(QuitGridBuildingState());
+            Debug.Log("BluePrintClicked");
             cursorManager.ChangeManagerState(CursorState.OnManage_Grid);
+            StartCoroutine(QuitGridBuildingState());
+        }
+
+        private IEnumerator QuitGridBuildingState()
+        {
+            while (!Input.GetMouseButtonUp(1) || ((cursorManager.CurrentState as ICursorState).CursorState == CursorState.OnManage_Idle))
+            {
+
+                yield return null;
+            }
+
+            if ((cursorManager.CurrentState as ICursorState).CursorState == CursorState.OnManage_Idle)
+            {
+                yield break;
+            }
+
+            dungeonConstructManager_.ConstructionProgress.ResetHoldingBuildData();
+            dungeonConstructManager_.ConstructionProgress.ResetTempRoomData();
+            gameStateManager_.ChangeManagerState(GameState.Dungeon_ConstructionState);
         }
     }
 

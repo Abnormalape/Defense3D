@@ -19,7 +19,7 @@ namespace BHSSolo.DungeonDefense.Controller
         public IState_ CurrentState { get; set; }
         public Dictionary<Enum, IState_> Type_StateDictionary { get; set; } = new(10);
 
-        public List<DungeonGridData> SearchedPath { get; private set; }
+        public List<DungeonGridData> SearchedPath { get; private set; } = new();
         private DungeonGridData startGrid;
         private DungeonGridData endGrid;
         private List<DungeonGridData> travledCrossRoads = new(20);

@@ -7,8 +7,8 @@ namespace BHSSolo.DungeonDefense.Contruct
     {
         [SerializeField] private GameObject GridPrefab;
         [SerializeField] private GameObject GridHolder;
-        private readonly string GRIDHOLDER = "GridHolder";
-        private readonly string PREFABPATH = "Prefabs/RoomGrid/RoomGrid";
+        private const string GRIDHOLDER = "GridHolder";
+        private const string PREFABPATH = "Prefabs/RoomGrid/RoomGrid";
 
 
         private void Awake()

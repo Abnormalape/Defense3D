@@ -59,10 +59,7 @@ namespace BHSSolo.DungeonDefense.Controller
             if (myCanvas.enabled == false)
                 return;
 
-
-
             //Todo: Not in UIController
-
 
             if (Input.GetKey(KeyCode.W))
                 Camera.main.transform.position += new Vector3(10f, 0, -10f) * Time.deltaTime;

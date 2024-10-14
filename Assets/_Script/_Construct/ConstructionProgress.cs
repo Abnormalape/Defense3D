@@ -1,8 +1,8 @@
 ﻿using BHSSolo.DungeonDefense.Contruct;
+using BHSSolo.DungeonDefense.Data;
 using BHSSolo.DungeonDefense.ManagerClass;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.Controller
@@ -11,30 +11,43 @@ namespace BHSSolo.DungeonDefense.Controller
     {
         public ConstructionProgress(DungeonConstructManager dungeonConstructManager)
         {
-            DungeonConstructManager = dungeonConstructManager;
+            this.DungeonConstructManager = dungeonConstructManager;
+            this.RoomManager_ = dungeonConstructManager.OwnerManager.RoomManager_;
+            this.GameStateManager_ = dungeonConstructManager.OwnerManager.GameStateManager_;
             CursorManager = dungeonConstructManager.OwnerManager.CursorManager_;
             AllGrid = dungeonConstructManager.GridDatas;
         }
         private DungeonConstructManager DungeonConstructManager { get; set; }
         private CursorManager CursorManager { get; set; }
+        private RoomManager_ RoomManager_ { get; set; }
+        private GameStateManager_ GameStateManager_ { get; set; }
         private Dictionary<Vector3, DungeonGridData> AllGrid { get; set; }
 
-        public void SetHoldingBuildData(RoomBuildType holdingType, int width, int depth)
+        public void SetHoldingBuildData(RoomBuildType holdingType, string holdingRoomName, int roomID, int width, int depth, Requirement roomRequire)
         {
             HoldingRoomBuildType = holdingType;
+            HoldingRoomName = holdingRoomName;
+            HoldingRoomID = roomID;
             HoldingRoomWidth = width;
             HoldingRoomDepth = depth;
+            HoldingRoomRequirement = roomRequire;
         }
         public void ResetHoldingBuildData()
         {
-            HoldingRoomBuildType = RoomBuildType.None;//Todo: None
+            HoldingRoomBuildType = RoomBuildType.None;
+            HoldingRoomName = "";
+            HoldingRoomID = 0;
             HoldingRoomWidth = 0;
             HoldingRoomDepth = 0;
+            HoldingRoomRequirement = null;
         }
         public RoomBuildType HoldingRoomBuildType { get; private set; }
+        public string HoldingRoomName { get; private set; }
+        public int HoldingRoomID { get; private set; }
         public int HoldingRoomWidth { get; private set; }
         public int HoldingRoomDepth { get; private set; }
-        
+        public Requirement HoldingRoomRequirement { get; private set; }
+
 
         public void ResetTempRoomData()
         {
@@ -292,36 +305,84 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public void CompleteRoomBuild(DungeonGridData roomEntrance, DungeonGridData nearPassage)
         {
-            //TempRoomCoreGrid.SetRoomCore();
+            GameObject tempRoom = this.RoomManager_.MakeNewRoom(HoldingRoomName);
+            TempRoomCoreGrid.SetRoomCore(TempRoomPlaceGrids, tempRoom);
 
             foreach (var e in TempRoomPlaceGrids)
             {
+                if (e == TempRoomCoreGrid)
+                { continue; }
+
                 e.SetRoom();
             }
 
-            roomEntrance.ConnectedGrids.Add(nearPassage);
-            nearPassage.ConnectedGrids.Add(roomEntrance);
+            roomEntrance.SetConnection(nearPassage); //격자에 대한 직접 연결
+            nearPassage.SetConnection(roomEntrance); //격자에 대한 직접 연결
 
-            ResetHoldingBuildData();
+            if (roomEntrance.GridType != GridType.RoomCore)
+            {
+                TempRoomCoreGrid.SetConnection(nearPassage);
+            }
+
+            Debug.Log($"Room's Connection Count :{TempRoomCoreGrid.ConnectedGrids.Count}");
+
             ResetTempRoomData();
+            ResetHoldingBuildData();
+            GameStateManager_.ChangeManagerState(GameState.Dungeon_ConstructionState);
         }
 
         public void JudgeLinkedPassage(List<DungeonGridData> passagePath)
         {
-            foreach(var e in passagePath)
+            foreach (var e in passagePath)
             {
-                if (e.IsContructed && e != passagePath.Last())
+                if (e.IsContructed && (e != passagePath.Last() && e != passagePath.First()))
                 {
                     Debug.Log("There is Something on Passage Path!");
                     return;
                 }
             }
+
+            Debug.Log("Can build passage.");
+
             CompletePassageBuild(passagePath);
         }
 
         public void CompletePassageBuild(List<DungeonGridData> passagePath)
         {
-            //Link Passage Each Other.
+            bool isContinuable = false;
+            if (!passagePath.Last().IsContructed) { isContinuable = true; }
+
+            for (int i = 0; i < passagePath.Count; i++)
+            {
+                if (i != passagePath.Count - 1) //Skip Last Grid
+                {
+                    passagePath[i].SetConnection(passagePath[i + 1]);
+                    passagePath[i + 1].SetConnection(passagePath[i]);
+                }
+
+                if (i > 0 && !passagePath[i].IsContructed) //판단과정에서 first,last path에 건축물이 있을경우 리턴됨. 즉 여기서는 last를 passage화 할지 결정.
+                {
+                    GameObject tempPassage = this.RoomManager_.MakeNewRoom(HoldingRoomName); //Todo: MakeNewRoom = Instantiate, Add
+                    passagePath[i].SetPassage(tempPassage);
+                }
+            }
+
+            if (passagePath.First().GridType == GridType.Room
+                || passagePath.First().GridType == GridType.RoomCore)
+            {
+                passagePath.First().RoomCoreGrid.SetConnection(passagePath[1]);
+            }
+
+            if (isContinuable) //Continue Build Passage
+            {
+                BasePosition = passagePath.Last().ConstructedPosition;
+            }
+            else //End Build Passage
+            {
+                ResetTempRoomData();
+                ResetHoldingBuildData();
+                GameStateManager_.ChangeManagerState(GameState.Dungeon_ConstructionState);
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using BHSSolo.DungeonDefense.ManagerClass;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.MemoryProfiler;
 using UnityEditor.Networking.PlayerConnection;
 using UnityEngine;
@@ -141,11 +142,10 @@ namespace BHSSolo.DungeonDefense.Contruct
             GridType = GridType.RoomCore;
             isContructed = true;
             ContainingRoom = InputRoom;
-            ContainingRoom.transform.position = ConstructedPosition;
+            ContainingRoom.transform.position = this.ConstructedPosition;
             roomCorePartGrid = new();
 
             List<Vector3> roomGridVectors = new(25);
-            List<Vector3> roomSidePositions = new(16);
 
             if (roomSize % 2 == 0) //Is Even
             {
@@ -184,6 +184,25 @@ namespace BHSSolo.DungeonDefense.Contruct
                 tempPart.RoomCoreGrid = this;
             }
         }
+        public void SetRoomCore(List<DungeonGridData> rooms, GameObject InputRoom)
+        {
+            GridType = GridType.RoomCore;
+            isContructed = true;
+            ContainingRoom = InputRoom;
+            roomCorePartGrid = new();
+
+            InputRoom.transform.position = this.ConstructedPosition;
+
+            this.ContainingRoom = InputRoom;
+
+            foreach (var e in rooms)
+            {
+                RoomCorePartGrid.Add(e);
+                e.ContainingRoom = this.ContainingRoom;
+                e.RoomCoreGrid = this;
+            }
+        }
+
         public void SetConnectedRooms(bool isUp, bool isDown, bool isLeft, bool isRight)
         {
             List<Vector3> connections = new();

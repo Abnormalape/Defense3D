@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.InputSystem.iOS;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
@@ -192,38 +193,38 @@ namespace BHSSolo.DungeonDefense.Controller
             }
         }
 
-
-        /// <summary>
-        /// Find Shortcut To Goal
-        /// </summary>
-        /// <param name="startGrid"></param>
-        /// <param name="endGrid"></param>
-        /// <param name="gridPath"></param>
-        public static void FindShortcutToGoal(DungeonGridData startGrid, DungeonGridData endGrid, out List<DungeonGridData> gridPath)
+        public static bool CanReachGoal(GridNode startNode, GridNode endNode)
         {
-            List<DungeonGridData> tempGridPath = new();
+            Debug.Log("Start: " + startNode.NodeGrid.ConstructedPosition);
+            Debug.Log("End: " + endNode.NodeGrid.ConstructedPosition);
+            if (startNode == endNode)
+                return true;
 
-            FindShortcutToGoalRecursive(startGrid, endGrid, ref tempGridPath);
+            Stack<GridNode> stack = new Stack<GridNode>();
+            Dictionary<GridNode, bool> visited = new Dictionary<GridNode, bool>();
 
-            gridPath = tempGridPath;
-        }
+            stack.Push(startNode);
+            visited[startNode] = true;
 
-        private static void FindShortcutToGoalRecursive(DungeonGridData startGrid, DungeonGridData endGrid, ref List<DungeonGridData> gridPath)
-        {
-            if (startGrid.ConnectedGrids.Contains(endGrid))
+            while (stack.Count > 0)
             {
-                Debug.Log("Found!");
-                return;
-            }
-            else
-            {
-                foreach (DungeonGridData grid in startGrid.ConnectedGrids)
+                GridNode current = stack.Pop();
+
+                if (current == endNode)
+                    return true;
+
+                foreach (GridNode neighbor in current.ConnectedNode)
                 {
-                    FindShortcutToGoalRecursive(grid, endGrid, ref gridPath);
+                    if (!visited.ContainsKey(neighbor))
+                    {
+                        stack.Push(neighbor);
+                        visited[neighbor] = true;
+                    }
                 }
             }
-        }
 
+            return false;
+        }
 
         public static void SetNodeGrids(List<DungeonGridData> Grids, out List<GridNode> Nodes)
         {
@@ -303,20 +304,21 @@ namespace BHSSolo.DungeonDefense.Controller
                     }
                     else //예외 처리용 //Todo: 수정필요
                     {
+                        Debug.Log($"Exception request need for {lastGrid.GridType}");
                         nextNode = lastGrid;
                     }
 
                     //노드 집합의 loops번째 노드의 연결 노드는 nextNode이다.
-                    node.ConnectedNode[loops] = gridNodeDictionary[nextNode];
-                    node.ConnectedNodePath[loops] = new List<DungeonGridData>(nodePath);
+                    node.ConnectedNode.Add(gridNodeDictionary[nextNode]);
+                    node.ConnectedNodePath.Add(new List<DungeonGridData>(nodePath));
 
                     if (node.ConnectedNode[loops].NodeGrid.GridType == GridType.RoomCore) //방과 연결 되었다면
                     {
-                        node.ConnectedNodePathWeight[loops] = node.ConnectedNodePath[loops].Count + 2; //추가 가중치를 받는다.
+                        node.ConnectedNodePathWeight.Add(node.ConnectedNodePath[loops].Count + 10); //추가 가중치를 받는다.
                     }
                     else
                     {
-                        node.ConnectedNodePathWeight[loops] = node.ConnectedNodePath[loops].Count; //길이라면 길의 수만큼 가중한다.
+                        node.ConnectedNodePathWeight.Add(node.ConnectedNodePath[loops].Count); //길이라면 길의 수만큼 가중한다.
                     }
                     loops++;
                 }
@@ -324,6 +326,79 @@ namespace BHSSolo.DungeonDefense.Controller
             }
 
             Nodes = NODES;
+        }
+
+        /// <summary>
+        /// This Method should run when you [Select a Room GameObject]. In else case, it might not run properly.
+        /// </summary>
+        /// <param name="nodes">Nodes Already Exsist.</param>
+        /// <param name="disconnection">Selected Room's Grid.</param>
+        /// <returns></returns>
+        public static bool CanRemoveRoom
+            (List<GridNode> nodes, DungeonGridData disconnection)
+        {
+            if (disconnection.GridType == GridType.Passage && disconnection.ConnectedGrids.Count == 1)
+            { return true; } //Can remove grid.
+
+            List<GridNode> tempResult = new(nodes);
+            List<DungeonGridData> tempDisConnections = new(disconnection.ConnectedGrids);
+            DungeonGridData tempDisconnection = disconnection;
+
+            GridNode nodeToDisconnect = tempResult.Find(node => node.NodeGrid == tempDisconnection);
+
+            List<GridNode> nodesToCheck = new(4);
+
+            bool isNode = false;
+
+            //if Grid is node
+            if (nodeToDisconnect != null)
+            {
+                isNode = true;
+                foreach (var e in nodeToDisconnect.ConnectedNode)
+                {
+                    e.ConnectedNode.Remove(nodeToDisconnect);
+                    nodesToCheck.Add(e);
+                }
+            }
+            else //If Grid is not node, It must have [Two Connection].
+            {
+                isNode = false;
+                List<DungeonGridData> tempExclusion = new(1);
+                tempExclusion.Add(tempDisconnection);
+
+                List<DungeonGridData> tempPath = new(10);
+                FindPathWithNoGoal(tempDisConnections[0], tempExclusion, out tempPath);
+                nodesToCheck.Add(tempResult.Find(node => node.NodeGrid == tempPath.Last()));
+                tempPath.Clear();
+                FindPathWithNoGoal(tempDisConnections[1], tempExclusion, out tempPath);
+                nodesToCheck.Add(tempResult.Find(node => node.NodeGrid == tempPath.Last()));
+
+                nodesToCheck[0].ConnectedNode.Remove(nodesToCheck[1]);
+                nodesToCheck[1].ConnectedNode.Remove(nodesToCheck[0]);
+            }
+
+            foreach (var e in nodesToCheck)
+            {
+                if (!CanReachGoal(tempResult[0], e))//하나라도 경로 검색에 실패시 삭제시도를 초기화, false
+                {
+                    if (isNode)
+                    {
+                        foreach (var f in nodeToDisconnect.ConnectedNode)
+                        {
+                            f.ConnectedNode.Add(nodeToDisconnect);
+                        }
+                    }
+                    else
+                    {
+                        nodesToCheck[0].ConnectedNode.Add(nodesToCheck[1]);
+                        nodesToCheck[1].ConnectedNode.Add(nodesToCheck[0]);
+                    }
+                    return false;
+                }
+            }
+
+            //Disconnected!! Data Adjusted!!
+            return true;
         }
 
         public static void FindShortestWay(GridNode startNode, GridNode endNode, List<GridNode> nodes)
@@ -343,7 +418,7 @@ namespace BHSSolo.DungeonDefense.Controller
 
             nodeDistance[startNode] = 0;
 
-            for (int i = 0; i < startNode.ConnectedNode.Length; i++)
+            for (int i = 0; i < startNode.ConnectedNode.Count; i++)
             {
                 nodeDistance[startNode.ConnectedNode[i]] = startNode.ConnectedNodePathWeight[i];
                 unvisitedNodes.Add(startNode.ConnectedNode[i]);
@@ -404,9 +479,9 @@ namespace BHSSolo.DungeonDefense.Controller
 
             List<GridNode> tempVisitedNodes = new List<GridNode>(visitedNodes);
 
-            for (int i = 0; i < startNode.ConnectedNode.Length; i++)
+            for (int i = 0; i < startNode.ConnectedNode.Count; i++)
             {
-                if (visitedNodes.Contains(startNode.ConnectedNode[i])) { continue; }
+                if (visitedNodes.Contains(startNode.ConnectedNode[i])) { continue; } //Todo: Find Grid in List => O(n)
 
                 if (currentDistance + startNode.ConnectedNodePathWeight[i] < nodeDistance[startNode.ConnectedNode[i]])
                 {
@@ -435,7 +510,7 @@ namespace BHSSolo.DungeonDefense.Controller
 
             while (currentNode != startNode)
             {
-                for (int i = 0; i < linkedNodes[currentNode].ConnectedNode.Length; i++)
+                for (int i = 0; i < linkedNodes[currentNode].ConnectedNode.Count; i++)
                 {
                     if (linkedNodes[currentNode].ConnectedNode[i] == currentNode)
                     {
@@ -459,17 +534,15 @@ namespace BHSSolo.DungeonDefense.Controller
         {
             NodeGrid = grid;
             int connections = NodeGrid.ConnectedGrids.Count;
-            ConnectedNode = new GridNode[connections];
-            ConnectedNodePath = new List<DungeonGridData>[connections];
-            ConnectedNodePathWeight = new int[connections];
+            ConnectedNode = new(connections);
+            ConnectedNodePath = new(connections);
+            ConnectedNodePathWeight = new(connections);
         }
 
         public DungeonGridData NodeGrid { get; private set; }
 
-        public GridNode[] ConnectedNode;
-        public List<DungeonGridData>[] ConnectedNodePath;
-        public int[] ConnectedNodePathWeight;
+        public List<GridNode> ConnectedNode;
+        public List<List<DungeonGridData>> ConnectedNodePath;
+        public List<int> ConnectedNodePathWeight;
     }
 }
-
-
