@@ -325,6 +325,21 @@ namespace BHSSolo.DungeonDefense.Controller
                 NODES.Add(node);
             }
 
+            //foreach (var e in NODES)
+            //{
+            //    Debug.Log("Node Position: " + e.NodeGrid.ConstructedPosition);
+            //    int i = 0;
+            //    foreach (var ee in e.ConnectedNodePath)
+            //    {
+            //        i++;
+            //        Debug.Log("Path " + i + ": ");
+            //        foreach (var eee in ee)
+            //        {
+            //            Debug.Log(eee.ConstructedPosition);
+            //        }
+            //    }
+            //}
+
             Nodes = NODES;
         }
 
@@ -542,7 +557,7 @@ namespace BHSSolo.DungeonDefense.Controller
         public DungeonGridData NodeGrid { get; private set; }
 
         public List<GridNode> ConnectedNode;
-        public List<List<DungeonGridData>> ConnectedNodePath;
+        public List<List<DungeonGridData>> ConnectedNodePath { get; set; }
         public List<int> ConnectedNodePathWeight;
     }
 }

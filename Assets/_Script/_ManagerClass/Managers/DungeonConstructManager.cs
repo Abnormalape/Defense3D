@@ -22,6 +22,9 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public Dictionary<Vector3, DungeonGridData> GridDatas { get; private set; } = new(10000);
         public ConstructionProgress ConstructionProgress { get; private set; }
 
+        private List<GridNode> nodeDatas = new();
+        public List<GridNode> NodeDatas { get => nodeDatas; }
+
 
         private GameObject constructurePlaceHolder;
         public GameObject ConstructurePlaceHolder
@@ -47,6 +50,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
             SetGridDataUsingMap();
             MakeGrid(GridDatas);
+
+            GridPathFinder.SetNodeGrids(GridDatas.Values.ToList(), out nodeDatas);
         }
 
         private void GameStateReaction(GameState gameState)

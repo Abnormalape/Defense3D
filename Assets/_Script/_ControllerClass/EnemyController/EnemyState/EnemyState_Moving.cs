@@ -1,7 +1,8 @@
 ﻿using BHSSolo.DungeonDefense.Controller;
 using BHSSolo.DungeonDefense.Contruct;
+using BHSSolo.DungeonDefense.NPCs;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 
@@ -16,6 +17,9 @@ namespace BHSSolo.DungeonDefense.State
         private Vector3 targetPosition;
         private Vector3 aheadVector;
         private Queue<DungeonGridData> path;
+        private const float NEAR_TARGET = 0.5f;
+        private float EnemySpeed = 20f;
+
 
         public void InitializeEnemyState(EnemyController_ enemyController_)
         {
@@ -40,15 +44,16 @@ namespace BHSSolo.DungeonDefense.State
             Debug.Log("Enemy Moving State Exit");
         }
 
+        float passedTime = 0;
         public void StateUpdate()
         {
-            enemyController.transform.position += aheadVector * 3f * Time.deltaTime;
+            enemyController.transform.position += aheadVector * EnemySpeed * Time.deltaTime;
 
-            if (Vector3.Distance(enemyController.transform.position, targetPosition) < 0.1f)
+            if (Vector3.Distance(enemyController.transform.position, targetPosition) < NEAR_TARGET)
             {
                 if (path.Count > 0)
                 {
-                    currentPosition = targetPosition;
+                    currentPosition = enemyController.transform.position;
                     targetPosition = path.Peek().ConstructedPosition;
 
                     aheadVector = (targetPosition - currentPosition).normalized;
@@ -57,11 +62,16 @@ namespace BHSSolo.DungeonDefense.State
                 else
                 {
                     aheadVector = Vector3.zero;
-                    enemyController.ChangeControllerState(EnemyStates.SearchPath);
+                    passedTime += Time.deltaTime;
+                    if (passedTime > 0.3f)
+                    {
+                        path.Clear();
+                        passedTime = 0;
+                        enemyController.ChangeControllerState(EnemyStates.SearchPath);
+                    }
                 }
             }
 
-            Debug.Log("Enemy Moving State Update");
         }
     }
 }

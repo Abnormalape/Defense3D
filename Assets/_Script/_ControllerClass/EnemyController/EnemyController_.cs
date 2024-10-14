@@ -25,6 +25,14 @@ namespace BHSSolo.DungeonDefense.Controller
         private List<DungeonGridData> travledCrossRoads = new(20);
         private List<DungeonGridData> travledForks = new(20);
 
+
+        public List<DungeonGridData> ExcludeGrids { get; private set; } = new(20);
+        public void AddExclusion(DungeonGridData exclusion)
+        {
+            if (!ExcludeGrids.Contains(exclusion))
+                ExcludeGrids.Add(exclusion);
+        }
+
         public virtual void InitializeEnemyController()
         {
             InitializeStateDictionary();

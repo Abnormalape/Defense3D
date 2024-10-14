@@ -13,6 +13,7 @@ namespace BHSSolo.DungeonDefense.Controller
         {
             OwnerManager = ownerManager;
             InitializeEnemyController();
+
         }
 
         public override void InitializeEnemyController()
