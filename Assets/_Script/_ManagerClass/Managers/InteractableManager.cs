@@ -80,6 +80,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                 AddSummoned(Interactable_ID, interactable as IController);
                 (interactable as IController)?.ControllerInitializer(this);
                 Interactable_ID++;
+                Debug.Log(interactable.gameObject.transform.position);
             }
 
             Debug.Log($"Interactables found : {ID_ControllerDictionary.Count}");

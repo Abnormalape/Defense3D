@@ -11,14 +11,29 @@ namespace BHSSolo.DungeonDefense.Controller
 {
     public abstract class EnemyController_ : MonoBehaviour, IControllerStateMachine
     {
-        protected EnemyManager_ enemyManager_;
-        public EnemyManager_ EnemyManager { get => enemyManager_; }
+        public abstract NPCCurrentStatus EnemyStatus_ { get; set; }
 
-        public int Enemy_ID { get; set; }
+        public abstract NPCStatus EnemyBaseStatus_ { get; set; }
+
+        public abstract EnemyType EnemyEnum_ { get; set; }
+
+        public abstract EnemyManager_ EnemyManager_ { get; set; }
+
+        public abstract int level { get; set; }
+
+        public abstract int Enemy_ID { get; set; }
+        //public int Enemy_ID { get; set; }
+
+        public abstract BattleManager_ BattleManager_ { get; set; } //BattleManager
+
+        //===
+
+
 
         public IState_ CurrentState { get; set; }
         public Dictionary<Enum, IState_> Type_StateDictionary { get; set; } = new(10);
 
+        #region Find Path
         public List<DungeonGridData> SearchedPath { get; private set; } = new();
         private DungeonGridData startGrid;
         private DungeonGridData endGrid;
@@ -32,12 +47,14 @@ namespace BHSSolo.DungeonDefense.Controller
             if (!ExcludeGrids.Contains(exclusion))
                 ExcludeGrids.Add(exclusion);
         }
+        #endregion Find Path
 
         public virtual void InitializeEnemyController()
         {
             InitializeStateDictionary();
             ChangeControllerState(EnemyStates.SearchPath); //Todo:
         }
+
 
         protected virtual void Update()
         {
@@ -49,7 +66,6 @@ namespace BHSSolo.DungeonDefense.Controller
             if (Type_StateDictionary[stateName] == CurrentState)
                 return;
 
-            Debug.Log("Enemy State Changing...");
             CurrentState?.StateExit();
             CurrentState = Type_StateDictionary[stateName];
             OnChangeControllerState();
@@ -81,13 +97,21 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public void OnChangeControllerState()
         {
-            Debug.Log("Enemy State OnChange...");
         }
 
+        #region FindPath
         public void SetSearchedPath(List<DungeonGridData> searchedPath)
         {
             SearchedPath.Clear();
             SearchedPath = searchedPath;
         }
+        #endregion FindPath
+    }
+
+    public enum EnemyType
+    {
+        None,
+        SwordMan,
+        Archer
     }
 }

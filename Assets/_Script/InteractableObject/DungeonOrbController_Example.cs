@@ -1,6 +1,5 @@
 ﻿using BHSSolo.DungeonDefense.DungeonCamera;
 using BHSSolo.DungeonDefense.UI;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.InteractableObject

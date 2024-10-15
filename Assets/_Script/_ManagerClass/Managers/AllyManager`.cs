@@ -11,6 +11,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public Dictionary<int, IController> ID_ControllerDictionary { get; set; }
         public Dictionary<Enum, AllyBaseStatus> BaseDataDictionary { get; set; }
 
+        public Dictionary<Enum, NPCStatus> TypeStatusDictionary { get; set; } = new(); //Todo: Initialize Dictionary Please
+
         private DataManager_ DataManager_;
 
         public static int Ally_ID { get; private set; }
@@ -83,13 +85,13 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
             foreach (AllyController_ e in allysInMap)
             {
-                ((IController)e).ControllerInitializer(this); //Controller Initialize
-                e.AllyControllerInitializer(BaseDataDictionary[e.AllyEnum_]); //Ally Controller Initialize
+                //((IController)e).ControllerInitializer(this); //Controller Initialize
+                //e.AllyControllerInitializer(BaseDataDictionary[e.AllyEnum_]); //Ally Controller Initialize
 
-                e.Ally_ID = Ally_ID;
-                Ally_ID++;
+                //e.Ally_ID = Ally_ID;
+                //Ally_ID++;
 
-                AddSummoned(e.Ally_ID, e as IController);
+                //AddSummoned(e.Ally_ID, e as IController);
             }
 
             Debug.Log($"Found, Set, Register Complete.\n{allysInMap.Length} Allys in map.");
@@ -118,6 +120,14 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public void RemoveSummoned(int summoned_ID)
         {
             ID_ControllerDictionary.Remove(summoned_ID);
+        }
+
+        public void MakeNewAlly(AllyType allyType, Transform interactedPosition) //Todo:
+        {
+            //string toSummon = TypeStatusDictionary[allyType].Race;
+            string toSummon = "Goblin";
+            GameObject allyPrefab = Resources.Load($"Prefabs/Ally/{toSummon}") as GameObject;
+            Instantiate(allyPrefab, interactedPosition);
         }
     }
 

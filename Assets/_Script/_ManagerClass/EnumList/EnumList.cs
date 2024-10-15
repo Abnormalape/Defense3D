@@ -1,11 +1,6 @@
 ﻿namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    public enum AllyType
-    {
-        None,
-        Goblin,
-        Skeleton
-    }
+    
 
     public enum AllyStatus
     {

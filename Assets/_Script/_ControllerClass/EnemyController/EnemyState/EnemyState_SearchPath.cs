@@ -23,7 +23,7 @@ namespace BHSSolo.DungeonDefense.State
         {
             enemyController = enemyController_;
             excludeGrids = enemyController.ExcludeGrids;
-            dungeonConstructManager = enemyController.EnemyManager.OwnerManager.DungeonConstructManager_;
+            dungeonConstructManager = enemyController.EnemyManager_.OwnerManager.DungeonConstructManager_;
         }
 
         public void StateEnter()

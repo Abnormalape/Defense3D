@@ -1,4 +1,5 @@
 ﻿using BHSSolo.DungeonDefense.Controller;
+using BHSSolo.DungeonDefense.Enums;
 using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
@@ -37,5 +38,48 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         }
 
+        public void SendAttack(NPCType opponentType, int opponentID, temp_AllyController attacker) //Todo: temp_AllyController => battle NPC?
+        {
+            temp_AllyController hit = null; //Todo:
+
+            //if (opponentType == NPCType.Enemy) { hit = EnemyManager_.ID_ControllerDictionary[opponentID]; }
+            //else if (opponentType == NPCType.Ally) { hit = AllyManager_.ID_ControllerDictionary[opponentID]; }
+            //else { Debug.Log("Wrong Type"); return; }
+
+            AllyStatusBlock attackerStatus = new(attacker.allyCurrentStatus); //Todo: allyCurrentStatus => NPCCurrentStatus
+            AllyStatusBlock hitStatus = new(hit.allyCurrentStatus);
+
+            AllyStatusBlock attackerFinalStatus;
+            AllyStatusBlock hitFinalStatus;
+
+            float damage;
+
+            //CalculateFinalStatus(attackerStatus, attacker.allyBuffs, out attackerFinalStatus);
+            //CalculateFinalStatus(hitStatus, hit.allyBuffs, out hitFinalStatus);
+
+            foreach (var e in attacker.allyBuffs)
+            {
+                //e.RunBuff(attackerStatus, attacker.allyBuffs, hitStatus, hit.allyBuffs);
+            }
+
+            foreach (var e in hit.allyBuffs)
+            {
+                //e.RunBuff(hitStatus, hit.allyBuffs, attackerStatus, attacker.allyBuffs);
+            }
+
+            //CalculateDamage(attackerFinalStatus, hitFinalStatus, out damage);
+
+            foreach (var e in attacker.allyBuffs)
+            {
+                //e.RunBuff(out damage);
+            }
+
+            foreach (var e in hit.allyBuffs)
+            {
+                //e.RunBuff(out damage);
+            }
+
+            //피격자의 상태를 변경?
+        }
     }
 }

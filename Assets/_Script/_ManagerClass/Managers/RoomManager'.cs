@@ -40,7 +40,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             {
                 //Must execute A and B separately.
                 ((IController)e).ControllerInitializer(this); //Controller Initialize
-                e.RoomControllerInitializer(); //Ally Controller Initialize
+                e.RoomControllerInitializer(); //Room Controller Initialize
 
                 //e.AllyControllerInitializer(BaseDataDictionary[e.AllyEnum_]); //=> AllyController Needs its Data.
                 //But how on Room? Does Room Need Data?
@@ -83,7 +83,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public GameObject MakeNewRoom(string RoomName) //Todo: Add Room.
         {
-            Debug.Log("Built Room Name : " + RoomName);
+            //Debug.Log("Built Room Name : " + RoomName);
 
             GameObject roomPrefab = Resources.Load($"Prefabs/Room/{RoomName}") as GameObject;
             return Instantiate(roomPrefab);
@@ -94,12 +94,14 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             GameObject t;
             if (MapCodeOnCsv.StartsWith("R"))
             {
-                t = Instantiate(Resources.Load("Prefabs/Room/StandardSmallRoom") as GameObject);
+                t = MakeNewRoom("StandardSmallRoom");
             }
+            //else if(MapCodeOnCsv == "E") //For entrance
             else
             {
-                t = Instantiate(Resources.Load("Prefabs/Room/StandardSmallPassage") as GameObject);
+                t = MakeNewRoom("StandardSmallPassage");
             }
+
 
             IController tempController = t.GetComponent<IController>();
             tempController.ControllerInitializer(this);

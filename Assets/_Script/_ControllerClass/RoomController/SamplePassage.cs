@@ -14,6 +14,11 @@ namespace BHSSolo.DungeonDefense.Controller
             RoomControllerInitializer();
         }
 
+        public override void OnRoomClicked()
+        {
+            Debug.Log("Sample Passage");
+        }
+
         public override void RoomControllerInitializer()
         {
             base.RoomControllerInitializer();

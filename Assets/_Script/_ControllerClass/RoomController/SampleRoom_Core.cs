@@ -47,5 +47,10 @@ namespace BHSSolo.DungeonDefense.Controller
         {
             Debug.Log("Core_Sample_Room : Enemy_Exit");
         }
+
+        public override void OnRoomClicked()
+        {
+            Debug.Log("Sample CoreRoom");
+        }
     }
 }

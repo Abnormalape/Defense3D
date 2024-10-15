@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.iOS;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
@@ -13,6 +14,7 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public virtual void RoomControllerInitializer()
         {
+            Debug.Log("Room Initialize.");
             OnAllyEnter += OnAllyEnterEvent;
             OnAllyExit += OnAllyExitEvent;
             OnEnemyEnter += OnEnemyEnterEvent;
@@ -83,5 +85,7 @@ namespace BHSSolo.DungeonDefense.Controller
         {
 
         }
+
+        public abstract void OnRoomClicked();
     }
 }

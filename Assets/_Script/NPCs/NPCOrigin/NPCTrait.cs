@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using BHSSolo.DungeonDefense.Function;
-using Unity.VisualScripting;
 
 namespace BHSSolo.DungeonDefense.NPCs
 {

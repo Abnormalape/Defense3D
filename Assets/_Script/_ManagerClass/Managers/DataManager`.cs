@@ -34,6 +34,9 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         private const string DEFAULT_MAP_DATA_PATH = "GameData/MapData/DefaultDungeonMap"; //Csv
 
 
+        public List<NPCStatus> AllyStatusData { get; private set; } //Todo:
+
+
         public TextAsset allyBaseTextAsset { get; private set; }
         public TextAsset enemyBaseTextAsset { get; private set; }
         public TextAsset defaultMapTextAsset { get; private set; }

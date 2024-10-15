@@ -18,7 +18,7 @@ namespace BHSSolo.DungeonDefense.Controller
         {
             base.RoomControllerInitializer();
 
-            Debug.Log("Small Room Made");
+            //Debug.Log("Small Room Made");
         }
 
         protected override void OnAllyEnterEvent(AllyController_ enteredAlly)
@@ -31,10 +31,17 @@ namespace BHSSolo.DungeonDefense.Controller
 
         protected override void OnEnemyEnterEvent(EnemyController_ enteredEnemy)
         {
+            Debug.Log("Enemy Enter Standard Small Room");
         }
 
         protected override void OnEnemyExitEvent(EnemyController_ exitedEnemy)
         {
+            Debug.Log("Enemy Exit Standard Small Room");
+        }
+
+        public override void OnRoomClicked()
+        {
+            Debug.Log("Standard Samll Room Clicked.");
         }
     }
 }

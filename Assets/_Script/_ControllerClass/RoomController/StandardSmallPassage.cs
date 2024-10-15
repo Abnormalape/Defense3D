@@ -18,7 +18,7 @@ namespace BHSSolo.DungeonDefense.Controller
         {
             base.RoomControllerInitializer();
 
-            Debug.Log("Passage Made");
+            //Debug.Log("Passage Made");
         }
 
         protected override void OnAllyEnterEvent(AllyController_ enteredAlly)
@@ -27,14 +27,22 @@ namespace BHSSolo.DungeonDefense.Controller
 
         protected override void OnAllyExitEvent(AllyController_ exitedAlly)
         {
+
         }
 
         protected override void OnEnemyEnterEvent(EnemyController_ enteredEnemy)
         {
+            Debug.Log("Enemy Enter Standard Small Passage");
         }
 
         protected override void OnEnemyExitEvent(EnemyController_ exitedEnemy)
         {
+            Debug.Log("Enemy Exit Standard Small Passage");
+        }
+
+        public override void OnRoomClicked()
+        {
+            Debug.Log("Standard Samll Passage Clicked.");
         }
     }
 }

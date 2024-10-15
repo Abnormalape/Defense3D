@@ -288,13 +288,12 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void TempFindPath_RemoveThisMothod()
         {
-            List<GridNode> tempNodes = new();
-            GridPathFinder.SetNodeGrids(GridDatas.Values.ToList(), out tempNodes);
-            GridPathFinder.FindShortestWay(tempNodes.First(), tempNodes.Last(), tempNodes);
+            GridPathFinder.SetNodeGrids(GridDatas.Values.ToList(), out nodeDatas);
+            //GridPathFinder.FindShortestWay(tempNodes.First(), tempNodes.Last(), tempNodes);
 
-            Debug.Log("CanRemove: " + GridPathFinder.CanRemoveRoom(tempNodes, tempNodes[1].NodeGrid));
+            //Debug.Log("CanRemove: " + GridPathFinder.CanRemoveRoom(tempNodes, tempNodes[1].NodeGrid));
 
-            Debug.Log("CanReach: " + GridPathFinder.CanReachGoal(tempNodes[0], tempNodes[tempNodes.Count - 1]));
+            //Debug.Log("CanReach: " + GridPathFinder.CanReachGoal(tempNodes[0], tempNodes[tempNodes.Count - 1]));
         }
     }
 }

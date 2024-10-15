@@ -18,7 +18,7 @@ namespace BHSSolo.DungeonDefense.State
         private Vector3 aheadVector;
         private Queue<DungeonGridData> path;
         private const float NEAR_TARGET = 0.5f;
-        private float EnemySpeed = 20f;
+        private float EnemySpeed = 10f;
 
 
         public void InitializeEnemyState(EnemyController_ enemyController_)
@@ -28,9 +28,6 @@ namespace BHSSolo.DungeonDefense.State
 
         public void StateEnter()
         {
-            Debug.Log("Enemy Moving State Enter");
-            Debug.Log(enemyController.SearchedPath.Count);
-
             path = new Queue<DungeonGridData>(enemyController.SearchedPath);
             currentPosition = enemyController.transform.position;
             targetPosition = path.Peek().ConstructedPosition;
@@ -41,7 +38,6 @@ namespace BHSSolo.DungeonDefense.State
 
         public void StateExit()
         {
-            Debug.Log("Enemy Moving State Exit");
         }
 
         float passedTime = 0;
