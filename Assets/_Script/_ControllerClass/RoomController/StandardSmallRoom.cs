@@ -8,7 +8,7 @@ namespace BHSSolo.DungeonDefense.Controller
         public IManagerClass OwnerManager { get; set; }
         public override int Room_ID { get; set; }
 
-        public void ControllerInitializer(IManagerClass ownerManager)
+        public void InitializeController(IManagerClass ownerManager)
         {
             OwnerManager = ownerManager;
             RoomControllerInitializer();

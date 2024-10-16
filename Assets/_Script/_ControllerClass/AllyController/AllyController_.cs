@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
-    public abstract class AllyController_ : MonoBehaviour, IController<AllyManager_>, IStatHolder, IStateMachineOwner, INpc
+    public abstract class AllyController_ : MonoBehaviour, IController, IStatHolder, IStateMachineOwner, INpc
     {
         NpcBaseStat IStatHolder.NpcBaseStat { get; set; } //Todo: NpcBaseStat 자체가 빈 클래스가 내용 채워야 함
         int IStatHolder.maxLevel { get; set; }
@@ -14,9 +14,9 @@ namespace BHSSolo.DungeonDefense.Controller
 
 
         public abstract int Ally_ID { get; set; }
-        public AllyManager_ OwnerManager { get; set; }
+        public IManagerClass OwnerManager { get; set; }
 
-        public void InitializeController(AllyManager_ ownerManager)
+        public void InitializeController(IManagerClass ownerManager)
         {
             OwnerManager = ownerManager;
         }

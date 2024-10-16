@@ -20,7 +20,7 @@ namespace BHSSolo.DungeonDefense.Controller
         private SceneManager_ SceneManager_;
 
 
-        public void ControllerInitializer(IManagerClass owenerManager)
+        public void InitializeController(IManagerClass owenerManager)
         {
             OwnerManager = owenerManager;
             UIManager_ = OwnerManager.OwnerManager.UIManager_;

@@ -22,8 +22,8 @@ namespace BHSSolo.DungeonDefense.State
         public void InitializeEnemyState(EnemyController_ enemyController_)
         {
             enemyController = enemyController_;
-            excludeGrids = enemyController.ExcludeGrids;
-            dungeonConstructManager = enemyController.EnemyManager_.OwnerManager.DungeonConstructManager_;
+            excludeGrids = enemyController.ExcludeGrids; //Todo: 새로 만든다고 길찾기 박살냈네
+            dungeonConstructManager = enemyController.EnemyManager_.OwnerManager.DungeonConstructManager_; //Todo: 새로 만든다고 길찾기 박살냈네
         }
 
         public void StateEnter()

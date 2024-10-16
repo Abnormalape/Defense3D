@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    public class EnemyManager_ : MonoBehaviour, IManagerClass, IManagerFactory<NpcBaseStatus, EnemyBaseStats>
+    public class EnemyManager_ : MonoBehaviour, IManagerClass, IManagerFactory<EnemyBaseStatus>
     {
         public GameManager_ OwnerManager { get; set; }
         public Dictionary<int, IController> ID_ControllerDictionary { get; set; } = new();
-        public EnemyBaseStats BaseDataDictionary { get; set; }
+        public EnemyBaseStatus BaseDataDictionary { get; set; }
 
         private DataManager_ DataManager_;
         public static int Enemy_ID { get; private set; }
@@ -43,7 +43,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
             foreach (EnemyController_ e in enemies)
             {
-                ((IController)e).ControllerInitializer(this); //Controller Initializer Should Runs all Initializer.
+                ((IController)e).InitializeController(this); //Controller Initializer Should Runs all Initializer.
 
                 e.Enemy_ID = Enemy_ID;
                 Enemy_ID++;

@@ -61,7 +61,7 @@ namespace BHSSolo.DungeonDefense.Controller
 
     }
 
-    public class AllyBaseStats
+    public class AllyBaseStatus
     {
         public NpcBaseStatus this[int AllyId]
         {
@@ -71,7 +71,7 @@ namespace BHSSolo.DungeonDefense.Controller
         private List<NpcBaseStatus> AllyStats;
     }
 
-    public class EnemyBaseStats
+    public class EnemyBaseStatus
     {
         public NpcBaseStatus this[int EnemyId]
         {

@@ -19,7 +19,7 @@ namespace BHSSolo.DungeonDefense.InteractableObject
         public override InteractableManager_ InteractableManager { get; set; }
 
 
-        public void ControllerInitializer(IManagerClass owenerManager)
+        public void InitializeController(IManagerClass owenerManager)
         {
             OwnerManager = owenerManager;
             UIManager_ = OwnerManager.OwnerManager.UIManager_;

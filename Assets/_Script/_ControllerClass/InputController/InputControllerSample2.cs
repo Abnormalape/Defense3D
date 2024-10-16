@@ -12,7 +12,7 @@ namespace BHSSolo.DungeonDefense.Controller
         public override InputState_enum InputState { get; set; } = InputState_enum.Sample2;
 
 
-        public void ControllerInitializer(IManagerClass ownerManager)
+        public void InitializeController(IManagerClass ownerManager)
         {
             OwnerManager = ownerManager;
         }

@@ -4,19 +4,19 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
-    public abstract class EnemyController_ : MonoBehaviour, IStatHolder, IController<EnemyManager_>, IStateMachineOwner, INpc
+    public abstract class EnemyController_ : MonoBehaviour, IStatHolder, IController, IStateMachineOwner, INpc
     {
         NpcBaseStat IStatHolder.NpcBaseStat { get; set; }
         int IStatHolder.maxLevel { get; set; }
         int IStatHolder.level { get; set; }
         public CustomStateMachine StateMachine { get; set; }
-        NPCType INpc.NpcType { get; set; } = NPCType.Enemy;
+        public NPCType NpcType { get; set; } = NPCType.Enemy;
 
 
         public abstract int Enemy_ID { get; set; }
-        public EnemyManager_ OwnerManager { get; set; }
+        public IManagerClass OwnerManager { get; set; }
 
-        public void InitializeController(EnemyManager_ ownerManager)
+        public void InitializeController(IManagerClass ownerManager)
         {
             OwnerManager = ownerManager;
         }

@@ -4,6 +4,6 @@ namespace BHSSolo.DungeonDefense.Controller
 {
     public interface INpc
     {
-        public NPCType NpcType { get; protected set; }
+        public NPCType NpcType { get; set; }
     }
 }

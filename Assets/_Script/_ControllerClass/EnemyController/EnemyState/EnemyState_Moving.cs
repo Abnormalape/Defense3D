@@ -28,7 +28,7 @@ namespace BHSSolo.DungeonDefense.State
 
         public void StateEnter()
         {
-            path = new Queue<DungeonGridData>(enemyController.SearchedPath);
+            path = new Queue<DungeonGridData>(enemyController.SearchedPath); //Todo: EnemyController 새로 만든다고 길찾기 박살내 놓음
             currentPosition = enemyController.transform.position;
             targetPosition = path.Peek().ConstructedPosition;
             aheadVector = (targetPosition - currentPosition).normalized;
@@ -63,7 +63,7 @@ namespace BHSSolo.DungeonDefense.State
                     {
                         path.Clear();
                         passedTime = 0;
-                        enemyController.ChangeControllerState(EnemyStates.SearchPath);
+                        enemyController.ChangeControllerState(EnemyStates.SearchPath);//Todo: EnemyController 새로 만든다고 길찾기 박살내 놓음
                     }
                 }
             }

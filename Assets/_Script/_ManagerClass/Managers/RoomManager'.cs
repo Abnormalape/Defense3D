@@ -6,15 +6,15 @@ using UnityEngine.UI;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    public class RoomManager_ : MonoBehaviour, IManagerClass, IManagerFactory<RoomBaseData>
+    public class RoomManager_ : MonoBehaviour, IManagerClass, IManagerFactory<RoomBaseStatus>
     {
         public GameManager_ OwnerManager { get; set; }
         public Dictionary<int, IController> ID_ControllerDictionary { get; set; } = new();
-        public Dictionary<Enum, RoomBaseData> BaseDataDictionary { get; set; } = new();
+        public RoomBaseStatus BaseDataDictionary { get; set; }
 
         public const string ROOM_PATH = "RoomPrefab";
-
         public static int Room_ID { get; private set; }
+
 
         public void InitializeManager(GameManager_ gameManager_)
         {
@@ -39,7 +39,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             foreach (RoomController e in roomsInMap)
             {
                 //Must execute A and B separately.
-                ((IController)e).ControllerInitializer(this); //Controller Initialize
+                ((IController)e).InitializeController(this); //Controller Initialize
                 e.RoomControllerInitializer(); //Room Controller Initialize
 
                 //e.AllyControllerInitializer(BaseDataDictionary[e.AllyEnum_]); //=> AllyController Needs its Data.
@@ -63,6 +63,11 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                 = Instantiate(prefab, summonPoint.position, summonPoint.rotation, null); //Todo: null Is for RoomHolder.
 
             AddSummoned(Room_ID, tempSummoned.GetComponent<IController>());
+        }
+
+        public void SummonGameObject(int Id, Transform summonPoint = null)
+        {
+            throw new NotImplementedException();
         }
 
         public void AddSummoned(int summoned_ID, IController summonedAttachedController)
@@ -104,14 +109,15 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
 
             IController tempController = t.GetComponent<IController>();
-            tempController.ControllerInitializer(this);
+            tempController.InitializeController(this);
 
             AddSummoned(Room_ID, t.GetComponent<IController>());
             return t;
         }
+
     }
 
-    public struct RoomBaseData
+    public class RoomBaseStatus //Todo: Temp Class
     {
 
     }

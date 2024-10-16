@@ -14,7 +14,7 @@ namespace BHSSolo.DungeonDefense.InteractableObject
         private AllyManager_ allyManager_ { get; set; }
         private AllyType allyType { get; set; } = AllyType.Goblin;
 
-        public void ControllerInitializer(IManagerClass ownerManager)
+        public void InitializeController(IManagerClass ownerManager)
         {
             OwnerManager = ownerManager;
             allyManager_ = OwnerManager.OwnerManager.AllyManager_;

@@ -29,7 +29,7 @@ namespace BHSSolo.DungeonDefense.Controller
             OnUIUpdate();
         }
 
-        public void ControllerInitializer(IManagerClass ownerManager)
+        public void InitializeController(IManagerClass ownerManager)
         {
             OwnerManager = ownerManager;
             gameStateManager = OwnerManager.OwnerManager.GameStateManager_;

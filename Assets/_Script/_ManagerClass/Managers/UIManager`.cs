@@ -31,7 +31,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
                 DictionaryEnumController.Add(ui.UIType, ui as IController);
 
-                (ui as IController)?.ControllerInitializer(this);
+                (ui as IController)?.InitializeController(this);
             }
 
             Debug.Log($"UI Found : {uis.Length}");

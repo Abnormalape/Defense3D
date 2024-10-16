@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    public class AllyManager_ : MonoBehaviour, IManagerClass, IManagerFactory<AllyController_, AllyManager_>
+    public class AllyManager_ : MonoBehaviour, IManagerClass, IManagerFactory<AllyBaseStatus>
     {
         public GameManager_ OwnerManager { get; set; }
         public Dictionary<int, IController> ID_ControllerDictionary { get; set; } = new();
-        public AllyBaseStats BaseDataDictionary { get; set; }
+        public AllyBaseStatus BaseDataDictionary { get; set; }
 
         private DataManager_ DataManager_;
         public static int Ally_ID { get; private set; }
@@ -45,7 +45,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
             foreach (AllyController_ e in allysInMap)
             {
-                ((IController)e).ControllerInitializer(this); //Controller Initializer Should Runs all Initializer.
+                ((IController)e).InitializeController(this); //Controller Initializer Should Runs all Initializer.
 
                 e.Ally_ID = Ally_ID;
                 Ally_ID++;

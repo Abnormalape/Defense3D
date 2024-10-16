@@ -34,15 +34,15 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         private const string DEFAULT_MAP_DATA_PATH = "GameData/MapData/DefaultDungeonMap"; //Csv
 
 
-        public AllyBaseStats AllyStatDatas { get; private set; } //Todo:
-        public EnemyBaseStats EnemyStatDatas { get; private set; } //Todo:
+        public AllyBaseStatus AllyStatDatas { get; private set; } //Todo:
+        public EnemyBaseStatus EnemyStatDatas { get; private set; } //Todo:
         private void SetNpcStatData(TextAsset allyStat, TextAsset enemyStat) //Todo:
         {
             string tempAllyStat = allyStat.text;
             string tempEnemyStat = enemyStat.text;
 
-            AllyStatDatas = JsonUtility.FromJson<AllyBaseStats>(tempAllyStat);
-            EnemyStatDatas = JsonUtility.FromJson<EnemyBaseStats>(tempEnemyStat);
+            AllyStatDatas = JsonUtility.FromJson<AllyBaseStatus>(tempAllyStat);
+            EnemyStatDatas = JsonUtility.FromJson<EnemyBaseStatus>(tempEnemyStat);
         }
 
 
@@ -97,7 +97,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         private void SetBaseData()
         {
-            ParseCsvToDictionaryWithHeader(allyBaseTextAsset.text, out allyBaseData);
+            //ParseCsvToDictionaryWithHeader(allyBaseTextAsset.text, out allyBaseData);
             //ParseTextAsset(enemyBaseTextAsset.text, out enemyBaseData);
             //ParseCsvToDictionaryWithHeader(defaultMapTextAsset.text, out defaultMapData); //Map Data don't need parse with header.
         }

@@ -12,7 +12,7 @@ namespace BHSSolo.DungeonDefense.Controller
         [SerializeField] private Collider ClickableFloor;
 
 
-        public void ControllerInitializer(IManagerClass ownerManager)
+        public void InitializeController(IManagerClass ownerManager)
         {
             OwnerManager = ownerManager;
 

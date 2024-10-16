@@ -1,13 +1,11 @@
 ﻿using BHSSolo.DungeonDefense.Controller;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    public class InteractableManager_ : MonoBehaviour, IManagerClass, IManagerFactory<InteractableStatus>
+    public class InteractableManager_ : MonoBehaviour, IManagerClass //Todo: 얘도 한번 대대적으로 뜯어 고쳐야 겠다
     {
         public Dictionary<IController, GameObject> DictionaryOfController { get; set; } = new();
         public GameManager_ OwnerManager { get; set; }
@@ -78,7 +76,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             foreach (var interactable in interactables)
             {
                 AddSummoned(Interactable_ID, interactable as IController);
-                (interactable as IController)?.ControllerInitializer(this);
+                (interactable as IController)?.InitializeController(this);
                 Interactable_ID++;
                 Debug.Log(interactable.gameObject.transform.position);
             }
@@ -86,30 +84,10 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             Debug.Log($"Interactables found : {ID_ControllerDictionary.Count}");
         }
 
-        public void SummonGameObject(GameObject prefab, Transform summonPoint)
-        {
-            InteractableController tempInteractable
-                = Instantiate(prefab, summonPoint.position, Quaternion.identity, null)
-                .GetComponent<InteractableController>();
-
-            AddSummoned(Interactable_ID, tempInteractable as IController);
-        }
-
         public void AddSummoned(int summoned_ID, IController summonedAttachedController)
         {
             ID_ControllerDictionary.Add(summoned_ID, summonedAttachedController);
         }
-
-        public void DestroyGameObject(GameObject prefabInstance)
-        {
-            Destroy(prefabInstance);
-        }
-
-        public void RemoveSummoned(int summoned_ID)
-        {
-            ID_ControllerDictionary.Remove(summoned_ID);
-        }
-
     }
     public enum InteractableObjectType
     {
