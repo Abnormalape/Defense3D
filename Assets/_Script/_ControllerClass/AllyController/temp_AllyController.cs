@@ -16,7 +16,7 @@ namespace BHSSolo.DungeonDefense.Controller
         public int AllyLevel { get; protected set; }
         public int AllyMaxLevel { get; protected set; }
         public AllyStatusBlock allyCurrentStatus { get; protected set; }
-        public NPCStatus allyStatusBase { get; protected set; }
+        public NpcBaseStatus allyStatusBase { get; protected set; }
         public RoomController currentRoom { get; protected set; }
         public List<NPCEquipment> allyEquipments { get; protected set; }
         public List<NPCTrait> allyTraits { get; protected set; }
@@ -53,7 +53,7 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public void SetBaseStatus()
         {
-            allyStatusBase = DataManager.AllyStatusData[AllyID];
+            allyStatusBase = DataManager.NpcStatData[AllyID];
             allyCurrentStatus = SetCurrentStatus(allyStatusBase, AllyLevel);
             AllyMaxLevel = allyStatusBase.MaxLevel;
         }
@@ -72,7 +72,7 @@ namespace BHSSolo.DungeonDefense.Controller
             SetCurrentStatus(allyStatusBase, AllyLevel);
         }
 
-        public AllyStatusBlock SetCurrentStatus(NPCStatus statusBase, int level)
+        public AllyStatusBlock SetCurrentStatus(NpcBaseStatus statusBase, int level)
         {
             AllyStatusBlock tempStatusBlock = new AllyStatusBlock(
                 statusBase.Blood,

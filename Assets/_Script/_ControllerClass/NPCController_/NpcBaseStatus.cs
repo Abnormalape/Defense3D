@@ -1,15 +1,12 @@
-﻿using BHSSolo.DungeonDefense.NPCs;
-using System.Diagnostics;
-using static UnityEngine.ParticleSystem;
+﻿using System.Collections.Generic;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
-    public class NPCStatus
+    public class NpcBaseStatus
     {
-        public NPCStatus(NPCStatus inputStatus)
+        public NpcBaseStatus(NpcBaseStatus inputStatus)
         {
             this.NPCID = inputStatus.NPCID;
-            this.NPCType = inputStatus.NPCType;
             this.Race = inputStatus.Race;
             this.Blood = inputStatus.Blood;
             this.BloodScaling = inputStatus.BloodScaling;
@@ -32,13 +29,14 @@ namespace BHSSolo.DungeonDefense.Controller
             this.ReactSpeed = inputStatus.ReactSpeed;
             this.ReactSpeedScaling = inputStatus.ReactSpeedScaling;
             this.MaxLevel = inputStatus.MaxLevel;
-            this.Traits = inputStatus.Traits; //Pick One
+
             this.TraitIDs = inputStatus.TraitIDs;
         }
 
         public readonly int NPCID;
-        public readonly Enums.NPCType NPCType;
         public readonly string Race;
+        public readonly int MaxLevel;
+        public readonly int[] TraitIDs;
 
         public readonly float Blood;
         public readonly float BloodScaling;
@@ -60,9 +58,51 @@ namespace BHSSolo.DungeonDefense.Controller
         public readonly float SpeedScaling;
         public readonly float ReactSpeed;
         public readonly float ReactSpeedScaling;
-        public readonly int MaxLevel;
 
-        public readonly NPCTrait[] Traits; //Pick One
-        public readonly int[] TraitIDs;
+    }
+
+    public class AllyBaseStats
+    {
+        public NpcBaseStatus this[int AllyId]
+        {
+            get { return AllyStats[AllyId]; }
+        }
+
+        private List<NpcBaseStatus> AllyStats;
+    }
+
+    public class EnemyBaseStats
+    {
+        public NpcBaseStatus this[int EnemyId]
+        {
+            get { return EnemyStats[EnemyId]; }
+        }
+
+        private List<NpcBaseStatus> EnemyStats;
+    }
+
+    public enum NpcStat
+    {
+        None = 0, //Error
+        Blood,
+        BloodScaling,
+        Mental,
+        MentalScaling,
+        Physical,
+        PhysicalScaling,
+        Special,
+        SpecialScaling,
+        PhysicalPower,
+        PhysicalPowerScaling,
+        SpecialPower,
+        SpecialPowerScaling,
+        PhysicalResist,
+        PhysicalResistScaling,
+        SpecialResist,
+        SpecialResistScaling,
+        Speed,
+        SpeedScaling,
+        ReactSpeed,
+        ReactSpeedScaling,
     }
 }

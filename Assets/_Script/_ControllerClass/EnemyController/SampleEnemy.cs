@@ -8,7 +8,7 @@ namespace BHSSolo.DungeonDefense.Controller
     {
         public IManagerClass OwnerManager { get; set; }
         public override NPCCurrentStatus EnemyStatus_ { get; set; }
-        public override NPCStatus EnemyBaseStatus_ { get; set; }
+        public override NpcBaseStatus EnemyBaseStatus_ { get; set; }
         public override EnemyType EnemyEnum_ { get; set; }
         public override EnemyManager_ EnemyManager_ { get; set; }
         public override int level { get; set; }

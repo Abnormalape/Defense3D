@@ -5,20 +5,20 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    /// <summary>
-    /// Same As Ally.
-    /// </summary>
-    public class EnemyManager_ : MonoBehaviour, IManagerClass, IManagerFactory<EnemyBaseStatus>
+    public class EnemyManager_ : MonoBehaviour, IManagerClass, IManagerFactory<NpcBaseStatus, EnemyBaseStats>
     {
         public GameManager_ OwnerManager { get; set; }
         public Dictionary<int, IController> ID_ControllerDictionary { get; set; } = new();
-        public Dictionary<Enum, EnemyBaseStatus> BaseDataDictionary { get; set; } = new();
+        public EnemyBaseStats BaseDataDictionary { get; set; }
 
+        private DataManager_ DataManager_;
         public static int Enemy_ID { get; private set; }
+
 
         public void InitializeManager(GameManager_ gameManager_)
         {
             OwnerManager = gameManager_;
+            DataManager_ = OwnerManager.DataManager_;
             OnInitializeManager_Factory();
         }
 
@@ -30,16 +30,20 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void InitializeBaseData()
         {
-
+            BaseDataDictionary = this.DataManager_.EnemyStatDatas; //Pull EnemyStatData
         }
 
+        /// <summary>
+        /// Find enemy Already in Scene.
+        /// May Not Use...
+        /// </summary>
         public void FindAllInScene()
         {
             EnemyController_[] enemies = FindObjectsByType<EnemyController_>(FindObjectsSortMode.None);
 
-            foreach(EnemyController_ e in enemies)
+            foreach (EnemyController_ e in enemies)
             {
-                ((IController)e).ControllerInitializer(this); //=> this also executes InitializeEnemyController
+                ((IController)e).ControllerInitializer(this); //Controller Initializer Should Runs all Initializer.
 
                 e.Enemy_ID = Enemy_ID;
                 Enemy_ID++;
@@ -50,9 +54,16 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             Debug.Log($"Found, Set, Registet Complete.\n{enemies.Length} Enemies in map.");
         }
 
-        public void SummonGameObject(GameObject prefab, Transform summonPoint)
+        public void SummonGameObject(int enemyId, Transform summonPoint)
         {
+            string summoningRace = BaseDataDictionary[enemyId].Race;
+            GameObject tempPrefab = Resources.Load($"Prefabs/Enemy/{summoningRace}") as GameObject;
 
+            EnemyController_ tempEnemyController = Instantiate(tempPrefab, summonPoint.position, Quaternion.identity, null)
+                .GetComponent<EnemyController_>();
+
+            tempEnemyController.Enemy_ID = Enemy_ID;
+            AddSummoned(tempEnemyController.Enemy_ID, tempEnemyController as IController);
         }
 
         public void AddSummoned(int summoned_ID, IController summonedAttachedController)
@@ -71,82 +82,5 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         {
             ID_ControllerDictionary.Remove(summoned_ID);
         }
-    }
-
-    public struct EnemyBaseStatus
-    {
-        public EnemyBaseStatus(
-            string Type,
-            int blood,
-            int bloodScaling,
-            int mental,
-            int mentalScaling,
-            int physical,
-            int physicalScaling,
-            int special,
-            int specialScaling,
-            int physicalPower,
-            int physicalPowerScaling,
-            int specialPower,
-            int specialPowerScaling,
-            int physicalResist,
-            int physicalResistScaling,
-            int specialResist,
-            int specialResistScaling,
-            int speed,
-            int speedScaling,
-            int reactSpeed,
-            int reactSpeedScaling,
-            int maxLevel,
-            string[] traits)
-        {
-            this.Type = Type;
-            this.Blood = blood;
-            this.BloodScaling = bloodScaling;
-            this.Mental = mental;
-            this.MentalScaling = mentalScaling;
-            this.Physical = physical;
-            this.PhysicalScaling = physicalScaling;
-            this.Special = special;
-            this.SpecialScaling = specialScaling;
-            this.PhysicalPower = physicalPower;
-            this.PhysicalPowerScaling = physicalPowerScaling;
-            this.SpecialPower = specialPower;
-            this.SpecialPowerScaling = specialPowerScaling;
-            this.PhysicalResist = physicalResist;
-            this.PhysicalResistScaling = physicalResistScaling;
-            this.SpecialResist = specialResist;
-            this.SpecialResistScaling = specialResistScaling;
-            this.Speed = speed;
-            this.SpeedScaling = speedScaling;
-            this.ReactSpeed = reactSpeed;
-            this.ReactSpeedScaling = reactSpeedScaling;
-            this.MaxLevel = maxLevel;
-            this.Traits = traits;
-        }
-
-        public string Type { get; private set; }
-        public int Blood { get; private set; }
-        public int BloodScaling { get; private set; }
-        public int Mental { get; private set; }
-        public int MentalScaling { get; private set; }
-        public int Physical { get; private set; }
-        public int PhysicalScaling { get; private set; }
-        public int Special { get; private set; }
-        public int SpecialScaling { get; private set; }
-        public int PhysicalPower { get; private set; }
-        public int PhysicalPowerScaling { get; private set; }
-        public int SpecialPower { get; private set; }
-        public int SpecialPowerScaling { get; private set; }
-        public int PhysicalResist { get; private set; }
-        public int PhysicalResistScaling { get; private set; }
-        public int SpecialResist { get; private set; }
-        public int SpecialResistScaling { get; private set; }
-        public int Speed { get; private set; }
-        public int SpeedScaling { get; private set; }
-        public int ReactSpeed { get; private set; }
-        public int ReactSpeedScaling { get; private set; }
-        public int MaxLevel { get; private set; }
-        public string[] Traits { get; private set; }
     }
 }

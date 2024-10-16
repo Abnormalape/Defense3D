@@ -6,13 +6,17 @@ using UnityEngine;
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
     /// <summary>
-    /// Interface for Manager who is responsible for summon, and destroy GameObjcet.
-    /// T is for Data Structure Like AllyBaseStatus.
+    /// 
     /// </summary>
-    public interface IManagerFactory<T> where T : struct
+    /// <typeparam name="T1">Controller To Manage.</typeparam>
+    /// <typeparam name="T2">Manager.</typeparam>
+    /// <typeparam name="T3">Data Type to Use.</typeparam>
+    public interface IManagerFactory<T1, T2, T3>
+        where T1 : IController<T2>
+        where T2 : IManagerClass
     {
-        public Dictionary<int, IController> ID_ControllerDictionary { get; set; }
-        public Dictionary<Enum, T> BaseDataDictionary { get; set; }
+        public Dictionary<int, T1> ID_ControllerDictionary { get; set; }
+        public T3 BaseDataDictionary { get; set; }
 
 
         public void OnInitializeManager_Factory();
@@ -21,9 +25,9 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void FindAllInScene();
 
-        public void SummonGameObject(GameObject prefab, Transform summonPoint);
+        public void SummonGameObject(int Id, Transform summonPoint = null);
 
-        public void AddSummoned(int summoned_ID, IController summonedAttachedController);
+        public void AddSummoned(int summoned_ID, T1 summonedAttachedController);
 
         public void DestroyGameObject(GameObject prefabInstance);
 

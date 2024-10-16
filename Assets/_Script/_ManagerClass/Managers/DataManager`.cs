@@ -34,17 +34,26 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         private const string DEFAULT_MAP_DATA_PATH = "GameData/MapData/DefaultDungeonMap"; //Csv
 
 
-        public List<NPCStatus> AllyStatusData { get; private set; } //Todo:
+        public AllyBaseStats AllyStatDatas { get; private set; } //Todo:
+        public EnemyBaseStats EnemyStatDatas { get; private set; } //Todo:
+        private void SetNpcStatData(TextAsset allyStat, TextAsset enemyStat) //Todo:
+        {
+            string tempAllyStat = allyStat.text;
+            string tempEnemyStat = enemyStat.text;
+
+            AllyStatDatas = JsonUtility.FromJson<AllyBaseStats>(tempAllyStat);
+            EnemyStatDatas = JsonUtility.FromJson<EnemyBaseStats>(tempEnemyStat);
+        }
 
 
         public TextAsset allyBaseTextAsset { get; private set; }
         public TextAsset enemyBaseTextAsset { get; private set; }
         public TextAsset defaultMapTextAsset { get; private set; }
-        private Dictionary<string, Dictionary<string, string>> allyBaseData;
-        private Dictionary<string, Dictionary<string, string>> enemyBaseData;
+        //private Dictionary<string, Dictionary<string, string>> allyBaseData; //Todo: Remove
+        //private Dictionary<string, Dictionary<string, string>> enemyBaseData; //Todo: Remove
         private Dictionary<string, Dictionary<string, string>> defaultMapData;
-        public Dictionary<string, Dictionary<string, string>> AllyBaseData { get => allyBaseData; }
-        public Dictionary<string, Dictionary<string, string>> EnemyBaseData { get => enemyBaseData; }
+        //public Dictionary<string, Dictionary<string, string>> AllyBaseData { get => allyBaseData; }
+        //public Dictionary<string, Dictionary<string, string>> EnemyBaseData { get => enemyBaseData; }
         public Dictionary<string, Dictionary<string, string>> DefaultMapData { get => defaultMapData; }
 
 

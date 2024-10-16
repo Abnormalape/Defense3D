@@ -23,7 +23,6 @@ namespace BHSSolo.DungeonDefense.InteractableObject
         public override void OnInteract()
         {
             Debug.Log("You make Ally.");
-            allyManager_.MakeNewAlly(allyType, this.transform);
         }
 
         public override void OnInteractable()

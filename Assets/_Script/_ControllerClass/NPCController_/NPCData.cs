@@ -2,12 +2,12 @@
 {
     public class NPCData
     {
-        public NPCData(NPCStatus inputStatus)
+        public NPCData(NpcBaseStatus inputStatus)
         {
             NPCStatus = new(inputStatus);
         }
 
 
-        public readonly NPCStatus NPCStatus;
+        public readonly NpcBaseStatus NPCStatus;
     }
 }

@@ -7,7 +7,7 @@ namespace BHSSolo.DungeonDefense.Controller
     public class SampleAlly_Goblin : AllyController_, IController, IAllyStatusModifier
     {
         public override NPCCurrentStatus AllyStatus_ { get; set;}
-        public override NPCStatus AllyBaseStatus_ { get; set;}
+        public override NpcBaseStatus AllyBaseStatus_ { get; set;}
         public override AllyType AllyEnum_ { get; set;}
         public override AllyManager_ AllyManager_ { get; set;}
         public override int level { get; set;}
