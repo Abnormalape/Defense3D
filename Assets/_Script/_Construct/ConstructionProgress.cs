@@ -74,7 +74,7 @@ namespace BHSSolo.DungeonDefense.Controller
                 if (JudgePassageBuildable())
                 {
                     //Can Build
-                    CursorManager.ChangeManagerState(CursorState.OnManage_Grid_PassageBuildAfterJudge);
+                    CursorManager.ChangeState(CursorState.OnManage_Grid_PassageBuildAfterJudge);
                 }
                 else
                 {
@@ -87,7 +87,7 @@ namespace BHSSolo.DungeonDefense.Controller
                 if (JudgeRoomBuildable())
                 {
                     //Can Build
-                    CursorManager.ChangeManagerState(CursorState.OnManage_Grid_RoomBuildAfterJudge);
+                    CursorManager.ChangeState(CursorState.OnManage_Grid_RoomBuildAfterJudge);
                 }
                 else
                 {
@@ -328,7 +328,7 @@ namespace BHSSolo.DungeonDefense.Controller
 
             ResetTempRoomData();
             ResetHoldingBuildData();
-            GameStateManager_.ChangeManagerState(GameState.Dungeon_ConstructionState);
+            GameStateManager_.ChangeState(GameState.Dungeon_ConstructionState);
         }
 
         public void JudgeLinkedPassage(List<DungeonGridData> passagePath)
@@ -381,7 +381,7 @@ namespace BHSSolo.DungeonDefense.Controller
             {
                 ResetTempRoomData();
                 ResetHoldingBuildData();
-                GameStateManager_.ChangeManagerState(GameState.Dungeon_ConstructionState);
+                GameStateManager_.ChangeState(GameState.Dungeon_ConstructionState);
             }
         }
     }

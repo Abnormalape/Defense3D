@@ -5,13 +5,13 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 {
     public class InteractableGameObjectFinder
     {
-        public InteractableGameObjectFinder(PlayerState FinderHolder)
+        public InteractableGameObjectFinder(GameObject FinderHolder)
         {
             this.finderHolder = FinderHolder;
         }
 
 
-        private PlayerState finderHolder;
+        private GameObject finderHolder;
         private float searchDistance = 3f;
 
 

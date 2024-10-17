@@ -53,7 +53,7 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public void SetBaseStatus()
         {
-            allyStatusBase = DataManager.NpcStatData[AllyID]; //Todo: 이제 여기를 손볼 차례
+            //allyStatusBase = DataManager.NpcStatData[AllyID]; //Todo: 이제 여기를 손볼 차례
             allyCurrentStatus = SetCurrentStatus(allyStatusBase, AllyLevel);
             AllyMaxLevel = allyStatusBase.MaxLevel;
         }

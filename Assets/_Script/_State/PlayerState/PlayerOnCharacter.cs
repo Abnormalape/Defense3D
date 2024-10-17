@@ -4,11 +4,32 @@ using UnityEngine.InputSystem;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    public class PlayerOnCharacter : PlayerState, IState_
+    public class PlayerOnCharacter : IState_<PlayerState_, PlayerManager_>
     {
-        public override PlayerManager_ PlayerManager_ { get; set; }
-        public override PlayerState_ PlayerState_ { get; set; } = PlayerState_.PlayerOnCharacter;
-        public override PlayerInput PlayerInput { get; set; }
+        public PlayerManager_ BlackBoard { get; set; }
+        public PlayerState_ StateType { get; set; } = PlayerState_.PlayerOnCharacter;
+        private CustomInputManager customInputManager;
+
+        public void InitializeState(PlayerManager_ blackBoard)
+        {
+            BlackBoard = blackBoard;
+            ControllingGameObject = BlackBoard.CharacterGameObject;
+            ControllingPlayerInput = ControllingGameObject.GetComponent<PlayerInput>();
+            characterController_ = ControllingGameObject.GetComponent<CharacterController>();
+
+            interactableManager_ = blackBoard.OwnerManager.InteractableManager_;
+            interactableGameObjectFinder = new(ControllingGameObject);
+
+            customInputManager = blackBoard.OwnerManager.CustomInputManager_;
+            customInputManager.OnPlayerMove += OnMove;
+            customInputManager.OnPlayerHorizontal += OnHorizontal;
+            customInputManager.OnPlayerVertical += OnVertical;
+
+            TurnOffPlayerInput();
+        }
+
+        public GameObject ControllingGameObject { get; set; }
+        public PlayerInput ControllingPlayerInput { get; set; }
 
 
         private CharacterController characterController_;
@@ -16,33 +37,21 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         private InteractableManager_ interactableManager_;
 
 
-        public override void InitializePlayerState(PlayerManager_ ownerManager)
-        {
-            PlayerManager_ = ownerManager;
-            interactableManager_ = PlayerManager_.OwnerManager.InteractableManager_;
+        private float MoveSpeed = 3f;
+        private float MouseSpeed = 3f;
+        private Transform CameraTarget;
+        private Vector3 movementVector;
 
-            this.PlayerInput = GetComponent<PlayerInput>();
-            characterController_ = GetComponent<CharacterController>();
-
-            interactableGameObjectFinder = new(this);
-
-            TurnOffPlayerInput();
-        }
-
-        [SerializeField] private float MoveSpeed;
-        [SerializeField] private float MouseSpeed;
-        [SerializeField] private Transform CameraTarget;
-        private Vector2 movementVector;
         private void OnMove(InputValue value)
         {
             Vector2 input = value.Get<Vector2>();
-            movementVector = input;
+            movementVector = new(input.normalized.x, 0, input.normalized.y);
         }
 
         private void OnHorizontal(InputValue value)
         {
             float mouseMoved = value.Get<float>() / 3f;
-            this.transform.rotation *= Quaternion.Euler(0, mouseMoved, 0);
+            ControllingGameObject.transform.rotation *= Quaternion.Euler(0, mouseMoved, 0);
         }
 
         private void OnVertical(InputValue value)
@@ -61,22 +70,22 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void StateUpdate()
         {
-            characterController_.Move(((transform.right * movementVector.x) + (transform.forward * movementVector.y)) * Time.deltaTime * MoveSpeed);
+            characterController_.Move(movementVector * Time.deltaTime * MoveSpeed);
 
             interactableManager_.SetTargetInteractableGameObject(
                 interactableGameObjectFinder.FindInteractableGameObject());
         }
 
-        public override void TurnOffPlayerInput()
+        public void TurnOffPlayerInput()
         {
-            this.PlayerInput.enabled = false;
-            UnityEngine.Cursor.lockState = CursorLockMode.None;
+            ControllingPlayerInput.enabled = false;
+            Cursor.lockState = CursorLockMode.None;
         }
 
-        public override void TurnOnPlayerInput()
+        public void TurnOnPlayerInput()
         {
-            this.PlayerInput.enabled = true;
-            UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+            ControllingPlayerInput.enabled = true;
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 }

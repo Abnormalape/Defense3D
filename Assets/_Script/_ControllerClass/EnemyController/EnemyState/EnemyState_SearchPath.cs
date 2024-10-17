@@ -6,10 +6,12 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.State
 {
-    public class EnemyState_SearchPath : IState_, IEnemyState
+    public class EnemyState_SearchPath : IState_<EnemyStates, EnemyController_>, IEnemyState
     {
         public EnemyController_ enemyController { get; set; }
         public EnemyStates EnemyState { get; set; } = EnemyStates.SearchPath;
+        public EnemyStates StateType { get; set; } = EnemyStates.SearchPath;
+        public EnemyController_ BlackBoard { get; set; }
 
         private DungeonConstructManager dungeonConstructManager;
 
@@ -18,12 +20,16 @@ namespace BHSSolo.DungeonDefense.State
 
         private List<DungeonGridData> excludeGrids = new(10);
 
+        public void InitializeState(EnemyController_ blackBoard)
+        {
+            BlackBoard = blackBoard;
+        }
 
         public void InitializeEnemyState(EnemyController_ enemyController_)
         {
             enemyController = enemyController_;
             excludeGrids = enemyController.ExcludeGrids; //Todo: 새로 만든다고 길찾기 박살냈네
-            dungeonConstructManager = enemyController.EnemyManager_.OwnerManager.DungeonConstructManager_; //Todo: 새로 만든다고 길찾기 박살냈네
+            dungeonConstructManager = enemyController.OwnerManager.OwnerManager.DungeonConstructManager_; //Todo: 새로 만든다고 길찾기 박살냈네
         }
 
         public void StateEnter()
@@ -60,13 +66,16 @@ namespace BHSSolo.DungeonDefense.State
                         List<DungeonGridData> tempPath = new List<DungeonGridData>(e.ConnectedNodePath[rand]);
 
                         enemyController.SetSearchedPath(tempPath);
-                        enemyController.ChangeControllerState(EnemyStates.Moving);
+                        enemyController.StateMachine.ChangeState(EnemyStates.Moving);
+                        //enemyController.ChangeControllerState(EnemyStates.Moving);
                         return;
                     }
                 }
                 Debug.Log("Where Do I Go??!?!?!?!?!!");
             }
         }
+
+        
         //    dungeonConstructManager.NodeDatas.Contains(sta)
 
         //    if (dungeonConstructManager.GridDatas.ContainsKey(hit.transform.position))

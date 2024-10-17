@@ -34,7 +34,7 @@ namespace BHSSolo.DungeonDefense.Controller
             OwnerManager = ownerManager;
             gameStateManager = OwnerManager.OwnerManager.GameStateManager_;
 
-            constructionButton.onClick.AddListener(() => gameStateManager.ChangeManagerState(GameState.Dungeon_ConstructionState)); //Todo:
+            constructionButton.onClick.AddListener(() => gameStateManager.ChangeState(GameState.Dungeon_ConstructionState)); //Todo:
 
             myCanvas = GetComponent<Canvas>();
             Close();

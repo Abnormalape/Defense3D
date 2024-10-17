@@ -14,7 +14,7 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public virtual void RoomControllerInitializer()
         {
-            Debug.Log("Room Initialize.");
+            //Debug.Log("Room Initialize.");
             OnAllyEnter += OnAllyEnterEvent;
             OnAllyExit += OnAllyExitEvent;
             OnEnemyEnter += OnEnemyEnterEvent;

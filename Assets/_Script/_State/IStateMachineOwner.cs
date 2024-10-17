@@ -1,12 +1,83 @@
-﻿namespace BHSSolo.DungeonDefense.Controller
+﻿using BHSSolo.DungeonDefense.State;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using UnityEngine;
+
+namespace BHSSolo.DungeonDefense.Controller
 {
-    public interface IStateMachineOwner //Todo: 이름 재정의 하고 세부 내용좀 채워보자, 이전에 쓰던거 갈아 엎게
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T1">Blackboard</typeparam>
+    /// <typeparam name="T2">Enums To Use</typeparam>
+    public interface IStateMachineOwner<T1, T2> where T2 : Enum
     {
-        public CustomStateMachine StateMachine { get; set; }
+        public CustomStateMachine<T1, T2> StateMachine { get; set; }
+        public void InitializeStateMachine(T1 stateBlackBoard);
+        public void ChangeState(T2 state);
     }
 
-    public class CustomStateMachine //Todo: 이거... 어디에 만들어 놓은게 있 을텐데
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="T1">Blackboard</typeparam>
+    /// <typeparam name="T2">Enums To Use</typeparam>
+    public class CustomStateMachine<T1, T2> where T2 : Enum
     {
+        public CustomStateMachine(T1 stateBlackBoard)
+        {
+            BlackBoard = stateBlackBoard;
+            Type_StateDictionary = new();
+            InitializeStates();
+        }
 
+        private void InitializeStates()
+        {
+            var tempStates = Assembly.GetExecutingAssembly().GetTypes()
+                                .Where(t => typeof(IState_<T2, T1>).IsAssignableFrom(t)
+                                         && !t.IsInterface
+                                         && !t.IsAbstract).ToList();
+
+            //var tempStates = Assembly.GetExecutingAssembly().GetTypes()
+            //                            .Where(t => t.GetInterfaces().Any(i =>
+            //                            i.IsGenericType &&
+            //                            i.GetGenericTypeDefinition() == typeof(IState_<,>) &&
+            //                            i.GenericTypeArguments[0] == typeof(T2) &&
+            //                            i.GenericTypeArguments[1] == typeof(T1)))
+            //                            .Where(t => !t.IsInterface && !t.IsAbstract)
+            //                            .ToList();
+
+            foreach (var state in tempStates)
+            {
+                var tempState = Activator.CreateInstance(state);
+
+                IState_<T2, T1> tempIState = tempState as IState_<T2, T1>;
+                tempIState.InitializeState(BlackBoard);
+                AddState(tempIState.StateType, tempState as IState_<T2, T1>);
+            }
+        }
+
+        public void AddState(T2 stateName, IState_<T2, T1> state)
+        {
+            Debug.Log(stateName);
+            Type_StateDictionary.Add(stateName, state);
+        }
+
+        public Dictionary<T2, IState_<T2, T1>> Type_StateDictionary;
+
+        public T1 BlackBoard { get; set; }
+
+        public IState_<T2, T1> CurrentState { get; set; }
+
+        public void ChangeState(T2 stateName)
+        {
+            IState_<T2, T1> tempState = Type_StateDictionary[stateName];
+
+            CurrentState?.StateExit();
+            CurrentState = tempState;
+            CurrentState?.StateEnter();
+        }
     }
 }

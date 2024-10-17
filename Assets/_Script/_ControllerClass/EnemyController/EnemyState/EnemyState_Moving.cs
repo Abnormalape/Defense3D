@@ -8,10 +8,12 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.State
 {
-    public class EnemyState_Moving : IState_, IEnemyState
+    public class EnemyState_Moving : IState_<EnemyStates, EnemyController_>, IEnemyState
     {
         public EnemyController_ enemyController { get; set; }
         public EnemyStates EnemyState { get; set; } = EnemyStates.Moving;
+        public EnemyStates StateType { get; set; } = EnemyStates.Moving;
+        public EnemyController_ BlackBoard { get; set; }
 
         private Vector3 currentPosition;
         private Vector3 targetPosition;
@@ -20,6 +22,11 @@ namespace BHSSolo.DungeonDefense.State
         private const float NEAR_TARGET = 0.5f;
         private float EnemySpeed = 10f;
 
+
+        public void InitializeState(EnemyController_ blackBoard)
+        {
+            BlackBoard = blackBoard;
+        }
 
         public void InitializeEnemyState(EnemyController_ enemyController_)
         {
@@ -63,11 +70,14 @@ namespace BHSSolo.DungeonDefense.State
                     {
                         path.Clear();
                         passedTime = 0;
-                        enemyController.ChangeControllerState(EnemyStates.SearchPath);//Todo: EnemyController 새로 만든다고 길찾기 박살내 놓음
+                        enemyController.StateMachine.ChangeState(EnemyStates.SearchPath);
+                        //enemyController.ChangeControllerState(EnemyStates.SearchPath);//Todo: EnemyController 새로 만든다고 길찾기 박살내 놓음
                     }
                 }
             }
 
         }
+
+        
     }
 }

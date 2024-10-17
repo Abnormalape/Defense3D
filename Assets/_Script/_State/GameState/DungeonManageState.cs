@@ -3,8 +3,16 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    public class DungeonManageState : IState_, IGameState
+    public class DungeonManageState : IState_<GameState,GameStateManager_>, IGameState
     {
+        public GameStateManager_ BlackBoard { get; set; }
+        public GameState StateType { get; set; } = GameState.Dungeon_ConstructionState;
+        public void InitializeState(GameStateManager_ blackBoard)
+        {
+            BlackBoard = blackBoard;
+        }
+
+
         public GameStateManager_ GameStateManager_ { get; set; }
 
         public GameState GameState { get; set; } = GameState.Dungeon_ObserveState;

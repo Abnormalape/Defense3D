@@ -4,12 +4,20 @@ using UnityEngine.EventSystems;
 
 namespace BHSSolo.DungeonDefense.State
 {
-    public class OnManage_GridCursor : IState_, ICursorState
+    public class OnManage_GridCursor : IState_<CursorState, CursorManager>, ICursorState
     {
+        public CursorManager BlackBoard { get; set; }
+        public CursorState StateType { get; set; } = CursorState.OnManage_Grid;
+        public void InitializeState(CursorManager blackBoard)
+        {
+            BlackBoard = blackBoard;
+        }
+
         public CursorManager CursorManager_ { get; set; }
         public CursorState CursorState { get; set; } = CursorState.OnManage_Grid;
 
         private DungeonConstructManager DungeonConstructManager_ { get; set; }
+
         private bool mousePressed = false;
 
         private GameObject gridObject;
@@ -50,5 +58,7 @@ namespace BHSSolo.DungeonDefense.State
                 DungeonConstructManager_.ConstructionProgress.JudgePositionIsBuildable(gridObject.transform.position);
             }
         }
+
+
     }
 }

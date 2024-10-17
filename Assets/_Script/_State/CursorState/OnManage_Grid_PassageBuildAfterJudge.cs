@@ -9,8 +9,16 @@ using UnityEngine.EventSystems;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
-    public class OnManage_Grid_PassageBuildAfterJudge : IState_, ICursorState
+    public class OnManage_Grid_PassageBuildAfterJudge : IState_<CursorState, CursorManager>, ICursorState
     {
+        public CursorManager BlackBoard { get; set; }
+        public CursorState StateType { get; set; } = CursorState.OnManage_Grid_PassageBuildAfterJudge;
+        public void InitializeState(CursorManager blackBoard)
+        {
+            BlackBoard = blackBoard;
+        }
+
+
         public CursorManager CursorManager_ { get; set; }
         public CursorState CursorState { get; set; } = CursorState.OnManage_Grid_PassageBuildAfterJudge;
         private DungeonConstructManager dungeonConstructManager { get; set; }

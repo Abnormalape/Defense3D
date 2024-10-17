@@ -1,25 +1,96 @@
-﻿using BHSSolo.DungeonDefense.Enums;
+﻿using BHSSolo.DungeonDefense.Contruct;
+using BHSSolo.DungeonDefense.Enums;
 using BHSSolo.DungeonDefense.ManagerClass;
+using BHSSolo.DungeonDefense.State;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
-    public abstract class EnemyController_ : MonoBehaviour, IStatHolder, IController, IStateMachineOwner, INpc
+    public abstract class EnemyController_ : MonoBehaviour, IStatHolder, IController, IStateMachineOwner<EnemyController_, EnemyStates>, INpc
     {
-        NpcBaseStat IStatHolder.NpcBaseStat { get; set; }
-        int IStatHolder.maxLevel { get; set; }
-        int IStatHolder.level { get; set; }
-        public CustomStateMachine StateMachine { get; set; }
+        public NpcBaseStat NpcBaseStat { get; set; }
+        public int maxLevel { get; set; }
+        public int level { get; set; }
+        public CustomStateMachine<EnemyController_, EnemyStates> StateMachine { get; set; }
         public NPCType NpcType { get; set; } = NPCType.Enemy;
-
-
         public abstract int Enemy_ID { get; set; }
-        public IManagerClass OwnerManager { get; set; }
 
-        public void InitializeController(IManagerClass ownerManager)
+
+
+
+
+
+
+
+
+        private NpcBaseStat EnemyBaseStat { get; set; }
+
+
+
+
+
+
+
+
+
+
+        public IManagerClass OwnerManager { get; set; }
+        private EnemyManager_ enemyManager_;
+
+        public virtual void InitializeController(IManagerClass ownerManager)
         {
             OwnerManager = ownerManager;
+            enemyManager_ = OwnerManager.OwnerManager.EnemyManager_;
+
+
+            this.NpcBaseStat = new NpcBaseStat(enemyManager_.BaseDataDictionary[Enemy_ID]);
+
+
+            InitializeStateMachine(this);
         }
+
+        protected virtual void Update()
+        {
+            StateMachine.CurrentState.StateUpdate();
+        }
+
+        public void InitializeStateMachine(EnemyController_ stateBlackBoard)
+        {
+            Debug.Log("Initialize StateMachine");
+            StateMachine = new(stateBlackBoard);
+        }
+
+        public void ChangeState(EnemyStates state)
+        {
+        }
+
+        #region Find Path
+        public List<DungeonGridData> SearchedPath { get; private set; } = new();
+        private DungeonGridData startGrid;
+        private DungeonGridData endGrid;
+        private List<DungeonGridData> travledCrossRoads = new(20);
+        private List<DungeonGridData> travledForks = new(20);
+
+
+        public List<DungeonGridData> ExcludeGrids { get; private set; } = new(20);
+
+
+        public void AddExclusion(DungeonGridData exclusion)
+        {
+            if (!ExcludeGrids.Contains(exclusion))
+                ExcludeGrids.Add(exclusion);
+        }
+
+        public void SetSearchedPath(List<DungeonGridData> searchedPath)
+        {
+            SearchedPath.Clear();
+            SearchedPath = searchedPath;
+        }
+
+
+        #endregion Find Path
     }
 
     public enum EnemyType
@@ -51,34 +122,6 @@ namespace BHSSolo.DungeonDefense.Controller
 
 //public IState_ CurrentState { get; set; }
 //public Dictionary<Enum, IState_> Type_StateDictionary { get; set; } = new(10);
-
-//#region Find Path
-//public List<DungeonGridData> SearchedPath { get; private set; } = new();
-//private DungeonGridData startGrid;
-//private DungeonGridData endGrid;
-//private List<DungeonGridData> travledCrossRoads = new(20);
-//private List<DungeonGridData> travledForks = new(20);
-
-
-//public List<DungeonGridData> ExcludeGrids { get; private set; } = new(20);
-//public void AddExclusion(DungeonGridData exclusion)
-//{
-//    if (!ExcludeGrids.Contains(exclusion))
-//        ExcludeGrids.Add(exclusion);
-//}
-//#endregion Find Path
-
-//public virtual void InitializeEnemyController()
-//{
-//    InitializeStateDictionary();
-//    ChangeControllerState(EnemyStates.SearchPath); //Todo:
-//}
-
-
-//protected virtual void Update()
-//{
-//    CurrentState?.StateUpdate();
-//}
 
 //public void ChangeControllerState(Enum stateName)
 //{

@@ -18,7 +18,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public AudioManager AudioManager_ { get; private set; }
         public SceneManager_ SceneManager_ { get; private set; }
         public EnemyManager_ EnemyManager_ { get; private set; }
-        public InputManager_ InputManager_ { get; private set; }
+        public CustomInputManager CustomInputManager_ { get; private set; }
         public PlayerManager_ PlayerManager_ { get; private set; }
         public GameStateManager_ GameStateManager_ { get; private set; }
         public InteractableManager_ InteractableManager_ { get; private set; }
@@ -39,7 +39,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             AudioManager_ = GetComponent<AudioManager>();
             SceneManager_ = GetComponent<SceneManager_>();
             EnemyManager_ = GetComponent<EnemyManager_>();
-            InputManager_ = GetComponent<InputManager_>();
+            CustomInputManager_ = GetComponent<CustomInputManager>();
             PlayerManager_ = GetComponent<PlayerManager_>();
             GameStateManager_ = GetComponent<GameStateManager_>();
             InteractableManager_ = GetComponent<InteractableManager_>();
@@ -58,7 +58,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             this.AudioManager_.InitializeManager(this);
             this.SceneManager_.InitializeManager(this);
             this.EnemyManager_.InitializeManager(this);
-            this.InputManager_.InitializeManager(this);
+            this.CustomInputManager_.InitializeManager(this);
             this.PlayerManager_.InitializeManager(this);
             this.InteractableManager_.InitializeManager(this);
             this.EventManager_.InitializeManager(this);

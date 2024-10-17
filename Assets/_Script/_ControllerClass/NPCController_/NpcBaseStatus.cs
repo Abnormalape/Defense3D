@@ -1,36 +1,69 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
+    [System.Serializable]
     public class NpcBaseStatus
     {
-        public NpcBaseStatus(NpcBaseStatus inputStatus)
+        public float this[int index]
         {
-            this.NPCID = inputStatus.NPCID;
-            this.Race = inputStatus.Race;
-            this.Blood = inputStatus.Blood;
-            this.BloodScaling = inputStatus.BloodScaling;
-            this.Mental = inputStatus.Mental;
-            this.MentalScaling = inputStatus.MentalScaling;
-            this.Physical = inputStatus.Physical;
-            this.PhysicalScaling = inputStatus.PhysicalScaling;
-            this.Special = inputStatus.Special;
-            this.SpecialScaling = inputStatus.SpecialScaling;
-            this.PhysicalPower = inputStatus.PhysicalPower;
-            this.PhysicalPowerScaling = inputStatus.PhysicalPowerScaling;
-            this.SpecialPower = inputStatus.SpecialPower;
-            this.SpecialPowerScaling = inputStatus.SpecialPowerScaling;
-            this.PhysicalResist = inputStatus.PhysicalResist;
-            this.PhysicalResistScaling = inputStatus.PhysicalResistScaling;
-            this.SpecialResist = inputStatus.SpecialResist;
-            this.SpecialResistScaling = inputStatus.SpecialResistScaling;
-            this.Speed = inputStatus.Speed;
-            this.SpeedScaling = inputStatus.SpeedScaling;
-            this.ReactSpeed = inputStatus.ReactSpeed;
-            this.ReactSpeedScaling = inputStatus.ReactSpeedScaling;
-            this.MaxLevel = inputStatus.MaxLevel;
+            get
+            {
+                switch (index)
+                {
+                    case 1: return Blood;
+                    case 2: return BloodScaling;
+                    case 3: return Mental;
+                    case 4: return MentalScaling;
+                    case 5: return Physical;
+                    case 6: return PhysicalScaling;
+                    case 7: return Special;
+                    case 8: return SpecialScaling;
+                    case 9: return PhysicalPower;
+                    case 10: return PhysicalPowerScaling;
+                    case 11: return SpecialPower;
+                    case 12: return SpecialPowerScaling;
+                    case 13: return PhysicalResist;
+                    case 14: return PhysicalResistScaling;
+                    case 15: return SpecialResist;
+                    case 16: return SpecialResistScaling;
+                    case 17: return Speed;
+                    case 18: return SpeedScaling;
+                    case 19: return ReactSpeed;
+                    case 20: return ReactSpeedScaling;
+                }
+                Debug.LogError("Incorrect Stat ID");
+                return 0;
+            }
+        }
+        public NpcBaseStatus()//NpcBaseStatus inputStatus)
+        {
+            //this.NPCID = inputStatus.NPCID;
+            //this.Race = inputStatus.Race;
+            //this.Blood = inputStatus.Blood;
+            //this.BloodScaling = inputStatus.BloodScaling;
+            //this.Mental = inputStatus.Mental;
+            //this.MentalScaling = inputStatus.MentalScaling;
+            //this.Physical = inputStatus.Physical;
+            //this.PhysicalScaling = inputStatus.PhysicalScaling;
+            //this.Special = inputStatus.Special;
+            //this.SpecialScaling = inputStatus.SpecialScaling;
+            //this.PhysicalPower = inputStatus.PhysicalPower;
+            //this.PhysicalPowerScaling = inputStatus.PhysicalPowerScaling;
+            //this.SpecialPower = inputStatus.SpecialPower;
+            //this.SpecialPowerScaling = inputStatus.SpecialPowerScaling;
+            //this.PhysicalResist = inputStatus.PhysicalResist;
+            //this.PhysicalResistScaling = inputStatus.PhysicalResistScaling;
+            //this.SpecialResist = inputStatus.SpecialResist;
+            //this.SpecialResistScaling = inputStatus.SpecialResistScaling;
+            //this.Speed = inputStatus.Speed;
+            //this.SpeedScaling = inputStatus.SpeedScaling;
+            //this.ReactSpeed = inputStatus.ReactSpeed;
+            //this.ReactSpeedScaling = inputStatus.ReactSpeedScaling;
+            //this.MaxLevel = inputStatus.MaxLevel;
 
-            this.TraitIDs = inputStatus.TraitIDs;
+            //this.TraitIDs = inputStatus.TraitIDs;
         }
 
         public readonly int NPCID;
@@ -58,7 +91,6 @@ namespace BHSSolo.DungeonDefense.Controller
         public readonly float SpeedScaling;
         public readonly float ReactSpeed;
         public readonly float ReactSpeedScaling;
-
     }
 
     public class AllyBaseStatus

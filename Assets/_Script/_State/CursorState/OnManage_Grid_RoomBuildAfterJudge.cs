@@ -7,8 +7,16 @@ using UnityEngine.EventSystems;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
-    public class OnManage_Grid_RoomBuildAfterJudge : IState_, ICursorState
+    public class OnManage_Grid_RoomBuildAfterJudge : IState_<CursorState, CursorManager>, ICursorState
     {
+        public CursorManager BlackBoard { get; set; }
+        public CursorState StateType { get; set; } = CursorState.OnManage_Grid_RoomBuildAfterJudge;
+        public void InitializeState(CursorManager blackBoard)
+        {
+            BlackBoard = blackBoard;
+        }
+
+
         public CursorManager CursorManager_ { get; set; }
         public CursorState CursorState { get; set; } = CursorState.OnManage_Grid_RoomBuildAfterJudge;
 
@@ -152,8 +160,8 @@ namespace BHSSolo.DungeonDefense.Controller
 
         private void ExitConstructionState()
         {
-            CursorManager_.ChangeManagerState(CursorState.OnManage_Idle);
-            gameStateManager_.ChangeManagerState(GameState.Dungeon_ConstructionState);
+            CursorManager_.ChangeState(CursorState.OnManage_Idle);
+            gameStateManager_.ChangeState(GameState.Dungeon_ConstructionState);
         }
 
         private void ShowNearbyGrids()

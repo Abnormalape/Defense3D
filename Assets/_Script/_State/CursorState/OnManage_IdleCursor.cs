@@ -5,8 +5,15 @@ using UnityEngine.EventSystems;
 
 namespace BHSSolo.DungeonDefense.State
 {
-    public class OnManage_IdleCursor : IState_, ICursorState
+    public class OnManage_IdleCursor : IState_<CursorState, CursorManager>, ICursorState
     {
+        public CursorManager BlackBoard { get; set; }
+        public CursorState StateType { get; set; } = CursorState.OnManage_Idle;
+        public void InitializeState(CursorManager blackBoard)
+        {
+            BlackBoard = blackBoard;
+        }
+
         public CursorManager CursorManager_ { get; set; }
         public CursorState CursorState { get; set; } = CursorState.OnManage_Idle;
 

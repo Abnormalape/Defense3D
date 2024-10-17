@@ -25,7 +25,7 @@ namespace BHSSolo.DungeonDefense.InteractableObject
             UIManager_ = OwnerManager.OwnerManager.UIManager_;
             this.GameStateManager_ = OwnerManager.OwnerManager.GameStateManager_;
 
-            OnInteracted += this.GameStateManager_.ChangeManagerState;
+            OnInteracted += this.GameStateManager_.ChangeState;
         }
 
         public override void OnInteract()
@@ -48,7 +48,7 @@ namespace BHSSolo.DungeonDefense.InteractableObject
         }
 
 
-        public delegate void Interacted(Enum gameState);
+        public delegate void Interacted(GameState gameState);
         public event Interacted OnInteracted;
     }
 }

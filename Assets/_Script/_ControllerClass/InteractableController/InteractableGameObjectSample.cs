@@ -16,7 +16,7 @@ namespace BHSSolo.DungeonDefense.Controller
 
 
         private UIManager_ UIManager_;
-        private InputManager_ InputManager_;
+        private CustomInputManager InputManager_;
         private SceneManager_ SceneManager_;
 
 
@@ -24,7 +24,7 @@ namespace BHSSolo.DungeonDefense.Controller
         {
             OwnerManager = owenerManager;
             UIManager_ = OwnerManager.OwnerManager.UIManager_;
-            InputManager_ = OwnerManager.OwnerManager.InputManager_;
+            InputManager_ = OwnerManager.OwnerManager.CustomInputManager_;
             SceneManager_ = OwnerManager.OwnerManager.SceneManager_;
         }
 

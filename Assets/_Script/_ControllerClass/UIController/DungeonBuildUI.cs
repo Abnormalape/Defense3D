@@ -122,7 +122,7 @@ namespace BHSSolo.DungeonDefense.Controller
         private void SendSelectedRoomData(int roomId, string roomName,
             RoomBuildType buildType, int roomWidth, int roomDepth, Requirement tempRequire)
         {
-            if ((cursorManager.CurrentState as ICursorState).CursorState != CursorState.OnManage_Idle)
+            if ((cursorManager.StateMachine.CurrentState as ICursorState).CursorState != CursorState.OnManage_Idle)
                 return;
 
             dungeonConstructManager_.ConstructionProgress.SetHoldingBuildData(buildType, roomName, roomId, roomWidth, roomDepth, tempRequire);
@@ -131,31 +131,31 @@ namespace BHSSolo.DungeonDefense.Controller
         private void BluePrintClicked()
         {
             //Action Blocker
-            if ((cursorManager.CurrentState as ICursorState).CursorState != CursorState.OnManage_Idle)
+            if ((cursorManager.StateMachine.CurrentState as ICursorState).CursorState != CursorState.OnManage_Idle)
                 return;
 
             StopCoroutine(QuitGridBuildingState());
             Debug.Log("BluePrintClicked");
-            cursorManager.ChangeManagerState(CursorState.OnManage_Grid);
+            cursorManager.ChangeState(CursorState.OnManage_Grid);
             StartCoroutine(QuitGridBuildingState());
         }
 
         private IEnumerator QuitGridBuildingState()
         {
-            while (!Input.GetMouseButtonUp(1) || ((cursorManager.CurrentState as ICursorState).CursorState == CursorState.OnManage_Idle))
+            while (!Input.GetMouseButtonUp(1) || ((cursorManager.StateMachine.CurrentState as ICursorState).CursorState == CursorState.OnManage_Idle))
             {
 
                 yield return null;
             }
 
-            if ((cursorManager.CurrentState as ICursorState).CursorState == CursorState.OnManage_Idle)
+            if ((cursorManager.StateMachine.CurrentState as ICursorState).CursorState == CursorState.OnManage_Idle)
             {
                 yield break;
             }
 
             dungeonConstructManager_.ConstructionProgress.ResetHoldingBuildData();
             dungeonConstructManager_.ConstructionProgress.ResetTempRoomData();
-            gameStateManager_.ChangeManagerState(GameState.Dungeon_ConstructionState);
+            gameStateManager_.ChangeState(GameState.Dungeon_ConstructionState);
         }
     }
 

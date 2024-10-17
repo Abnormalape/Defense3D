@@ -4,21 +4,44 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
-    public abstract class AllyController_ : MonoBehaviour, IController, IStatHolder, IStateMachineOwner, INpc
+    public abstract class AllyController_ : MonoBehaviour, IController, IStatHolder, IStateMachineOwner<AllyController_, AllyStates>, INpc
     {
-        NpcBaseStat IStatHolder.NpcBaseStat { get; set; } //Todo: NpcBaseStat 자체가 빈 클래스가 내용 채워야 함
-        int IStatHolder.maxLevel { get; set; }
-        int IStatHolder.level { get; set; }
-        public CustomStateMachine StateMachine { get; set; }
+        public NpcBaseStat NpcBaseStat { get; set; } //Todo: NpcBaseStat 자체가 빈 클래스가 내용 채워야 함
+        public int maxLevel { get; set; }
+        public int level { get; set; }
+        public CustomStateMachine<AllyController_, AllyStates> StateMachine { get; set; }
         NPCType INpc.NpcType { get; set; } = NPCType.Ally;
-
-
         public abstract int Ally_ID { get; set; }
+
+
         public IManagerClass OwnerManager { get; set; }
+        private AllyManager_ AllyManager_;
+
 
         public void InitializeController(IManagerClass ownerManager)
         {
             OwnerManager = ownerManager;
+            AllyManager_ = OwnerManager.OwnerManager.AllyManager_;
+
+
+            NpcBaseStat = new NpcBaseStat(AllyManager_.BaseDataDictionary[Ally_ID]);
+
+
+            InitializeStateMachine(this);
+        }
+
+        protected virtual void Update()
+        {
+            StateMachine.CurrentState.StateUpdate();
+        }
+
+        public void InitializeStateMachine(AllyController_ stateBlackBoard)
+        {
+            StateMachine = new(stateBlackBoard);
+        }
+
+        public void ChangeState(AllyStates state)
+        {
         }
     }
 
