@@ -3,20 +3,21 @@ using BHSSolo.DungeonDefense.Enums;
 using BHSSolo.DungeonDefense.ManagerClass;
 using BHSSolo.DungeonDefense.State;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
     public abstract class EnemyController_ : MonoBehaviour, IStatHolder, IController, IStateMachineOwner<EnemyController_, EnemyStates>, INpc
     {
-        public NpcBaseStat NpcBaseStat { get; set; }
         public int maxLevel { get; set; }
         public int level { get; set; }
         public CustomStateMachine<EnemyController_, EnemyStates> StateMachine { get; set; }
         public NPCType NpcType { get; set; } = NPCType.Enemy;
         public abstract int Enemy_ID { get; set; }
 
+        public int NPCID;
+        public string Race;
+        public int CurrentLevel;
 
 
 
@@ -24,11 +25,26 @@ namespace BHSSolo.DungeonDefense.Controller
 
 
 
+        public NpcBaseStat NpcBaseStat { get; set; }
+        public NpcBaseStat NpcFinalStat { get; set; }
+        public List<NpcStatModifier> EnemyStatModifiers { get; set; }
 
-        private NpcBaseStat EnemyBaseStat { get; set; }
+        public void SetFinalStat()
+        {
+            NpcBaseStat tempBaseStat = new();
 
+            if (EnemyStatModifiers != null)
+            {
+                foreach (var modifier in EnemyStatModifiers)
+                {
+                    tempBaseStat[modifier.NpcStat] += modifier.StatModifyValue;
+                }
+            }
 
+            tempBaseStat += NpcBaseStat;
 
+            NpcFinalStat = tempBaseStat;
+        }
 
 
 
@@ -45,7 +61,8 @@ namespace BHSSolo.DungeonDefense.Controller
             enemyManager_ = OwnerManager.OwnerManager.EnemyManager_;
 
 
-            this.NpcBaseStat = new NpcBaseStat(enemyManager_.BaseDataDictionary[Enemy_ID]);
+            NpcBaseStat = new NpcBaseStat(enemyManager_.BaseDataDictionary[Enemy_ID]);
+            NpcFinalStat = new();
 
 
             InitializeStateMachine(this);
