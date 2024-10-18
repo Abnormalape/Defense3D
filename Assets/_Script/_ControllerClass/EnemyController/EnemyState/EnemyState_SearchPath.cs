@@ -29,7 +29,7 @@ namespace BHSSolo.DungeonDefense.State
         {
             enemyController = enemyController_;
             excludeGrids = enemyController.ExcludeGrids; //Todo: 새로 만든다고 길찾기 박살냈네
-            dungeonConstructManager = enemyController.OwnerManager.OwnerManager.DungeonConstructManager_; //Todo: 새로 만든다고 길찾기 박살냈네
+            dungeonConstructManager = enemyController.OwnerManager.GameManager.DungeonConstructManager_; //Todo: 새로 만든다고 길찾기 박살냈네
         }
 
         public void StateEnter()

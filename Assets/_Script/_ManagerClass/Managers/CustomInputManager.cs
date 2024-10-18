@@ -8,14 +8,14 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 {
     public class CustomInputManager : MonoBehaviour, IManagerClass
     {
-        public GameManager_ OwnerManager { get; set; }
+        public GameManager_ GameManager { get; set; }
 
         public PlayerInput PlayerInput { get; private set; }
 
 
         public void InitializeManager(GameManager_ gameManager_)
         {
-            OwnerManager = gameManager_;
+            GameManager = gameManager_;
             PlayerInput = GetComponent<PlayerInput>();
         }
 

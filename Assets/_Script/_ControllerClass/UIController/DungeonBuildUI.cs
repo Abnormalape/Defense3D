@@ -49,10 +49,10 @@ namespace BHSSolo.DungeonDefense.Controller
         {
             OwnerManager = ownerManager;
             myCanvas = GetComponent<Canvas>();
-            cursorManager = OwnerManager.OwnerManager.CursorManager_;
-            dataManager_ = OwnerManager.OwnerManager.DataManager_;
-            gameStateManager_ = OwnerManager.OwnerManager.GameStateManager_;
-            dungeonConstructManager_ = OwnerManager.OwnerManager.DungeonConstructManager_;
+            cursorManager = OwnerManager.GameManager.CursorManager_;
+            dataManager_ = OwnerManager.GameManager.DataManager_;
+            gameStateManager_ = OwnerManager.GameManager.GameStateManager_;
+            dungeonConstructManager_ = OwnerManager.GameManager.DungeonConstructManager_;
 
             UIControllerInitializer();
         }

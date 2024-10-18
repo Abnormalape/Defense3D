@@ -7,7 +7,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 {
     public class AllyManager_ : MonoBehaviour, IManagerClass, IManagerFactory<AllyBaseStatus>
     {
-        public GameManager_ OwnerManager { get; set; }
+        public GameManager_ GameManager { get; set; }
         public Dictionary<int, IController> ID_ControllerDictionary { get; set; } = new();
         public AllyBaseStatus BaseDataDictionary { get; set; }
 
@@ -17,8 +17,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void InitializeManager(GameManager_ gameManager_)
         {
-            OwnerManager = gameManager_;
-            DataManager_ = OwnerManager.DataManager_;
+            GameManager = gameManager_;
+            DataManager_ = GameManager.DataManager_;
             OnInitializeManager_Factory();
         }
 

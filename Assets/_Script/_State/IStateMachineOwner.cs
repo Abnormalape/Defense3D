@@ -49,6 +49,7 @@ namespace BHSSolo.DungeonDefense.Controller
             //                            .Where(t => !t.IsInterface && !t.IsAbstract)
             //                            .ToList();
 
+
             foreach (var state in tempStates)
             {
                 var tempState = Activator.CreateInstance(state);

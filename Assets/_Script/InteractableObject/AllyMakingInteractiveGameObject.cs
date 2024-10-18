@@ -17,7 +17,7 @@ namespace BHSSolo.DungeonDefense.InteractableObject
         public void InitializeController(IManagerClass ownerManager)
         {
             OwnerManager = ownerManager;
-            allyManager_ = OwnerManager.OwnerManager.AllyManager_;
+            allyManager_ = OwnerManager.GameManager.AllyManager_;
         }
 
         public override void OnInteract()

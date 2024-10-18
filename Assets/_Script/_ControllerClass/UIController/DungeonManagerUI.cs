@@ -32,7 +32,7 @@ namespace BHSSolo.DungeonDefense.Controller
         public void InitializeController(IManagerClass ownerManager)
         {
             OwnerManager = ownerManager;
-            gameStateManager = OwnerManager.OwnerManager.GameStateManager_;
+            gameStateManager = OwnerManager.GameManager.GameStateManager_;
 
             constructionButton.onClick.AddListener(() => gameStateManager.ChangeState(GameState.Dungeon_ConstructionState)); //Todo:
 

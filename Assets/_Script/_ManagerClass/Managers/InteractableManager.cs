@@ -8,7 +8,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
     public class InteractableManager_ : MonoBehaviour, IManagerClass //Todo: 얘도 한번 대대적으로 뜯어 고쳐야 겠다
     {
         public Dictionary<IController, GameObject> DictionaryOfController { get; set; } = new();
-        public GameManager_ OwnerManager { get; set; }
+        public GameManager_ GameManager { get; set; }
         public Dictionary<int, IController> ID_ControllerDictionary { get; set; }
         public Dictionary<Enum, InteractableStatus> BaseDataDictionary { get; set; }
 
@@ -30,9 +30,9 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void InitializeManager(GameManager_ gameManager_)
         {
-            OwnerManager = gameManager_;
-            this.SceneManager = OwnerManager.SceneManager_;
-            this.GameStateManager_ = OwnerManager.GameStateManager_;
+            GameManager = gameManager_;
+            this.SceneManager = GameManager.SceneManager_;
+            this.GameStateManager_ = GameManager.GameStateManager_;
             this.GameStateManager_.OnGameStateChanged += Set_IsPlayerIdleGameState;
 
             OnInitializeManager_Factory();

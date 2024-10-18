@@ -25,7 +25,7 @@ namespace BHSSolo.DungeonDefense.State
         public void InitialzieCursorState(CursorManager cursorManager)
         {
             CursorManager_ = cursorManager;
-            DungeonConstructManager_ = CursorManager_.OwnerManager.DungeonConstructManager_; //Todo:
+            DungeonConstructManager_ = CursorManager_.GameManager.DungeonConstructManager_; //Todo:
         }
 
         public void StateEnter()

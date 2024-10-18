@@ -21,7 +21,7 @@ namespace BHSSolo.DungeonDefense.Controller
         public void InitializeController(IManagerClass ownerManager)
         {
             OwnerManager = ownerManager;
-            AllyManager_ = OwnerManager.OwnerManager.AllyManager_;
+            AllyManager_ = OwnerManager.GameManager.AllyManager_;
 
 
             NpcBaseStat = new NpcBaseStat(AllyManager_.BaseDataDictionary[Ally_ID]);

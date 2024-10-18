@@ -8,14 +8,14 @@ namespace BHSSolo.DungeonDefense.ManagerClass
     {
         AllyManager_ AllyManager_ { get; set; }
         EnemyManager_ EnemyManager_ { get; set; }
-        public GameManager_ OwnerManager { get; set; }
+        public GameManager_ GameManager { get; set; }
 
 
         public void InitializeManager(GameManager_ gameManager_)
         {
-            OwnerManager = gameManager_;
-            AllyManager_ = OwnerManager.AllyManager_;
-            EnemyManager_ = OwnerManager.EnemyManager_;
+            GameManager = gameManager_;
+            AllyManager_ = GameManager.AllyManager_;
+            EnemyManager_ = GameManager.EnemyManager_;
         }
 
         public void SendBuff(NPCController_ buffSender, NPCController_ BuffReceiver)

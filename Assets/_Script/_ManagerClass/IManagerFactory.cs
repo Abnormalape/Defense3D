@@ -8,7 +8,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
     /// <summary>
     /// 
     /// </summary>
-    /// <typeparam name="T1">Data Type to Use.</typeparam>
+    /// <typeparam name="T1">Data Type to Use. = BaseDataDictionary</typeparam>
     public interface IManagerFactory<T1>
     {
         public Dictionary<int, IController> ID_ControllerDictionary { get; set; }

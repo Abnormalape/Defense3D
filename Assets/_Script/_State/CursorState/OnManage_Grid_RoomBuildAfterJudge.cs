@@ -32,9 +32,9 @@ namespace BHSSolo.DungeonDefense.Controller
         public void InitialzieCursorState(CursorManager cursorManager)
         {
             CursorManager_ = cursorManager;
-            dungeonConstructManager_ = cursorManager.OwnerManager.DungeonConstructManager_;
-            gameStateManager_ = cursorManager.OwnerManager.GameStateManager_;
-            roomManager_ = cursorManager.OwnerManager.RoomManager_;
+            dungeonConstructManager_ = cursorManager.GameManager.DungeonConstructManager_;
+            gameStateManager_ = cursorManager.GameManager.GameStateManager_;
+            roomManager_ = cursorManager.GameManager.RoomManager_;
         }
 
         public void StateEnter()

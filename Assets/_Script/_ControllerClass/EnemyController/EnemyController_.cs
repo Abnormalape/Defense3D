@@ -58,7 +58,7 @@ namespace BHSSolo.DungeonDefense.Controller
         public virtual void InitializeController(IManagerClass ownerManager)
         {
             OwnerManager = ownerManager;
-            enemyManager_ = OwnerManager.OwnerManager.EnemyManager_;
+            enemyManager_ = OwnerManager.GameManager.EnemyManager_;
 
 
             NpcBaseStat = new NpcBaseStat(enemyManager_.BaseDataDictionary[Enemy_ID]);

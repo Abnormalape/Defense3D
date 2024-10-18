@@ -31,8 +31,8 @@ namespace BHSSolo.DungeonDefense.Controller
         {
             AllyLevel = level;
             AllyManager = allyManager;
-            BattleManager = AllyManager.OwnerManager.BattleManager_;
-            DataManager = AllyManager.OwnerManager.DataManager_;
+            BattleManager = AllyManager.GameManager.BattleManager_;
+            DataManager = AllyManager.GameManager.DataManager_;
             SetBaseStatus(); //DataManager.SetBaseStatus(AllyID, AllyLevel);
         }
 

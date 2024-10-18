@@ -10,7 +10,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 {
     public class DungeonConstructManager : MonoBehaviour, IManagerClass
     {
-        public GameManager_ OwnerManager { get; set; }
+        public GameManager_ GameManager { get; set; }
 
 
         private GameStateManager_ gameStateManager; //Todo:
@@ -36,12 +36,12 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void InitializeManager(GameManager_ gameManager_)
         {
-            OwnerManager = gameManager_;
+            GameManager = gameManager_;
 
-            this.RoomManager = OwnerManager.RoomManager_;
-            this.CursorManager_ = OwnerManager.CursorManager_;
-            this.dataManager_ = OwnerManager.DataManager_;
-            gameStateManager = OwnerManager.GameStateManager_;
+            this.RoomManager = GameManager.RoomManager_;
+            this.CursorManager_ = GameManager.CursorManager_;
+            this.dataManager_ = GameManager.DataManager_;
+            gameStateManager = GameManager.GameStateManager_;
             gameStateManager.OnGameStateChanged += GameStateReaction;
 
             this.ConstructionProgress = new(this);

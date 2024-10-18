@@ -2,7 +2,7 @@
 {
     public interface IManagerClass
     {
-        public GameManager_ OwnerManager { get; set; }
+        public GameManager_ GameManager { get; set; }
 
 
         public void InitializeManager(GameManager_ gameManager_);

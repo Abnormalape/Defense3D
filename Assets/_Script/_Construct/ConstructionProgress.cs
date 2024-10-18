@@ -12,9 +12,9 @@ namespace BHSSolo.DungeonDefense.Controller
         public ConstructionProgress(DungeonConstructManager dungeonConstructManager)
         {
             this.DungeonConstructManager = dungeonConstructManager;
-            this.RoomManager_ = dungeonConstructManager.OwnerManager.RoomManager_;
-            this.GameStateManager_ = dungeonConstructManager.OwnerManager.GameStateManager_;
-            CursorManager = dungeonConstructManager.OwnerManager.CursorManager_;
+            this.RoomManager_ = dungeonConstructManager.GameManager.RoomManager_;
+            this.GameStateManager_ = dungeonConstructManager.GameManager.GameStateManager_;
+            CursorManager = dungeonConstructManager.GameManager.CursorManager_;
             AllGrid = dungeonConstructManager.GridDatas;
         }
         private DungeonConstructManager DungeonConstructManager { get; set; }

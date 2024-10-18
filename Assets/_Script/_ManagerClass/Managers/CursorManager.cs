@@ -10,7 +10,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 {
     public class CursorManager : MonoBehaviour, IManagerClass, IGameStateReactor, IStateMachineOwner<CursorManager, CursorState>//, IManagerStateMachine
     {
-        public GameManager_ OwnerManager { get; set; }
+        public GameManager_ GameManager { get; set; }
 
         private GameStateManager_ GameStateManager { get; set; }
         private DungeonConstructManager DungeonConstructManager { get; set; }
@@ -42,9 +42,9 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void InitializeManager(GameManager_ gameManager_)
         {
-            OwnerManager = gameManager_;
-            this.GameStateManager = OwnerManager.GameStateManager_;
-            this.DungeonConstructManager = OwnerManager.DungeonConstructManager_;
+            GameManager = gameManager_;
+            this.GameStateManager = GameManager.GameStateManager_;
+            this.DungeonConstructManager = GameManager.DungeonConstructManager_;
             GameStateManager.OnGameStateChanged += GameStateReaction; //Reaction.
             GridTargetPrefab = Resources.Load(GRID_TARGET_PATH) as GameObject;
             FollowCursor = GameObject.FindGameObjectWithTag("MainCursor"); //Null

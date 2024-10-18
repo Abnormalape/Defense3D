@@ -27,7 +27,7 @@ namespace BHSSolo.DungeonDefense.Controller
         {
             OwnerManager = ownerManager;
             UIManager_ = (UIManager_)OwnerManager;
-            SceneManager_ = OwnerManager.OwnerManager.SceneManager_;
+            SceneManager_ = OwnerManager.GameManager.SceneManager_;
 
             myCanvas = GetComponent<Canvas>();
 

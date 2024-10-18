@@ -8,7 +8,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 {
     public class DataManager_ : MonoBehaviour, IManagerClass
     {
-        public GameManager_ OwnerManager { get; set; }
+        public GameManager_ GameManager { get; set; }
 
         public PlayerData PlayerData { get; private set; } //Data can only be changed in this class.
         public Dictionary<int, RoomBuildData> ID_RoomBuildData { get; private set; }
@@ -16,7 +16,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void InitializeManager(GameManager_ gameManager_)
         {
-            OwnerManager = gameManager_;
+            GameManager = gameManager_;
 
             InitializeGameData();
         }

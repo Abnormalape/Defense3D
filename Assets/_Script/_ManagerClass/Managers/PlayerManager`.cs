@@ -5,7 +5,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 {
     public class PlayerManager_ : MonoBehaviour, IManagerClass, IStateMachineOwner<PlayerManager_, PlayerState_>//, IManagerStateMachine
     {
-        public GameManager_ OwnerManager { get; set; }
+        public GameManager_ GameManager { get; set; }
 
 
         private GameStateManager_ GameStateManager_;
@@ -21,15 +21,15 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         private void Update()
         {
-            if (OwnerManager == null) return;
+            if (GameManager == null) return;
             StateMachine.CurrentState.StateUpdate();
         }
 
         public void InitializeManager(GameManager_ gameManager_)
         {
-            OwnerManager = gameManager_;
+            GameManager = gameManager_;
 
-            this.GameStateManager_ = OwnerManager.GameStateManager_;
+            this.GameStateManager_ = GameManager.GameStateManager_;
             this.GameStateManager_.OnGameStateChanged += GameStateReactor;
 
             InitializeStateMachine(this);

@@ -17,10 +17,10 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             ControllingPlayerInput = ControllingGameObject.GetComponent<PlayerInput>();
             characterController_ = ControllingGameObject.GetComponent<CharacterController>();
 
-            interactableManager_ = blackBoard.OwnerManager.InteractableManager_;
+            interactableManager_ = blackBoard.GameManager.InteractableManager_;
             interactableGameObjectFinder = new(ControllingGameObject);
 
-            customInputManager = blackBoard.OwnerManager.CustomInputManager_;
+            customInputManager = blackBoard.GameManager.CustomInputManager_;
             customInputManager.OnPlayerMove += OnMove;
             customInputManager.OnPlayerHorizontal += OnHorizontal;
             customInputManager.OnPlayerVertical += OnVertical;

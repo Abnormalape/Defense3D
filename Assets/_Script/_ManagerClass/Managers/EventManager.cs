@@ -7,12 +7,12 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 {
     public class EventManager : MonoBehaviour, IManagerClass
     {
-        public GameManager_ OwnerManager { get; set; }
+        public GameManager_ GameManager { get; set; }
 
 
         public void InitializeManager(GameManager_ gameManager_)
         {
-            OwnerManager = gameManager_;
+            GameManager = gameManager_;
         }
     }
 }

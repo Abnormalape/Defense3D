@@ -22,8 +22,8 @@ namespace BHSSolo.DungeonDefense.InteractableObject
         public void InitializeController(IManagerClass owenerManager)
         {
             OwnerManager = owenerManager;
-            UIManager_ = OwnerManager.OwnerManager.UIManager_;
-            this.GameStateManager_ = OwnerManager.OwnerManager.GameStateManager_;
+            UIManager_ = OwnerManager.GameManager.UIManager_;
+            this.GameStateManager_ = OwnerManager.GameManager.GameStateManager_;
 
             OnInteracted += this.GameStateManager_.ChangeState;
         }

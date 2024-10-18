@@ -23,9 +23,9 @@ namespace BHSSolo.DungeonDefense.Controller
         public void InitializeController(IManagerClass owenerManager)
         {
             OwnerManager = owenerManager;
-            UIManager_ = OwnerManager.OwnerManager.UIManager_;
-            InputManager_ = OwnerManager.OwnerManager.CustomInputManager_;
-            SceneManager_ = OwnerManager.OwnerManager.SceneManager_;
+            UIManager_ = OwnerManager.GameManager.UIManager_;
+            InputManager_ = OwnerManager.GameManager.CustomInputManager_;
+            SceneManager_ = OwnerManager.GameManager.SceneManager_;
         }
 
         public override void OnInteract()

@@ -17,7 +17,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public List<IController> ListOfController { get; set; }
         public Dictionary<IController, GameObject> DictionaryOfController { get; set; }
         public Dictionary<Enum, IController> DictionaryEnumController { get; set; }
-        public GameManager_ OwnerManager { get; set; }
+        public GameManager_ GameManager { get; set; }
         public float LoadingProgress { get; private set; }
 
 
@@ -27,8 +27,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void InitializeManager(GameManager_ gameManager_)
         {
-            OwnerManager = gameManager_;
-            UIManager_ = OwnerManager.UIManager_;
+            GameManager = gameManager_;
+            UIManager_ = GameManager.UIManager_;
         }
 
         public void OrderChangeScene(string sceneName)
