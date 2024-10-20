@@ -83,5 +83,28 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         {
             ID_ControllerDictionary.Remove(summoned_ID);
         }
+
+
+
+
+        public List<NPCController_> AllAlly = new();
+        public delegate void AllyManagerEvent(List<NPCController_> updatingAlly);
+        public event AllyManagerEvent OnAddAllAllyList;
+        public event AllyManagerEvent OnRemoveAllAllyList;
+
+        private void AddAllyToList(List<NPCController_> addedAlly)
+        {
+            AllAlly.AddRange(addedAlly);
+            OnAddAllAllyList(addedAlly);
+        }
+        private void RemoveAllyFromList(List<NPCController_> removedAlly)
+        {
+            foreach (NPCController_ item in removedAlly)
+            {
+                AllAlly.Remove(item);
+
+            }
+            OnRemoveAllAllyList(removedAlly);
+        }
     }
 }

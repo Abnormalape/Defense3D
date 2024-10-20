@@ -82,5 +82,28 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         {
             ID_ControllerDictionary.Remove(summoned_ID);
         }
+
+
+
+
+        public List<NPCController_> AllEnemy = new();
+        public delegate void EnemyManagerEvent(List<NPCController_> updatingEnemy);
+        public event EnemyManagerEvent OnAddAllEnemyList;
+        public event EnemyManagerEvent OnRemoveAllEnemyList;
+
+        private void AddEnemyToList(List<NPCController_> addedEnemy)
+        {
+            AllEnemy.AddRange(addedEnemy);
+            OnAddAllEnemyList(addedEnemy);
+        }
+        private void RemoveEnemyFromList(List<NPCController_> removedEnemy)
+        {
+            foreach (NPCController_ item in removedEnemy)
+            {
+                AllEnemy.Remove(item);
+
+            }
+            OnRemoveAllEnemyList(removedEnemy);
+        }
     }
 }

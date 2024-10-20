@@ -1,28 +1,34 @@
 ﻿using BHSSolo.DungeonDefense.Enums;
 using BHSSolo.DungeonDefense.ManagerClass;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
-    public abstract class AllyController_ : MonoBehaviour, IController, IStatHolder, IStateMachineOwner<AllyController_, AllyStates>, INpc
+    public abstract class AllyController_ : NPCController_, IController, IStatHolder, IStateMachineOwner<AllyController_, AllyStates>, IBuffHolder
     {
         public NpcBaseStat NpcBaseStat { get; set; } //Todo: NpcBaseStat 자체가 빈 클래스가 내용 채워야 함
         public int maxLevel { get; set; }
         public int level { get; set; }
         public CustomStateMachine<AllyController_, AllyStates> StateMachine { get; set; }
-        NPCType INpc.NpcType { get; set; } = NPCType.Ally;
+        public override NPCType NpcType { get; set; } = NPCType.Ally;
         public abstract int Ally_ID { get; set; }
 
+        public event IStatHolder.ResourceStatEvent OnCurrentResourceStatModified;
+        public event IStatHolder.AbilityStatEvent OnFinalAbilityStatModified;
 
         public IManagerClass OwnerManager { get; set; }
         private AllyManager_ AllyManager_;
-
+        public Dictionary<int, BuffController> HoldingBuffs { get; set; }
+        public override NpcManager_ NpcManager_ { get; set; }
+        public BuffManager BuffManager { get; set; }
+        public List<NpcStatModifier> StatModifiers { get; set; } = new();
 
         public void InitializeController(IManagerClass ownerManager)
         {
             OwnerManager = ownerManager;
             AllyManager_ = OwnerManager.GameManager.AllyManager_;
-
+            NpcManager_ = OwnerManager.GameManager.NpcManager_;
 
             NpcBaseStat = new NpcBaseStat(AllyManager_.BaseDataDictionary[Ally_ID]);
 
@@ -41,6 +47,16 @@ namespace BHSSolo.DungeonDefense.Controller
         }
 
         public void ChangeState(AllyStates state)
+        {
+        }
+
+        public void InitializeBuffHolder()
+        {
+        }
+        public void AddBuff(int buffID)
+        {
+        }
+        public void RemoveBuff(int buffID)
         {
         }
     }

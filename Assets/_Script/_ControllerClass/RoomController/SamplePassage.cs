@@ -1,4 +1,5 @@
 ﻿using BHSSolo.DungeonDefense.ManagerClass;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.Controller
@@ -25,24 +26,28 @@ namespace BHSSolo.DungeonDefense.Controller
             Debug.Log("SSamplePassage override parent class's method");
         }
 
-        protected override void OnAllyEnterEvent(AllyController_ enteredAlly)
+
+        protected override void OnAllyEnterEvent(List<IBuffHolder> enteredAlly)
         {
-            Debug.Log("SSample Passage Event : AllyEnter");
+            throw new System.NotImplementedException();
         }
 
-        protected override void OnAllyExitEvent(AllyController_ exitedAlly)
+
+        protected override void OnAllyExitEvent(List<IBuffHolder> exitedAlly)
         {
-            Debug.Log("SSample Passage Event : AllyExit");
+            throw new System.NotImplementedException();
         }
 
-        protected override void OnEnemyEnterEvent(EnemyController_ enteredEnemy)
+
+        protected override void OnEnemyEnterEvent(List<IBuffHolder> enteredEnemy)
         {
-            Debug.Log("SSample Passage Event : EnemyEnter");
+            throw new System.NotImplementedException();
         }
 
-        protected override void OnEnemyExitEvent(EnemyController_ exitedEnemy)
+
+        protected override void OnEnemyExitEvent(List<IBuffHolder> exitedEnemy)
         {
-            Debug.Log("SSample Passage Event : EnemyExit");
+            throw new System.NotImplementedException();
         }
     }
 }

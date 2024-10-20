@@ -40,16 +40,6 @@ namespace BHSSolo.DungeonDefense.Controller
                                          && !t.IsInterface
                                          && !t.IsAbstract).ToList();
 
-            //var tempStates = Assembly.GetExecutingAssembly().GetTypes()
-            //                            .Where(t => t.GetInterfaces().Any(i =>
-            //                            i.IsGenericType &&
-            //                            i.GetGenericTypeDefinition() == typeof(IState_<,>) &&
-            //                            i.GenericTypeArguments[0] == typeof(T2) &&
-            //                            i.GenericTypeArguments[1] == typeof(T1)))
-            //                            .Where(t => !t.IsInterface && !t.IsAbstract)
-            //                            .ToList();
-
-
             foreach (var state in tempStates)
             {
                 var tempState = Activator.CreateInstance(state);
@@ -82,3 +72,11 @@ namespace BHSSolo.DungeonDefense.Controller
         }
     }
 }
+//var tempStates = Assembly.GetExecutingAssembly().GetTypes()
+//                            .Where(t => t.GetInterfaces().Any(i =>
+//                            i.IsGenericType &&
+//                            i.GetGenericTypeDefinition() == typeof(IState_<,>) &&
+//                            i.GenericTypeArguments[0] == typeof(T2) &&
+//                            i.GenericTypeArguments[1] == typeof(T1)))
+//                            .Where(t => !t.IsInterface && !t.IsAbstract)
+//                            .ToList();

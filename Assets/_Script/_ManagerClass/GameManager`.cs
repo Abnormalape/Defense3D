@@ -6,9 +6,7 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    [RequireComponent(typeof(DungeonConstructManager))]
-    [RequireComponent(typeof(CursorManager))]
-    [RequireComponent(typeof(BattleManager_))]
+    [RequireComponent(typeof(NpcManager_))]
     public class GameManager_ : MonoBehaviour
     {
         public UIManager_ UIManager_ { get; private set; }
@@ -27,6 +25,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public DungeonConstructManager DungeonConstructManager_ { get; private set; }
         public CursorManager CursorManager_ { get; private set; }
         public BattleManager_ BattleManager_ { get; private set; }
+        public NpcManager_ NpcManager_ { get; private set; }
 
         private void Awake()
         {
@@ -48,6 +47,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             DungeonConstructManager_ = GetComponent<DungeonConstructManager>();
             BattleManager_ = GetComponent<BattleManager_>();
             CursorManager_ = GetComponent<CursorManager>();
+            NpcManager_ = GetComponent<NpcManager_>();
 
             this.DataManager_.InitializeManager(this); //DataManager First.
             this.UIManager_.InitializeManager(this);
@@ -55,9 +55,10 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             this.BattleManager_.InitializeManager(this);
             this.DungeonConstructManager_.InitializeManager(this); //DungeonConstructManager Must Come Before AllyManager and EnemyManager.
             this.AllyManager_.InitializeManager(this);
+            this.EnemyManager_.InitializeManager(this);
+            this.NpcManager_.InitializeManager(this);
             this.AudioManager_.InitializeManager(this);
             this.SceneManager_.InitializeManager(this);
-            this.EnemyManager_.InitializeManager(this);
             this.CustomInputManager_.InitializeManager(this);
             this.PlayerManager_.InitializeManager(this);
             this.InteractableManager_.InitializeManager(this);
