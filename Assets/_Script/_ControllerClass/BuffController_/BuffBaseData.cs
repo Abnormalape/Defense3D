@@ -1,11 +1,4 @@
-﻿using BHSSolo.DungeonDefense.ManagerClass;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Reflection;
-using Unity.VisualScripting;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
@@ -80,6 +73,10 @@ namespace BHSSolo.DungeonDefense.Controller
         OnDamaged, //데미지를 입음
         OnDead, //죽었을 때
         Start, //시작 할때
+        OnEnterRoom, //방에 입장
+        OnExitRoom, //방에서 퇴장
+        OnCurrentResourceStatModified,
+        OnFinalAbilityStatModified,
     }
 
     public enum SubTriggerAction

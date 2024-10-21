@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.State
 {
-    public class OnPlayerCursor : IState_<CursorState, CursorManager>, ICursorState
+    public class OnPlayerCursor : IState_<CursorState, CursorManager>
     {
         public CursorManager BlackBoard { get; set; }
         public CursorState StateType { get; set; } = CursorState.OnPlayer;
@@ -13,13 +13,7 @@ namespace BHSSolo.DungeonDefense.State
         }
 
 
-        public CursorManager CursorManager_ { get; set; }
-        public CursorState CursorState { get; set; } = CursorState.OnPlayer;
 
-        public void InitialzieCursorState(CursorManager cursorManager)
-        {
-            CursorManager_ = cursorManager;
-        }
 
         public void StateEnter()
         {

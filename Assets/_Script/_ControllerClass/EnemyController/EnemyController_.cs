@@ -1,5 +1,6 @@
 ﻿using BHSSolo.DungeonDefense.Contruct;
 using BHSSolo.DungeonDefense.Enums;
+using BHSSolo.DungeonDefense.Management;
 using BHSSolo.DungeonDefense.ManagerClass;
 using BHSSolo.DungeonDefense.State;
 using System.Collections.Generic;
@@ -7,7 +8,9 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
-    public abstract class EnemyController_ : NPCController_, IStatHolder, IController, IStateMachineOwner<EnemyController_, EnemyStates>, IBuffHolder
+    public abstract class EnemyController_ : NPCController_
+        , IStatHolder, IController, IBuffHolder
+        , IStateMachineOwner<EnemyController_, EnemyStates>
     {
         public int maxLevel { get; set; }
         public int level { get; set; }
@@ -15,14 +18,16 @@ namespace BHSSolo.DungeonDefense.Controller
         public override NPCType NpcType { get; set; } = NPCType.Enemy;
         public abstract int Enemy_ID { get; set; }
 
-        public int NPCID;
-        public string Race;
-        public int CurrentLevel;
+        //public int NPCID; //Todo:
+        //public string Race; //Todo:
+        //public int CurrentLevel; //Todo:
 
-        public Dictionary<int, BuffController> HoldingBuffs { get; set; }
+        public Dictionary<int, BuffController> HoldingBuffs { get; set; } = new();
 
         public event IStatHolder.ResourceStatEvent OnCurrentResourceStatModified;
         public event IStatHolder.AbilityStatEvent OnFinalAbilityStatModified;
+        public NpcBaseStat CurrentResourceStat { get; set; }
+        public NpcBaseStat CurrentFinalStat { get; set; }
 
         public NpcBaseStat NpcBaseStat { get; set; }
         public NpcBaseStat NpcFinalStat { get; set; }
@@ -53,6 +58,8 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public virtual void InitializeController(IManagerClass ownerManager)
         {
+            if (Enemy_ID == -100) { return; } //Todo:
+
             OwnerManager = ownerManager;
             enemyManager_ = OwnerManager.GameManager.EnemyManager_;
             NpcManager_ = OwnerManager.GameManager.NpcManager_;
@@ -60,13 +67,21 @@ namespace BHSSolo.DungeonDefense.Controller
             NpcBaseStat = new NpcBaseStat(enemyManager_.BaseDataDictionary[Enemy_ID]);
             NpcFinalStat = new();
 
-
             InitializeStateMachine(this);
+
+            BuffManager = OwnerManager.GameManager.BuffManager_;
+            int[] buffIDs = enemyManager_.BaseDataDictionary[Enemy_ID].TraitIDs;
+            foreach (int e in buffIDs)
+            {
+                var tempBuff = BuffManager.InstantiateBuff(e, out BuffBaseData tempBuffData);
+                HoldingBuffs.Add(e, tempBuff);
+                tempBuff.InitializeBuff(tempBuffData, this);
+            }
         }
 
-        protected virtual void Update()
+        public virtual void Update()
         {
-            StateMachine.CurrentState.StateUpdate();
+            StateMachine?.CurrentState.StateUpdate();
         }
 
         public void InitializeStateMachine(EnemyController_ stateBlackBoard)

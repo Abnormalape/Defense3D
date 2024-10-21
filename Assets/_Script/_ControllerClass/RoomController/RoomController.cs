@@ -1,7 +1,6 @@
 ﻿using BHSSolo.DungeonDefense.ManagerClass;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.iOS;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
@@ -9,7 +8,7 @@ namespace BHSSolo.DungeonDefense.Controller
     {
         protected List<RoomInstallationController_> RoomInstallations { get; set; } = new();
         public List<NPCController_> EnteredAllys { get; protected set; } = new();
-        public List<NPCController_> EnteredEnemys { get; protected set; } = new();
+        public List<NPCController_> EnteredEnemies { get; protected set; } = new();
 
         public abstract int Room_ID { get; set; }
         public Dictionary<int, BuffController> HoldingBuffs { get; set; } = new();
@@ -35,10 +34,22 @@ namespace BHSSolo.DungeonDefense.Controller
         public const string ALLY_LAYER = "Ally";
         public const string ENEMY_LAYER = "Enemy";
 
-        protected abstract void OnAllyEnterEvent(List<IBuffHolder> enteredAlly);
-        protected abstract void OnAllyExitEvent(List<IBuffHolder> exitedAlly);
-        protected abstract void OnEnemyEnterEvent(List<IBuffHolder> enteredEnemy);
-        protected abstract void OnEnemyExitEvent(List<IBuffHolder> exitedEnemy);
+        public virtual void OnAllyEnterEvent(List<NPCController_> enteredAlly)
+        {
+            AddAlly(enteredAlly);
+        }
+        public virtual void OnAllyExitEvent(List<NPCController_> exitedAlly)
+        {
+            RemoveAlly(exitedAlly);
+        }
+        public virtual void OnEnemyEnterEvent(List<NPCController_> enteredEnemy)
+        {
+            AddEnemy(enteredEnemy);
+        }
+        public virtual void OnEnemyExitEvent(List<NPCController_> exitedEnemy)
+        {
+            RemoveEnemy(exitedEnemy);
+        }
 
         private void OnTriggerEnter(UnityEngine.Collider other)
         {
@@ -47,13 +58,13 @@ namespace BHSSolo.DungeonDefense.Controller
             if (tempCollider.gameObject.layer == LayerMask.NameToLayer(ALLY_LAYER))
             {
                 AllyController_ tempAlly = tempCollider.GetComponent<AllyController_>();
-                List<IBuffHolder> tempBuffHolder = new() { (tempAlly as IBuffHolder) };
-                OnAllyEnter?.Invoke(tempBuffHolder);
+                List<NPCController_> tempAllyList = new() { tempAlly };
+                OnAllyEnter?.Invoke(tempAllyList);
             }
             else if (tempCollider.gameObject.layer == LayerMask.NameToLayer(ENEMY_LAYER))
             {
                 EnemyController_ tempEnemy = tempCollider.GetComponent<EnemyController_>();
-                List<IBuffHolder> tempBuffHolder = new() { (tempEnemy as IBuffHolder) };
+                List<NPCController_> tempBuffHolder = new() { tempEnemy };
                 OnEnemyEnter?.Invoke(tempBuffHolder);
             }
             else
@@ -70,13 +81,13 @@ namespace BHSSolo.DungeonDefense.Controller
             if (tempCollider.gameObject.layer == LayerMask.NameToLayer(ALLY_LAYER))
             {
                 AllyController_ tempAlly = tempCollider.GetComponent<AllyController_>();
-                List<IBuffHolder> tempBuffHolder = new() { (tempAlly as IBuffHolder) };
+                List<NPCController_> tempBuffHolder = new() { tempAlly };
                 OnAllyExit?.Invoke(tempBuffHolder);
             }
             else if (tempCollider.gameObject.layer == LayerMask.NameToLayer(ENEMY_LAYER))
             {
                 EnemyController_ tempEnemy = tempCollider.GetComponent<EnemyController_>();
-                List<IBuffHolder> tempBuffHolder = new() { (tempEnemy as IBuffHolder) };
+                List<NPCController_> tempBuffHolder = new() { tempEnemy };
                 OnEnemyExit?.Invoke(tempBuffHolder);
             }
             else
@@ -93,7 +104,7 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public abstract void OnRoomClicked();
 
-        public delegate void RoomEvent(List<IBuffHolder> Npcs);
+        public delegate void RoomEvent(List<NPCController_> Npcs);
         public event RoomEvent OnEnemyEnter;
         public event RoomEvent OnEnemyExit;
         public event RoomEvent OnAllyEnter;
@@ -104,18 +115,28 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public void AddAlly(List<NPCController_> enteredAllys)
         {
+            EnteredAllys.AddRange(enteredAllys);
             OnAddAllyList(enteredAllys);
         }
         public void RemoveAlly(List<NPCController_> exitedAllys)
         {
+            foreach (var e in exitedAllys)
+            {
+                EnteredAllys.Remove(e);
+            }
             OnRemoveAllyList(exitedAllys);
         }
         public void AddEnemy(List<NPCController_> enteredEnemies)
         {
+            EnteredEnemies.AddRange(enteredEnemies);
             OnAddEnemyList(enteredEnemies);
         }
         public void RemoveEnemy(List<NPCController_> exitedEnemies)
         {
+            foreach (var e in exitedEnemies)
+            {
+                EnteredEnemies.Remove(e);
+            }
             OnRemoveEnemyList(exitedEnemies);
         }
 
@@ -134,7 +155,5 @@ namespace BHSSolo.DungeonDefense.Controller
         public void RemoveBuff(int buffID)
         {
         }
-
-        
     }
 }

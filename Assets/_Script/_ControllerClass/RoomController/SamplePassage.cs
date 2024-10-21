@@ -25,29 +25,5 @@ namespace BHSSolo.DungeonDefense.Controller
             base.RoomControllerInitializer();
             Debug.Log("SSamplePassage override parent class's method");
         }
-
-
-        protected override void OnAllyEnterEvent(List<IBuffHolder> enteredAlly)
-        {
-            throw new System.NotImplementedException();
-        }
-
-
-        protected override void OnAllyExitEvent(List<IBuffHolder> exitedAlly)
-        {
-            throw new System.NotImplementedException();
-        }
-
-
-        protected override void OnEnemyEnterEvent(List<IBuffHolder> enteredEnemy)
-        {
-            throw new System.NotImplementedException();
-        }
-
-
-        protected override void OnEnemyExitEvent(List<IBuffHolder> exitedEnemy)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

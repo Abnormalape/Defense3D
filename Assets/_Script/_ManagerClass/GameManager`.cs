@@ -1,5 +1,6 @@
 ﻿using BHSSolo.DungeonDefense.Data;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -7,6 +8,8 @@ using UnityEngine;
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
     [RequireComponent(typeof(NpcManager_))]
+    [RequireComponent(typeof(TimeManager))]
+    [RequireComponent(typeof(BuffManager))]
     public class GameManager_ : MonoBehaviour
     {
         public UIManager_ UIManager_ { get; private set; }
@@ -26,6 +29,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public CursorManager CursorManager_ { get; private set; }
         public BattleManager_ BattleManager_ { get; private set; }
         public NpcManager_ NpcManager_ { get; private set; }
+        public TimeManager TimeManager_ { get; private set; }
+        public BuffManager BuffManager_ { get; private set; }
 
         private void Awake()
         {
@@ -48,12 +53,16 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             BattleManager_ = GetComponent<BattleManager_>();
             CursorManager_ = GetComponent<CursorManager>();
             NpcManager_ = GetComponent<NpcManager_>();
+            TimeManager_ = GetComponent<TimeManager>();
+            BuffManager_ = GetComponent<BuffManager>();
 
             this.DataManager_.InitializeManager(this); //DataManager First.
+            this.TimeManager_.InitializeManager(this);
             this.UIManager_.InitializeManager(this);
             this.RoomManager_.InitializeManager(this);
             this.BattleManager_.InitializeManager(this);
             this.DungeonConstructManager_.InitializeManager(this); //DungeonConstructManager Must Come Before AllyManager and EnemyManager.
+            this.BuffManager_.InitializeManager(this); //Buff Must Come Before Ally and Enemy
             this.AllyManager_.InitializeManager(this);
             this.EnemyManager_.InitializeManager(this);
             this.NpcManager_.InitializeManager(this);
@@ -71,6 +80,10 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         private void Start()
         {
             Debug.Log("GameManager Alter Setting Complete");
+        }
+
+        private void Update()
+        {
         }
     }
 }

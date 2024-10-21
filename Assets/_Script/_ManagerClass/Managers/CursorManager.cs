@@ -37,6 +37,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             //        Debug.Log(hit.transform.gameObject.name + " has Clicked!!");
             //    }
             //}
+            StateMachine.CurrentState?.StateUpdate();
         }
 
 
@@ -48,6 +49,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             GameStateManager.OnGameStateChanged += GameStateReaction; //Reaction.
             GridTargetPrefab = Resources.Load(GRID_TARGET_PATH) as GameObject;
             FollowCursor = GameObject.FindGameObjectWithTag("MainCursor"); //Null
+
+
 
             InitializeStateMachine(this);
         }

@@ -11,12 +11,12 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         private GameStateManager_ GameStateManager_;
 
 
-        
+
         [SerializeField] private GameObject managerSightGameObject;
         public GameObject ManagerSightGameObject => managerSightGameObject;
         [SerializeField] private GameObject characterGameObject;
         public GameObject CharacterGameObject => characterGameObject;
-
+        private CustomInputManager customInputManager_;
 
 
         private void Update()
@@ -30,6 +30,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             GameManager = gameManager_;
 
             this.GameStateManager_ = GameManager.GameStateManager_;
+            this.customInputManager_ = gameManager_.CustomInputManager_;
             this.GameStateManager_.OnGameStateChanged += GameStateReactor;
 
             InitializeStateMachine(this);
@@ -59,7 +60,18 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public void ChangeState(PlayerState_ state)
         {
             StateMachine.ChangeState(state);
+
+            if (state == PlayerState_.PlayerOnCharacter) //Todo:
+            {
+                customInputManager_.ChangeInputMap(InputActionMapType.OnPlayer);
+            }
+            else
+            {
+                customInputManager_.ChangeInputMap(InputActionMapType.OnManage);
+            }
         }
+
+
     }
 
     public enum PlayerState_

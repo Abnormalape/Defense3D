@@ -86,7 +86,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             string[] internalRows = mapData.Trim('\r').Trim('\n').Split('\n');
             Array.Reverse(internalRows);
 
-            rows = internalRows; //Out
+            rows = internalRows;
 
             tempGridMap = new(internalRows.Length * internalRows[0].Trim(',').Length);
 
@@ -105,7 +105,6 @@ namespace BHSSolo.DungeonDefense.ManagerClass
                 }
                 iy++;
             }
-
             GridDatas.AddRange(tempGridMap);
         }
 

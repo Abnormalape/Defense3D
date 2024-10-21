@@ -82,8 +82,6 @@ namespace BHSSolo.DungeonDefense.Controller
                         Enum.TryParse(tempRoomBuildData.roomType, out buildType);
                         Requirement tempRequire = tempRoomBuildData.Requirements;
 
-                        //Todo: Check Requirement To Build. If your gold, workforce or etc is under Requirement value, can't build.
-
                         SendSelectedRoomData(roomId, roomName, buildType, roomDepth, roomWidth, tempRequire);
                         BluePrintClicked();
                     });
@@ -122,7 +120,7 @@ namespace BHSSolo.DungeonDefense.Controller
         private void SendSelectedRoomData(int roomId, string roomName,
             RoomBuildType buildType, int roomWidth, int roomDepth, Requirement tempRequire)
         {
-            if ((cursorManager.StateMachine.CurrentState as ICursorState).CursorState != CursorState.OnManage_Idle)
+            if (cursorManager.StateMachine.CurrentState.StateType != CursorState.OnManage_Idle)
                 return;
 
             dungeonConstructManager_.ConstructionProgress.SetHoldingBuildData(buildType, roomName, roomId, roomWidth, roomDepth, tempRequire);
@@ -131,7 +129,7 @@ namespace BHSSolo.DungeonDefense.Controller
         private void BluePrintClicked()
         {
             //Action Blocker
-            if ((cursorManager.StateMachine.CurrentState as ICursorState).CursorState != CursorState.OnManage_Idle)
+            if (cursorManager.StateMachine.CurrentState.StateType != CursorState.OnManage_Idle)
                 return;
 
             StopCoroutine(QuitGridBuildingState());
@@ -142,13 +140,14 @@ namespace BHSSolo.DungeonDefense.Controller
 
         private IEnumerator QuitGridBuildingState()
         {
-            while (!Input.GetMouseButtonUp(1) || ((cursorManager.StateMachine.CurrentState as ICursorState).CursorState == CursorState.OnManage_Idle))
-            {
+            CursorState tempCursorState = cursorManager.StateMachine.CurrentState.StateType;
 
+            while (!Input.GetMouseButtonUp(1) || (tempCursorState == CursorState.OnManage_Idle))
+            {
                 yield return null;
             }
 
-            if ((cursorManager.StateMachine.CurrentState as ICursorState).CursorState == CursorState.OnManage_Idle)
+            if (tempCursorState == CursorState.OnManage_Idle)
             {
                 yield break;
             }

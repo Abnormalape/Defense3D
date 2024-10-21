@@ -35,10 +35,14 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         public event InputActionEvent OnPlayerMove;
         public event InputActionEvent OnPlayerHorizontal;
         public event InputActionEvent OnPlayerVertical;
+        public event InputActionEvent OnManageMove;
+        public event InputActionEvent OnManageZoom;
 
         private void OnPlayerMoveAction(InputValue value) => OnPlayerMove?.Invoke(value);
         private void OnPlayerHorizontalAction(InputValue value) => OnPlayerHorizontal?.Invoke(value);
         private void OnPlayerVerticalAction(InputValue value) => OnPlayerVertical?.Invoke(value);
+        private void OnManageMoveAction(InputValue value) => OnManageMove?.Invoke(value);
+        private void OnManageZoomAction(InputValue value) => OnManageZoom?.Invoke(value);
     }
 
     public enum InputActionMapType

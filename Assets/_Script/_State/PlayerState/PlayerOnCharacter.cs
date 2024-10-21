@@ -14,7 +14,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         {
             BlackBoard = blackBoard;
             ControllingGameObject = BlackBoard.CharacterGameObject;
-            ControllingPlayerInput = ControllingGameObject.GetComponent<PlayerInput>();
+            //ControllingPlayerInput = ControllingGameObject.GetComponent<PlayerInput>();
             characterController_ = ControllingGameObject.GetComponent<CharacterController>();
 
             interactableManager_ = blackBoard.GameManager.InteractableManager_;
@@ -24,8 +24,6 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             customInputManager.OnPlayerMove += OnMove;
             customInputManager.OnPlayerHorizontal += OnHorizontal;
             customInputManager.OnPlayerVertical += OnVertical;
-
-            TurnOffPlayerInput();
         }
 
         public GameObject ControllingGameObject { get; set; }
@@ -60,12 +58,10 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void StateEnter()
         {
-            TurnOnPlayerInput();
         }
 
         public void StateExit()
         {
-            TurnOffPlayerInput();
         }
 
         public void StateUpdate()
@@ -74,18 +70,6 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
             interactableManager_.SetTargetInteractableGameObject(
                 interactableGameObjectFinder.FindInteractableGameObject());
-        }
-
-        public void TurnOffPlayerInput()
-        {
-            ControllingPlayerInput.enabled = false;
-            Cursor.lockState = CursorLockMode.None;
-        }
-
-        public void TurnOnPlayerInput()
-        {
-            ControllingPlayerInput.enabled = true;
-            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 }

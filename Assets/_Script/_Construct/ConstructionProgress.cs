@@ -87,6 +87,7 @@ namespace BHSSolo.DungeonDefense.Controller
                 if (JudgeRoomBuildable())
                 {
                     //Can Build
+                    Debug.Log("Can Build Room.");
                     CursorManager.ChangeState(CursorState.OnManage_Grid_RoomBuildAfterJudge);
                 }
                 else

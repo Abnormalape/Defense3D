@@ -187,42 +187,86 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             ""actions"": [
                 {
                     ""name"": ""ManageMoveAction"",
-                    ""type"": ""Button"",
-                    ""id"": ""bdba4360-2f76-4380-803b-b8f80ca88bb8"",
-                    ""expectedControlType"": ""Button"",
+                    ""type"": ""Value"",
+                    ""id"": ""44f057ec-ad9a-42db-8118-fd70d3aa03e5"",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""ManageZoomAction"",
-                    ""type"": ""Button"",
-                    ""id"": ""7abfd850-2e47-4843-b5a3-6ae0878d2bf0"",
-                    ""expectedControlType"": ""Button"",
+                    ""type"": ""Value"",
+                    ""id"": ""91a553b4-1db0-45df-b7c8-827d9ab2c95e"",
+                    ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
                 {
-                    ""name"": """",
-                    ""id"": ""a87a5d0a-07bd-4c27-a144-a3757cfd87f5"",
-                    ""path"": """",
+                    ""name"": ""WASD"",
+                    ""id"": ""67708805-8ced-4942-ac8c-bdce2af64152"",
+                    ""path"": ""2DVector"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ManageMoveAction"",
-                    ""isComposite"": false,
+                    ""isComposite"": true,
                     ""isPartOfComposite"": false
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""65650a05-7fed-4d99-b936-a6b52239aa44"",
-                    ""path"": """",
+                    ""name"": ""up"",
+                    ""id"": ""cad14eb5-7345-4190-a206-7fe89c02b637"",
+                    ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""ManageMoveAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""777cf78e-df34-4641-bd29-161c4d993408"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""ManageMoveAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""a2b94e91-5a5c-4247-ad0c-604d1479c1d6"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""ManageMoveAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""64d520a5-6189-44e8-ac56-73a580bef729"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
+                    ""action"": ""ManageMoveAction"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ec02df54-feaa-4cf4-9538-37dbee38e3e9"",
+                    ""path"": ""<Mouse>/scroll"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PC"",
                     ""action"": ""ManageZoomAction"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false

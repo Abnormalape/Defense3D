@@ -7,18 +7,19 @@ using UnityEngine.EventSystems;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
-    public class OnManage_Grid_RoomBuildAfterJudge : IState_<CursorState, CursorManager>, ICursorState
+    public class OnManage_Grid_RoomBuildAfterJudge : IState_<CursorState, CursorManager>
     {
         public CursorManager BlackBoard { get; set; }
         public CursorState StateType { get; set; } = CursorState.OnManage_Grid_RoomBuildAfterJudge;
         public void InitializeState(CursorManager blackBoard)
         {
             BlackBoard = blackBoard;
+            dungeonConstructManager_ = BlackBoard.GameManager.DungeonConstructManager_;
+            gameStateManager_ = BlackBoard.GameManager.GameStateManager_;
+            roomManager_ = BlackBoard.GameManager.RoomManager_;
         }
 
 
-        public CursorManager CursorManager_ { get; set; }
-        public CursorState CursorState { get; set; } = CursorState.OnManage_Grid_RoomBuildAfterJudge;
 
         private DungeonConstructManager dungeonConstructManager_;
         private GameStateManager_ gameStateManager_;
@@ -28,14 +29,6 @@ namespace BHSSolo.DungeonDefense.Controller
         private List<DungeonGridData> sideGrids { get; set; } = new(24);
         private Dictionary<Vector3, DungeonGridData> nearbyGrids { get; set; } = new(4);
 
-
-        public void InitialzieCursorState(CursorManager cursorManager)
-        {
-            CursorManager_ = cursorManager;
-            dungeonConstructManager_ = cursorManager.GameManager.DungeonConstructManager_;
-            gameStateManager_ = cursorManager.GameManager.GameStateManager_;
-            roomManager_ = cursorManager.GameManager.RoomManager_;
-        }
 
         public void StateEnter()
         {
@@ -160,7 +153,7 @@ namespace BHSSolo.DungeonDefense.Controller
 
         private void ExitConstructionState()
         {
-            CursorManager_.ChangeState(CursorState.OnManage_Idle);
+            BlackBoard.ChangeState(CursorState.OnManage_Idle);
             gameStateManager_.ChangeState(GameState.Dungeon_ConstructionState);
         }
 

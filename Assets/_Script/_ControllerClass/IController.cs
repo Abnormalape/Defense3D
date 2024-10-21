@@ -6,7 +6,6 @@ namespace BHSSolo.DungeonDefense.Controller
     {
         public IManagerClass OwnerManager { get; set; }
 
-
         public void InitializeController(IManagerClass ownerManager);
     }
 }

@@ -1,9 +1,8 @@
-﻿
-using BHSSolo.DungeonDefense.ManagerClass;
-using BHSSolo.DungeonDefense.NPCs;
+﻿using BHSSolo.DungeonDefense.ManagerClass;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.Controller
@@ -33,6 +32,8 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public void InitializeBuff(BuffBaseData buffBaseData, IBuffHolder buffHolder)
         {
+            Debug.Log("Setting Buff Data!!");
+
             BuffHolder = buffHolder;
             this.buffBaseData = buffBaseData;
 
@@ -49,14 +50,16 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public abstract void ExecuteBuff(); //Todo: Buff's Action. Like Make Buff, Damage Someone etc...
         public abstract void ExecuteBuff(IBuffHolder trigger, IBuffHolder opponent);
+        public abstract void ExecuteBuff(NpcBaseStat CurrentStat);
 
-        private Dictionary<IBuffHolder, KeyValuePair<EventInfo, Action>> TriggerTarget_Event_ActionDictionary { get; set; } = new();
+        //private Dictionary<IBuffHolder, KeyValuePair<EventInfo, Action>> TriggerTarget_Event_ActionDictionary { get; set; } = new();
 
 
         private List<NPCController_> NpcTriggerTarget { get; set; } = new();
+
+        //이 아래는 버프의 소유자가 Npc일 경우에 유효하다.
         private void SetNpcBuffUsingBaseData(BuffBaseData buffBaseData, NPCController_ npc)
         {
-            //이 아래는 버프의 소유자가 Npc일 경우에 유효하다.
             switch (buffBaseData.TriggerTarget)
             {
                 case TriggerTarget.BuffHolder:
@@ -66,128 +69,147 @@ namespace BHSSolo.DungeonDefense.Controller
 
                 case TriggerTarget.Opponent:
                     NpcTriggerTarget = npc.OpponentList;
-                    npc.OnAddOpponentList += SubscribeTriggerTarget;
-                    npc.OnRemoveOpponentList += UnsubscribeTriggerTarget;
+                    npc.OnAddOpponentList += SubscribeNpcTriggerTarget;
+                    npc.OnRemoveOpponentList += UnsubscribeNpcTriggerTarget;
                     break;
 
                 case TriggerTarget.RoomAlly:
                     var room = npc.CurrentRoom;
                     NpcTriggerTarget = room.EnteredAllys;
-                    room.OnAddAllyList += SubscribeTriggerTarget;
-                    room.OnRemoveAllyList += SubscribeTriggerTarget;
+                    room.OnAddAllyList += SubscribeNpcTriggerTarget;
+                    room.OnRemoveAllyList += SubscribeNpcTriggerTarget;
                     break;
 
                 case TriggerTarget.RoomEnemy:
                     room = npc.CurrentRoom;
-                    NpcTriggerTarget = room.EnteredEnemys;
-                    room.OnAddEnemyList += SubscribeTriggerTarget;
-                    room.OnRemoveEnemyList += UnsubscribeTriggerTarget;
+                    NpcTriggerTarget = room.EnteredEnemies;
+                    room.OnAddEnemyList += SubscribeNpcTriggerTarget;
+                    room.OnRemoveEnemyList += UnsubscribeNpcTriggerTarget;
                     break;
 
                 case TriggerTarget.AllAlly:
                     var allyManager = npc.NpcManager_.GameManager.AllyManager_;
                     NpcTriggerTarget = allyManager.AllAlly;
-                    allyManager.OnAddAllAllyList += SubscribeTriggerTarget;
-                    allyManager.OnRemoveAllAllyList += UnsubscribeTriggerTarget;
+                    allyManager.OnAddAllAllyList += SubscribeNpcTriggerTarget;
+                    allyManager.OnRemoveAllAllyList += UnsubscribeNpcTriggerTarget;
                     break;
 
                 case TriggerTarget.AllEnemy:
                     var enemyManager = npc.NpcManager_.GameManager.EnemyManager_;
                     NpcTriggerTarget = enemyManager.AllEnemy;
-                    enemyManager.OnAddAllEnemyList += SubscribeTriggerTarget;
-                    enemyManager.OnRemoveAllEnemyList += UnsubscribeTriggerTarget;
+                    enemyManager.OnAddAllEnemyList += SubscribeNpcTriggerTarget;
+                    enemyManager.OnRemoveAllEnemyList += UnsubscribeNpcTriggerTarget;
                     break;
 
                 default:
                     return;
             }
-
-            SubscribeTriggerTarget(NpcTriggerTarget);
+            SubscribeNpcTriggerTarget(NpcTriggerTarget);
         }
-        private void SubscribeTriggerTarget(List<NPCController_> triggerTarget)
-        {
-            var action = buffBaseData.TriggerAction;
-
-            foreach (var e in triggerTarget)
-            {
-                switch (action)
-                {
-                    case TriggerAction.OnAttack:
-                        e.OnAttack += ExecuteBuff;
-                        break;
-                    case TriggerAction.OnHit:
-                        e.OnHit += ExecuteBuff;
-                        break;
-                    case TriggerAction.OnAttacked:
-                        e.OnAttacked += ExecuteBuff;
-                        break;
-                    case TriggerAction.OnDamaged:
-                        e.OnDamaged += ExecuteBuff;
-                        break;
-                }
-            }
-        }
-        private void UnsubscribeTriggerTarget(List<NPCController_> triggerTarget)
-        {
-            var action = buffBaseData.TriggerAction;
-
-            foreach (var e in triggerTarget)
-            {
-                switch (action)
-                {
-                    case (TriggerAction.OnAttack):
-                        e.OnAttack -= ExecuteBuff;
-                        break;
-                    case (TriggerAction.OnHit):
-                        e.OnHit -= ExecuteBuff;
-                        break;
-                    case (TriggerAction.OnAttacked):
-                        e.OnAttacked -= ExecuteBuff;
-                        break;
-                    case (TriggerAction.OnDamaged):
-                        e.OnDamaged -= ExecuteBuff;
-                        break;
-                }
-            }
-        }
-
-
-        private List<RoomController> RoomTriggerTarget { get; set; } = new();
         private void SetRoomBuffUsingBaseData(BuffBaseData buffBaseData, RoomController room)
         {
             switch (buffBaseData.TriggerTarget)
             {
                 case TriggerTarget.RoomAlly:
                     NpcTriggerTarget = room.EnteredAllys;
-                    room.OnAddAllyList += SubscribeTriggerTarget;
-                    room.OnRemoveAllyList += SubscribeTriggerTarget;
+                    room.OnAddAllyList += SubscribeNpcTriggerTarget;
+                    room.OnRemoveAllyList += SubscribeNpcTriggerTarget;
                     break;
 
                 case TriggerTarget.RoomEnemy:
-                    NpcTriggerTarget = room.EnteredEnemys;
-                    room.OnAddEnemyList += SubscribeTriggerTarget;
-                    room.OnRemoveEnemyList += UnsubscribeTriggerTarget;
+                    NpcTriggerTarget = room.EnteredEnemies;
+                    room.OnAddEnemyList += SubscribeNpcTriggerTarget;
+                    room.OnRemoveEnemyList += UnsubscribeNpcTriggerTarget;
                     break;
 
                 case TriggerTarget.AllAlly:
                     var allyManager = room.OwnerManager.GameManager.AllyManager_;
                     NpcTriggerTarget = allyManager.AllAlly;
-                    allyManager.OnAddAllAllyList += SubscribeTriggerTarget;
-                    allyManager.OnRemoveAllAllyList += UnsubscribeTriggerTarget;
+                    allyManager.OnAddAllAllyList += SubscribeNpcTriggerTarget;
+                    allyManager.OnRemoveAllAllyList += UnsubscribeNpcTriggerTarget;
                     break;
 
                 case TriggerTarget.AllEnemy:
                     var enemyManager = room.OwnerManager.GameManager.EnemyManager_;
                     NpcTriggerTarget = enemyManager.AllEnemy;
-                    enemyManager.OnAddAllEnemyList += SubscribeTriggerTarget;
-                    enemyManager.OnRemoveAllEnemyList += UnsubscribeTriggerTarget;
+                    enemyManager.OnAddAllEnemyList += SubscribeNpcTriggerTarget;
+                    enemyManager.OnRemoveAllEnemyList += UnsubscribeNpcTriggerTarget;
                     break;
 
                 default:
                     return;
             }
+            SubscribeNpcTriggerTarget(NpcTriggerTarget);
+        }
+        private void SubscribeNpcTriggerTarget(List<NPCController_> triggerTarget)
+        {
+            var action = buffBaseData.TriggerAction;
 
-            SubscribeTriggerTarget(NpcTriggerTarget);
+            foreach (var e in triggerTarget)
+            {
+                switch (action)
+                {
+                    case TriggerAction.OnAttack: //관측 대상이 공격 시
+                        e.OnAttack += ExecuteBuff;
+                        break;
+                    case TriggerAction.OnHit: //관측 대상이 공격 성공시
+                        e.OnHit += ExecuteBuff;
+                        break;
+                    case TriggerAction.OnAttacked: //관측 대상이 공격 대상 시
+                        e.OnAttacked += ExecuteBuff;
+                        break;
+                    case TriggerAction.OnDamaged: //관측 대상이 피격 시
+                        e.OnDamaged += ExecuteBuff;
+                        break;
+                    case TriggerAction.OnEnterRoom: //관측 대상이 방에 들어갈 시 
+                        e.OnEnterRoom += ExecuteBuff;
+                        break;
+                    case TriggerAction.OnExitRoom: //관측 대상이 방에서 나올 시
+                        e.OnExitRoom += ExecuteBuff;
+                        break;
+                    case TriggerAction.OnDead: //관측 대상이 사망시
+                        e.OnDead += ExecuteBuff;
+                        break;
+                    case TriggerAction.OnCurrentResourceStatModified:
+                        (e as IStatHolder).OnCurrentResourceStatModified += ExecuteBuff;
+                        break;
+                    case TriggerAction.OnFinalAbilityStatModified:
+                        (e as IStatHolder).OnFinalAbilityStatModified += ExecuteBuff;
+                        break;
+                }
+            }
+        }
+        private void UnsubscribeNpcTriggerTarget(List<NPCController_> triggerTarget)
+        {
+            var action = buffBaseData.TriggerAction;
+
+            foreach (var e in triggerTarget)
+            {
+                switch (action)
+                {
+                    case TriggerAction.OnAttack: //관측 대상이 공격 시
+                        e.OnAttack -= ExecuteBuff;
+                        break;
+                    case TriggerAction.OnHit: //관측 대상이 공격 성공시
+                        e.OnHit -= ExecuteBuff;
+                        break;
+                    case TriggerAction.OnAttacked: //관측 대상이 공격 대상 시
+                        e.OnAttacked -= ExecuteBuff;
+                        break;
+                    case TriggerAction.OnDamaged: //관측 대상이 피격 시
+                        e.OnDamaged -= ExecuteBuff;
+                        break;
+                    case TriggerAction.OnEnterRoom: //관측 대상이 방에 들어갈 시 
+                        e.OnEnterRoom -= ExecuteBuff;
+                        break;
+                    case TriggerAction.OnExitRoom: //관측 대상이 방에서 나올 시
+                        e.OnExitRoom -= ExecuteBuff;
+                        break;
+                    case TriggerAction.OnDead: //관측 대상이 사망시
+                        e.OnDead -= ExecuteBuff;
+                        break;
+                }
+            }
         }
     }
 }

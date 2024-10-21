@@ -8,11 +8,17 @@ namespace BHSSolo.DungeonDefense.ManagerClass
     {
         public PlayerManager_ BlackBoard { get; set; }
         public PlayerState_ StateType { get; set; } = PlayerState_.PlayerManageSight;
+        private CustomInputManager customInputManager;
         public void InitializeState(PlayerManager_ blackBoard)
         {
             BlackBoard = blackBoard;
             ControllingGameObject = BlackBoard.ManagerSightGameObject;
             ControllingPlayerInput = ControllingGameObject.GetComponent<PlayerInput>();
+
+            customInputManager = blackBoard.GameManager.CustomInputManager_;
+            customInputManager.OnManageMove += OnMove;
+            customInputManager.OnManageZoom += OnZoom;
+
             TurnOffPlayerInput();
         }
 

@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 
 namespace BHSSolo.DungeonDefense.State
 {
-    public class OnManage_IdleCursor : IState_<CursorState, CursorManager>, ICursorState
+    public class OnManage_IdleCursor : IState_<CursorState, CursorManager>
     {
         public CursorManager BlackBoard { get; set; }
         public CursorState StateType { get; set; } = CursorState.OnManage_Idle;
@@ -14,13 +14,7 @@ namespace BHSSolo.DungeonDefense.State
             BlackBoard = blackBoard;
         }
 
-        public CursorManager CursorManager_ { get; set; }
-        public CursorState CursorState { get; set; } = CursorState.OnManage_Idle;
 
-        public void InitialzieCursorState(CursorManager cursorManager)
-        {
-            CursorManager_ = cursorManager;
-        }
 
         public void StateEnter()
         {

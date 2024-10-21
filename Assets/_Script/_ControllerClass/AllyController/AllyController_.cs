@@ -1,4 +1,5 @@
 ﻿using BHSSolo.DungeonDefense.Enums;
+using BHSSolo.DungeonDefense.Management;
 using BHSSolo.DungeonDefense.ManagerClass;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public event IStatHolder.ResourceStatEvent OnCurrentResourceStatModified;
         public event IStatHolder.AbilityStatEvent OnFinalAbilityStatModified;
+        public NpcBaseStat CurrentResourceStat { get; set; }
+        public NpcBaseStat CurrentFinalStat { get; set; }
 
         public IManagerClass OwnerManager { get; set; }
         private AllyManager_ AllyManager_;
@@ -23,6 +26,7 @@ namespace BHSSolo.DungeonDefense.Controller
         public override NpcManager_ NpcManager_ { get; set; }
         public BuffManager BuffManager { get; set; }
         public List<NpcStatModifier> StatModifiers { get; set; } = new();
+
 
         public void InitializeController(IManagerClass ownerManager)
         {
@@ -34,11 +38,20 @@ namespace BHSSolo.DungeonDefense.Controller
 
 
             InitializeStateMachine(this);
+
+            BuffManager = OwnerManager.GameManager.BuffManager_;
+            int[] buffIDs = AllyManager_.BaseDataDictionary[Ally_ID].TraitIDs;
+            foreach (int e in buffIDs)
+            {
+                var tempBuff = BuffManager.InstantiateBuff(e, out BuffBaseData tempBuffData);
+                HoldingBuffs.Add(e, tempBuff);
+                tempBuff.InitializeBuff(tempBuffData, this);
+            }
         }
 
         protected virtual void Update()
         {
-            StateMachine.CurrentState.StateUpdate();
+            StateMachine?.CurrentState.StateUpdate();
         }
 
         public void InitializeStateMachine(AllyController_ stateBlackBoard)

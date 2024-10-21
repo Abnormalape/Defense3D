@@ -9,18 +9,17 @@ using UnityEngine.EventSystems;
 
 namespace BHSSolo.DungeonDefense.Controller
 {
-    public class OnManage_Grid_PassageBuildAfterJudge : IState_<CursorState, CursorManager>, ICursorState
+    public class OnManage_Grid_PassageBuildAfterJudge : IState_<CursorState, CursorManager>//, ICursorState
     {
         public CursorManager BlackBoard { get; set; }
         public CursorState StateType { get; set; } = CursorState.OnManage_Grid_PassageBuildAfterJudge;
         public void InitializeState(CursorManager blackBoard)
         {
             BlackBoard = blackBoard;
+            dungeonConstructManager = blackBoard.GameManager.DungeonConstructManager_;
         }
 
 
-        public CursorManager CursorManager_ { get; set; }
-        public CursorState CursorState { get; set; } = CursorState.OnManage_Grid_PassageBuildAfterJudge;
         private DungeonConstructManager dungeonConstructManager { get; set; }
         private GameObject gridTarget { get; set; }
         private Vector3 gridTargetPosition { get; set; }
@@ -30,15 +29,9 @@ namespace BHSSolo.DungeonDefense.Controller
 
         private bool clicked;
 
-        public void InitialzieCursorState(CursorManager cursorManager)
-        {
-            CursorManager_ = cursorManager;
-            dungeonConstructManager = cursorManager.GameManager.DungeonConstructManager_;
-        }
-
         public void StateEnter()
         {
-            gridTarget = CursorManager_.SummonGridTarget();
+            gridTarget = BlackBoard.SummonGridTarget();
             gridTargetPosition = gridTarget.transform.position;
             startPosition = dungeonConstructManager.ConstructionProgress.BasePosition;
 
@@ -47,7 +40,7 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public void StateExit()
         {
-            CursorManager_.DestroyGridTarget();
+            BlackBoard.DestroyGridTarget();
         }
 
         public void StateUpdate()

@@ -39,5 +39,8 @@ namespace BHSSolo.DungeonDefense.Controller
         public event NpcEvent OnHit;
         public event NpcEvent OnAttacked;
         public event NpcEvent OnDamaged;
+        public event NpcEvent OnEnterRoom;
+        public event NpcEvent OnExitRoom;
+        public event NpcEvent OnDead;
     }
 }

@@ -69,6 +69,8 @@ namespace BHSSolo.DungeonDefense.Controller
             CurrentState?.StateExit();
             CurrentState = tempState;
             CurrentState?.StateEnter();
+
+            Debug.Log($"CurrentState {CurrentState.StateType.ToString()}");
         }
     }
 }
