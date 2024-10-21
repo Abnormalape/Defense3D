@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 4240832015594629441}
   - component: {fileID: 4009381138217001091}
   - component: {fileID: 8723902528223997026}
-  - component: {fileID: -8654026674163800532}
+  - component: {fileID: 2915841612990190058}
   m_Layer: 0
-  m_Name: Goblin
+  m_Name: NewbieSwordMan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -106,7 +106,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-8654026674163800532
+--- !u!114 &2915841612990190058
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -115,7 +115,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6839417385826938579}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 130f8f9ff680830439a822abad0906e2, type: 3}
+  m_Script: {fileID: 11500000, guid: 6a27893fbd7f4b8448c8d2cf346b1f79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentRoom: {fileID: 0}

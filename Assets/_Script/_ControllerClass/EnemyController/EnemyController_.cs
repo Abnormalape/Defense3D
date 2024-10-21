@@ -58,8 +58,6 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public virtual void InitializeController(IManagerClass ownerManager)
         {
-            if (Enemy_ID == -100) { return; } //Todo:
-
             OwnerManager = ownerManager;
             enemyManager_ = OwnerManager.GameManager.EnemyManager_;
             NpcManager_ = OwnerManager.GameManager.NpcManager_;

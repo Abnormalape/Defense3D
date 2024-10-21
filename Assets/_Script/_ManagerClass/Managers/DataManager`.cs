@@ -18,6 +18,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             GameManager = gameManager_;
 
             InitializeGameData();
+            SetBuffBaseDatas(); //Todo:
+            SetNpcStatData(); //Todo:
         }
 
         #region SetGameData
@@ -28,21 +30,61 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         private TextAsset roomBuildData { get { return Resources.Load(ROOM_BUILD_DATA_PATH) as TextAsset; } }
 
 
-        private const string ALLY_DATA_PATH = "GameData/AllyData"; //Csv
-        private const string ENEMY_DATA_PATH = "GameData/EnemyData"; //NONE
+        private const string ALLY_DATA_PATH = "GameData/AllyData"; //Json
+        private const string ENEMY_DATA_PATH = "GameData/EnemyData"; //Json
+        private const string TRAIT_DATA_PATH = "GameData/TraitData"; //Json
         private const string DEFAULT_MAP_DATA_PATH = "GameData/MapData/DefaultDungeonMap"; //Csv
 
 
-        public AllyBaseStatus AllyStatDatas { get; private set; } //Todo:
-        public EnemyBaseStatus EnemyStatDatas { get; private set; } //Todo:
-        private void SetNpcStatData(TextAsset allyStat, TextAsset enemyStat) //Todo:
+
+        public AllyBaseStatus AllyStatDatas { get; private set; }
+        public List<NpcBaseStatus> AllyBaseStatus { get; private set; } = new();
+        public EnemyBaseStatus EnemyStatDatas { get; private set; }
+        public List<NpcBaseStatus> EnemyBaseStatus { get; private set; } = new();
+        public TraitDataWrapper TraitDataWrapper { get; private set; }
+        public List<TraitBaseData> TraitDatas { get; private set; } = new();
+        private void SetNpcStatData()
         {
-            string tempAllyStat = allyStat.text;
-            string tempEnemyStat = enemyStat.text;
+            string tempAllyStat = (Resources.Load(ALLY_DATA_PATH) as TextAsset).text;
+            string tempEnemyStat = (Resources.Load(ENEMY_DATA_PATH) as TextAsset).text;
+            string tempTraitData = (Resources.Load(TRAIT_DATA_PATH) as TextAsset).text;
 
             AllyStatDatas = JsonUtility.FromJson<AllyBaseStatus>(tempAllyStat);
             EnemyStatDatas = JsonUtility.FromJson<EnemyBaseStatus>(tempEnemyStat);
+            TraitDataWrapper = JsonUtility.FromJson<TraitDataWrapper>(tempTraitData);
+
+            foreach (var e in AllyStatDatas.AllyStatusList)
+            {
+                AllyBaseStatus.Add(e);
+            }
+            foreach (var e in EnemyStatDatas.EnemyStatusList)
+            {
+                EnemyBaseStatus.Add(e);
+            }
+            foreach (var e in TraitDataWrapper.TraitDatas)
+            {
+                TraitDatas.Add(e);
+            }
+
+            Debug.Log($"AllyCount: {AllyBaseStatus.Count}");
+            Debug.Log($"EnemyyCount: {EnemyBaseStatus.Count}");
+            Debug.Log($"TraitCount: {TraitDatas.Count}");
         }
+
+        private const string BUFF_DATA_PATH = "GameData/BuffBaseDatas";
+        public BuffBaseDataWrapper BuffBaseDataWrapper { get; private set; } = new();
+        public List<BuffBaseData> BuffBaseDatas { get; private set; } = new();
+        private void SetBuffBaseDatas()
+        {
+            TextAsset buffBaseDatas = Resources.Load(BUFF_DATA_PATH) as TextAsset;
+            BuffBaseDataWrapper = JsonUtility.FromJson<BuffBaseDataWrapper>(buffBaseDatas.text);
+            foreach (var data in BuffBaseDataWrapper.BuffBaseDatas)
+            {
+                BuffBaseDatas.Add(data);
+            }
+            Debug.Log($"Imported Buff Data Count: {BuffBaseDatas.Count}");
+        }
+
 
 
         public TextAsset allyBaseTextAsset { get; private set; }
@@ -89,7 +131,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         private void LoadAllTextAsset()
         {
-            allyBaseTextAsset = Resources.Load(ALLY_DATA_PATH) as TextAsset;
+            //allyBaseTextAsset = Resources.Load(ALLY_DATA_PATH) as TextAsset;
             //enemyBaseTextAsset = Resources.Load(ENEMY_DATA_PATH) as TextAsset;
             defaultMapTextAsset = Resources.Load(DEFAULT_MAP_DATA_PATH) as TextAsset;
         }

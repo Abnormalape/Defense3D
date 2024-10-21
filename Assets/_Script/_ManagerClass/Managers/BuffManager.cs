@@ -18,17 +18,17 @@ namespace BHSSolo.DungeonDefense.ManagerClass
         {
             GameManager = gameManager_;
             DataManager = GameManager.DataManager_;
-            //BuffBaseDatas = DataManager.BuffBaseDatas;
+            this.BuffBaseDatas = DataManager.BuffBaseDatas;
 
             var tempBuffs = Assembly.GetExecutingAssembly().GetTypes()
                                     .Where(t => typeof(BuffController).IsAssignableFrom(t)
                                              && !t.IsInterface
                                              && !t.IsAbstract).ToList();
 
-            foreach (var buff in tempBuffs)
+            foreach (var item in tempBuffs)
             {
-                var instance = Activator.CreateInstance(buff);
-                BuffTypes.Add((instance as BuffController).BuffID, buff); //ID를 key로 찾아낸 타입(객체)를 value로.
+                int tempBuffID = (Activator.CreateInstance(item) as BuffController).BuffID;
+                BuffTypes.Add(tempBuffID, item);
             }
         }
 

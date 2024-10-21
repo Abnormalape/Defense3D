@@ -1,0 +1,20 @@
+{
+  "BuffBaseDatas": [
+    {
+      "BuffID": 0,
+      "BuffName": "Error",
+      "BuffDescription": "Not Defiend",
+      "TriggerTarget": "0",
+      "TriggerAction": "0",
+      "EffectTarget": "0"
+    },
+    {
+      "BuffID": 1,
+      "BuffName": "Increase Physical Power",
+      "BuffDescription": "Increases attack power temporarily upon taking damage.",
+      "TriggerTarget": 1,
+      "TriggerAction": 10,
+      "EffectTarget": 1
+    }
+  ]
+}

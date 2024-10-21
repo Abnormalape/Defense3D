@@ -22,7 +22,7 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public IManagerClass OwnerManager { get; set; }
         private AllyManager_ AllyManager_;
-        public Dictionary<int, BuffController> HoldingBuffs { get; set; }
+        public Dictionary<int, BuffController> HoldingBuffs { get; set; } = new();
         public override NpcManager_ NpcManager_ { get; set; }
         public BuffManager BuffManager { get; set; }
         public List<NpcStatModifier> StatModifiers { get; set; } = new();

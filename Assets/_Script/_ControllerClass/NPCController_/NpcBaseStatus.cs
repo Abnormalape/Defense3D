@@ -38,51 +38,51 @@ namespace BHSSolo.DungeonDefense.Controller
             }
         }
 
-        public readonly int NPCID;
-        public readonly string Race;
-        public readonly int MaxLevel;
-        public readonly int[] TraitIDs;
+        public int NPCID;
+        public string Race;
+        public int MaxLevel;
+        public int[] TraitIDs;
 
-        public readonly float Blood;
-        public readonly float BloodScaling;
-        public readonly float Mental;
-        public readonly float MentalScaling;
-        public readonly float Physical;
-        public readonly float PhysicalScaling;
-        public readonly float Special;
-        public readonly float SpecialScaling;
-        public readonly float PhysicalPower;
-        public readonly float PhysicalPowerScaling;
-        public readonly float SpecialPower;
-        public readonly float SpecialPowerScaling;
-        public readonly float PhysicalResist;
-        public readonly float PhysicalResistScaling;
-        public readonly float SpecialResist;
-        public readonly float SpecialResistScaling;
-        public readonly float Speed;
-        public readonly float SpeedScaling;
-        public readonly float ReactSpeed;
-        public readonly float ReactSpeedScaling;
+        public float Blood { get; private set; }
+        public float BloodScaling { get; private set; }
+        public float Mental { get; private set; }
+        public float MentalScaling { get; private set; }
+        public float Physical { get; private set; }
+        public float PhysicalScaling { get; private set; }
+        public float Special { get; private set; }
+        public float SpecialScaling { get; private set; }
+        public float PhysicalPower { get; private set; }
+        public float PhysicalPowerScaling { get; private set; }
+        public float SpecialPower { get; private set; }
+        public float SpecialPowerScaling { get; private set; }
+        public float PhysicalResist { get; private set; }
+        public float PhysicalResistScaling { get; private set; }
+        public float SpecialResist { get; private set; }
+        public float SpecialResistScaling { get; private set; }
+        public float Speed { get; private set; }
+        public float SpeedScaling { get; private set; }
+        public float ReactSpeed { get; private set; }
+        public float ReactSpeedScaling { get; private set; }
     }
 
     public class AllyBaseStatus
     {
         public NpcBaseStatus this[int AllyId]
         {
-            get { return AllyStats[AllyId]; }
+            get { return AllyStatusList[AllyId]; }
         }
 
-        private List<NpcBaseStatus> AllyStats;
+        public List<NpcBaseStatus> AllyStatusList;
     }
 
     public class EnemyBaseStatus
     {
         public NpcBaseStatus this[int EnemyId]
         {
-            get { return EnemyStats[EnemyId]; }
+            get { return EnemyStatusList[EnemyId]; }
         }
 
-        private List<NpcBaseStatus> EnemyStats;
+        public List<NpcBaseStatus> EnemyStatusList;
     }
 
     public enum NpcStat

@@ -1,0 +1,19 @@
+{
+  "TraitDatas": [
+    {
+      "TraitID": 0,
+      "TraitName": "None",
+      "BuffIDs": [ 0 ]
+    },
+    {
+      "TraitID": 1,
+      "TraitName": "CharpClaw",
+      "BuffIDs": [ 1 ]
+    },
+    {
+      "TraitID": 2,
+      "TraitName": "StrongMuscle",
+      "BuffIDs": [ 1 ]
+    }
+  ]
+}

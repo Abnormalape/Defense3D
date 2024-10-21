@@ -10,10 +10,10 @@ namespace BHSSolo.DungeonDefense.Data
         public static Dictionary<string, Dictionary<string, string>> AllyBaseData { get => allyBaseData; }
 
 
-        public static void InitializeGameData()
+        public static void InitializeGameData() //Todo: Remove
         {
-            LoadAllTextAsset();
-            SetBaseData();
+            //LoadAllTextAsset();
+            //SetBaseData();
         }
 
         private static void LoadAllTextAsset()

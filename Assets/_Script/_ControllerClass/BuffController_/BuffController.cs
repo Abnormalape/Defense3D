@@ -20,8 +20,6 @@ namespace BHSSolo.DungeonDefense.Controller
         public IManagerClass OwnerManager { get; set; }
         public BuffManager BuffManager { get; set; }
         public IBuffHolder BuffHolder { get; set; }
-        protected RoomController ActualBuffHolder_Room { get; set; }
-        protected NPCController_ ActualBuffHolder_Npc { get; set; }
         protected BuffBaseData buffBaseData { get; set; }
 
         public void InitializeController(IManagerClass ownerManager)
@@ -37,20 +35,28 @@ namespace BHSSolo.DungeonDefense.Controller
             BuffHolder = buffHolder;
             this.buffBaseData = buffBaseData;
 
+            // BuffHolder가 NpcController일 경우
             if (buffHolder is NPCController_ npc)
             {
+                Debug.Log("Buff Holder is NPC");
                 SetNpcBuffUsingBaseData(buffBaseData, npc);
             }
             // BuffHolder가 RoomController일 경우
             else if (buffHolder is RoomController room)
             {
+                Debug.Log("Buff Holder is Room");
                 SetRoomBuffUsingBaseData(buffBaseData, room);
             }
         }
 
-        public abstract void ExecuteBuff(); //Todo: Buff's Action. Like Make Buff, Damage Someone etc...
-        public abstract void ExecuteBuff(IBuffHolder trigger, IBuffHolder opponent);
+        public abstract void ExecuteBuff();
         public abstract void ExecuteBuff(NpcBaseStat CurrentStat);
+        public abstract void ExecuteBuff(IBuffHolder trigger, IBuffHolder opponent);
+
+        public virtual void EndBuff()
+        {
+            BuffHolder.HoldingBuffs.Remove(BuffID);
+        }
 
         //private Dictionary<IBuffHolder, KeyValuePair<EventInfo, Action>> TriggerTarget_Event_ActionDictionary { get; set; } = new();
 
@@ -64,6 +70,7 @@ namespace BHSSolo.DungeonDefense.Controller
             {
                 case TriggerTarget.BuffHolder:
                     //In this case, Only for Npc, and Npc Must inherit BuffHolder. Casting Must Success.
+                    Debug.Log("Trigger Target Is Buff Holder");
                     NpcTriggerTarget = new() { npc };
                     break;
 
@@ -102,7 +109,7 @@ namespace BHSSolo.DungeonDefense.Controller
                     break;
 
                 default:
-                    return;
+                    break;
             }
             SubscribeNpcTriggerTarget(NpcTriggerTarget);
         }
@@ -137,7 +144,7 @@ namespace BHSSolo.DungeonDefense.Controller
                     break;
 
                 default:
-                    return;
+                    break;
             }
             SubscribeNpcTriggerTarget(NpcTriggerTarget);
         }
@@ -176,6 +183,9 @@ namespace BHSSolo.DungeonDefense.Controller
                     case TriggerAction.OnFinalAbilityStatModified:
                         (e as IStatHolder).OnFinalAbilityStatModified += ExecuteBuff;
                         break;
+                    case TriggerAction.OnStart:
+                        ExecuteBuff();
+                        break;
                 }
             }
         }
@@ -210,6 +220,11 @@ namespace BHSSolo.DungeonDefense.Controller
                         break;
                 }
             }
+        }
+
+        private void SetBuffEffectTarget()
+        {
+
         }
     }
 }

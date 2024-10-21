@@ -5,21 +5,29 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    public class AllyManager_ : MonoBehaviour, IManagerClass, IManagerFactory<AllyBaseStatus>
+    public class AllyManager_ : MonoBehaviour, IManagerClass, IManagerFactory<List<NpcBaseStatus>>
     {
         public GameManager_ GameManager { get; set; }
         public Dictionary<int, IController> ID_ControllerDictionary { get; set; } = new();
-        public AllyBaseStatus BaseDataDictionary { get; set; }
+        public List<NpcBaseStatus> BaseDataDictionary { get; set; } = new();
 
         private DataManager_ DataManager_;
         public static int Ally_ID { get; private set; }
 
+        private const string ALLY_PREFAB_PATH = "Prefabs/Ally";
 
         public void InitializeManager(GameManager_ gameManager_)
         {
             GameManager = gameManager_;
             DataManager_ = GameManager.DataManager_;
             OnInitializeManager_Factory();
+
+
+            //Todo:
+            string tempName = $"{ALLY_PREFAB_PATH}/{BaseDataDictionary[1].Race}";
+            GameObject tempNPC = Resources.Load(tempName) as GameObject;
+            Instantiate(tempNPC);
+            tempNPC.GetComponent<AllyController_>().InitializeController(this);
         }
 
 
@@ -31,7 +39,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void InitializeBaseData()
         {
-            BaseDataDictionary = this.DataManager_.AllyStatDatas;//Pull AllyStatData
+            BaseDataDictionary = this.DataManager_.AllyBaseStatus;//Pull AllyStatData
+            Debug.Log(this.DataManager_.AllyBaseStatus[1]);
         }
 
 

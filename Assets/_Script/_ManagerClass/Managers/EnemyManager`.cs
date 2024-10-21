@@ -5,21 +5,28 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.ManagerClass
 {
-    public class EnemyManager_ : MonoBehaviour, IManagerClass, IManagerFactory<EnemyBaseStatus>
+    public class EnemyManager_ : MonoBehaviour, IManagerClass, IManagerFactory<List<NpcBaseStatus>>
     {
         public GameManager_ GameManager { get; set; }
         public Dictionary<int, IController> ID_ControllerDictionary { get; set; } = new();
-        public EnemyBaseStatus BaseDataDictionary { get; set; }
+        public List<NpcBaseStatus> BaseDataDictionary { get; set; } = new();
 
         private DataManager_ DataManager_;
         public static int Enemy_ID { get; private set; }
 
+        private const string ENEMY_PREFAB_PATH = "Prefabs/Enemy";
 
         public void InitializeManager(GameManager_ gameManager_)
         {
             GameManager = gameManager_;
             DataManager_ = GameManager.DataManager_;
             OnInitializeManager_Factory();
+
+            //Todo:
+            string tempName = $"{ENEMY_PREFAB_PATH}/{BaseDataDictionary[1].Race}";
+            GameObject tempNPC = Resources.Load(tempName) as GameObject;
+            Instantiate(tempNPC);
+            tempNPC.GetComponent<EnemyController_>().InitializeController(this);
         }
 
         public void OnInitializeManager_Factory()
@@ -30,7 +37,7 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
         public void InitializeBaseData()
         {
-            BaseDataDictionary = this.DataManager_.EnemyStatDatas; //Pull EnemyStatData
+            BaseDataDictionary = this.DataManager_.EnemyBaseStatus; //Pull EnemyStatData
         }
 
         /// <summary>
@@ -101,7 +108,6 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             foreach (NPCController_ item in removedEnemy)
             {
                 AllEnemy.Remove(item);
-
             }
             OnRemoveAllEnemyList(removedEnemy);
         }
