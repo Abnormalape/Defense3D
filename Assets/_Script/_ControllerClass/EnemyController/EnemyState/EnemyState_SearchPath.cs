@@ -6,10 +6,8 @@ using UnityEngine;
 
 namespace BHSSolo.DungeonDefense.State
 {
-    public class EnemyState_SearchPath : IState_<EnemyStates, EnemyController_>, IEnemyState
+    public class EnemyState_SearchPath : IState_<EnemyStates, EnemyController_>
     {
-        public EnemyController_ enemyController { get; set; }
-        public EnemyStates EnemyState { get; set; } = EnemyStates.SearchPath;
         public EnemyStates StateType { get; set; } = EnemyStates.SearchPath;
         public EnemyController_ BlackBoard { get; set; }
 
@@ -23,18 +21,14 @@ namespace BHSSolo.DungeonDefense.State
         public void InitializeState(EnemyController_ blackBoard)
         {
             BlackBoard = blackBoard;
-        }
-
-        public void InitializeEnemyState(EnemyController_ enemyController_)
-        {
-            enemyController = enemyController_;
-            excludeGrids = enemyController.ExcludeGrids; //Todo: 새로 만든다고 길찾기 박살냈네
-            dungeonConstructManager = enemyController.OwnerManager.GameManager.DungeonConstructManager_; //Todo: 새로 만든다고 길찾기 박살냈네
+            excludeGrids = BlackBoard.ExcludeGrids;
+            dungeonConstructManager = BlackBoard.OwnerManager.GameManager.DungeonConstructManager_;
         }
 
         public void StateEnter()
         {
             SetDestination();
+            Debug.Log("Searching Path!");
         }
 
         public void StateExit()
@@ -47,7 +41,7 @@ namespace BHSSolo.DungeonDefense.State
 
         private void SetDestination()
         {
-            Ray ray = new Ray(enemyController.transform.position + (Vector3.up * 0.5f), Vector3.down);
+            Ray ray = new Ray(BlackBoard.transform.position + (Vector3.up * 0.5f), Vector3.down);
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit, 1f, 1 << LayerMask.NameToLayer("GridFloor")))
@@ -65,8 +59,8 @@ namespace BHSSolo.DungeonDefense.State
 
                         List<DungeonGridData> tempPath = new List<DungeonGridData>(e.ConnectedNodePath[rand]);
 
-                        enemyController.SetSearchedPath(tempPath);
-                        enemyController.StateMachine.ChangeState(EnemyStates.Moving);
+                        BlackBoard.SetSearchedPath(tempPath);
+                        BlackBoard.StateMachine.ChangeState(EnemyStates.Moving);
                         //enemyController.ChangeControllerState(EnemyStates.Moving);
                         return;
                     }

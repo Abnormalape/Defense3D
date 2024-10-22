@@ -46,12 +46,9 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             GameManager = gameManager_;
             this.GameStateManager = GameManager.GameStateManager_;
             this.DungeonConstructManager = GameManager.DungeonConstructManager_;
-            GameStateManager.OnGameStateChanged += GameStateReaction; //Reaction.
+            GameStateManager.OnGameStateChanged += GameStateReaction;
             GridTargetPrefab = Resources.Load(GRID_TARGET_PATH) as GameObject;
-            FollowCursor = GameObject.FindGameObjectWithTag("MainCursor"); //Null
-
-
-
+            FollowCursor = GameObject.FindGameObjectWithTag("MainCursor");
             InitializeStateMachine(this);
         }
 
@@ -114,11 +111,11 @@ namespace BHSSolo.DungeonDefense.ManagerClass
 
     public enum CursorState
     {
-        OnPlayer, //Hide Cursor
-        OnManage_Idle, //Show Cursor, Free Move
-        OnManage_TargetNPC, //Show Cursor, Free Move, OnClickTarget : Ally
-        OnManage_TargetRoom, //Show Cursor, Free Move, OnClickTarget : Room
-        OnManage_Grid, //Show Cursor, Grid Move
+        OnPlayer, 
+        OnManage_Idle, 
+        OnManage_TargetNPC, 
+        OnManage_TargetRoom, 
+        OnManage_Grid, 
         OnManage_Grid_RoomBuildAfterJudge,
         OnManage_Grid_PassageBuildAfterJudge,
     }

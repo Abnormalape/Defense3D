@@ -34,7 +34,7 @@ namespace BHSSolo.DungeonDefense.Controller
 
         public abstract NPCType NpcType { get; set; }
 
-        public delegate void NpcEvent(IBuffHolder actor, IBuffHolder opponent);
+        public delegate void NpcEvent(NPCController_ actor, NPCController_ opponent);
         public event NpcEvent OnAttack;
         public event NpcEvent OnHit;
         public event NpcEvent OnAttacked;
@@ -42,5 +42,8 @@ namespace BHSSolo.DungeonDefense.Controller
         public event NpcEvent OnEnterRoom;
         public event NpcEvent OnExitRoom;
         public event NpcEvent OnDead;
+
+        public void Attack(NPCController_ actor, NPCController_ opponent) { OnAttack.Invoke(actor, opponent); }
+        public void Attacked(NPCController_ actor, NPCController_ opponent) { OnAttacked.Invoke(actor, opponent); }
     }
 }

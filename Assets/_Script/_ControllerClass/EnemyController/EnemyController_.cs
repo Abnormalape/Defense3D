@@ -88,6 +88,11 @@ namespace BHSSolo.DungeonDefense.Controller
             StateMachine = new(stateBlackBoard);
         }
 
+        private void Start()
+        {
+            StateMachine.ChangeState(EnemyStates.SearchPath);
+        }
+
         public void ChangeState(EnemyStates state)
         {
         }

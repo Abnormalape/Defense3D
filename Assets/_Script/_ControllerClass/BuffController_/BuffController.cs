@@ -1,4 +1,5 @@
 ﻿using BHSSolo.DungeonDefense.ManagerClass;
+using BHSSolo.DungeonDefense.State;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -52,6 +53,7 @@ namespace BHSSolo.DungeonDefense.Controller
         public abstract void ExecuteBuff();
         public abstract void ExecuteBuff(NpcBaseStat CurrentStat);
         public abstract void ExecuteBuff(IBuffHolder trigger, IBuffHolder opponent);
+        public abstract void ExecuteBuff(NPCController_ actor, NPCController_ opponent);
 
         public virtual void EndBuff()
         {

@@ -51,7 +51,7 @@ namespace BHSSolo.DungeonDefense.Controller
 
         protected virtual void Update()
         {
-            StateMachine?.CurrentState.StateUpdate();
+            StateMachine?.CurrentState?.StateUpdate();
         }
 
         public void InitializeStateMachine(AllyController_ stateBlackBoard)

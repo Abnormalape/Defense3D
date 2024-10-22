@@ -26,8 +26,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             //Todo:
             string tempName = $"{ALLY_PREFAB_PATH}/{BaseDataDictionary[1].Race}";
             GameObject tempNPC = Resources.Load(tempName) as GameObject;
-            Instantiate(tempNPC);
-            tempNPC.GetComponent<AllyController_>().InitializeController(this);
+            GameObject ttempNPC = Instantiate(tempNPC);
+            ttempNPC.GetComponent<AllyController_>().InitializeController(this);
         }
 
 

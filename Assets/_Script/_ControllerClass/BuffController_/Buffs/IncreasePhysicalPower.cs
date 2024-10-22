@@ -20,5 +20,11 @@ namespace BHSSolo.DungeonDefense.Controller
         {
             Debug.Log("Buff Executed.");
         }
+
+        public override void ExecuteBuff(NPCController_ actor, NPCController_ opponent)
+        {
+            Debug.Log("Buff Executed.");
+        }
     }
 }
+

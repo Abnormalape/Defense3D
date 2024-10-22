@@ -42,29 +42,29 @@ namespace BHSSolo.DungeonDefense.Controller
         public string Race;
         public int MaxLevel;
         public int[] TraitIDs;
-
-        public float Blood { get; private set; }
-        public float BloodScaling { get; private set; }
-        public float Mental { get; private set; }
-        public float MentalScaling { get; private set; }
-        public float Physical { get; private set; }
-        public float PhysicalScaling { get; private set; }
-        public float Special { get; private set; }
-        public float SpecialScaling { get; private set; }
-        public float PhysicalPower { get; private set; }
-        public float PhysicalPowerScaling { get; private set; }
-        public float SpecialPower { get; private set; }
-        public float SpecialPowerScaling { get; private set; }
-        public float PhysicalResist { get; private set; }
-        public float PhysicalResistScaling { get; private set; }
-        public float SpecialResist { get; private set; }
-        public float SpecialResistScaling { get; private set; }
-        public float Speed { get; private set; }
-        public float SpeedScaling { get; private set; }
-        public float ReactSpeed { get; private set; }
-        public float ReactSpeedScaling { get; private set; }
+        public float Blood;
+        public float BloodScaling;
+        public float Mental;
+        public float MentalScaling;
+        public float Physical;
+        public float PhysicalScaling;
+        public float Special;
+        public float SpecialScaling;
+        public float PhysicalPower;
+        public float PhysicalPowerScaling;
+        public float SpecialPower;
+        public float SpecialPowerScaling;
+        public float PhysicalResist;
+        public float PhysicalResistScaling;
+        public float SpecialResist;
+        public float SpecialResistScaling;
+        public float Speed;
+        public float SpeedScaling;
+        public float ReactSpeed;
+        public float ReactSpeedScaling;
     }
 
+    [System.Serializable]
     public class AllyBaseStatus
     {
         public NpcBaseStatus this[int AllyId]
@@ -75,6 +75,7 @@ namespace BHSSolo.DungeonDefense.Controller
         public List<NpcBaseStatus> AllyStatusList;
     }
 
+    [System.Serializable]
     public class EnemyBaseStatus
     {
         public NpcBaseStatus this[int EnemyId]

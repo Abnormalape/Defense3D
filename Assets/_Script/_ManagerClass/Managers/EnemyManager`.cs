@@ -25,8 +25,8 @@ namespace BHSSolo.DungeonDefense.ManagerClass
             //Todo:
             string tempName = $"{ENEMY_PREFAB_PATH}/{BaseDataDictionary[1].Race}";
             GameObject tempNPC = Resources.Load(tempName) as GameObject;
-            Instantiate(tempNPC);
-            tempNPC.GetComponent<EnemyController_>().InitializeController(this);
+            GameObject ttempNPC = Instantiate(tempNPC, new Vector3(250, 0, 0), Quaternion.identity);
+            ttempNPC.GetComponent<EnemyController_>().InitializeController(this);
         }
 
         public void OnInitializeManager_Factory()
